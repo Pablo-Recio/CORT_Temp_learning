@@ -1,0 +1,74 @@
+---
+docx: 
+reference-doc: "./bib/tmpl.docx"
+bibliography: "./bib/refs.bib"
+execute:
+  echo: false
+  error: false
+  cache: false
+  warning: false
+crossref:  
+  fig-title: Figure    # (default is "Figure")
+  title-delim: —     # (default is ":")
+  fig-prefix: Fig.   # (default is "Figure")
+  tbl-prefix: Tab.   # (default is "Table")
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+
+pacman::p_load(tidyverse, flextable)
+```
+
+## Introduction
+
+ [@ODea2019]
+
+```{r, dataload}
+#| label: dataload
+#| echo: false
+#| warning: false
+
+# Load data
+	data  <-  read.csv("./output/data/data_activity.csv")
+```
+
+## Results
+
+@fig-fig1
+
+We calculated $R^2$ as follows
+
+$$
+R^2 = \frac{SS_{reg}}{SS_{tot}}
+$$ {#eq-r2}
+
+@eq-r2
+
+```{r, fig1}
+#| label: fig-fig1
+#| fig-cap: "Activity budget of the focal group of chacma baboons (Papio ursinus) at the Cape Peninsula, South Africa, during the study period. The data are presented as the mean percentage of time spent in each activity category per hour (± SE)."
+
+data %>% ggplot(aes(x = Lizard_id))  + geom_histogram()
+
+
+```
+
+We have a total of `r length(unique(data$Lizard_id))`
+
+```{r,tb1}
+#| label: tbl-tb1
+#| tbl-cap: "Summary of the data"
+
+tab <- data %>% 
+  group_by(Lizard_id) %>% 
+  summarise(
+    n = n()
+  ) 
+flextable(tab[2:3,])
+```
+
+
+# References
