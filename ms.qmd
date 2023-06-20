@@ -24,7 +24,7 @@ pacman::p_load(tidyverse, flextable)
 
 ## Introduction
 
- [@ODea2019]
+[@ODea2019]
 
 ```{r, dataload}
 #| label: dataload
@@ -34,6 +34,42 @@ pacman::p_load(tidyverse, flextable)
 # Load data
 	data  <-  read.csv("./output/data/data_activity.csv")
 ```
+
+## Methods
+
+### Subjects
+
+The subjects in our experiments were juveniles from two species of skinks, the common garden skink (*L. guichenoti*) and the rainbow skink or delicate skink (*Lampropholis delicata*). These are small (∼35--55 mm snout-vent length (SVL)), oviparous, and generalist skinks that usually share the same habitat in suburban areas throughout south-eastern Australia (Chapple et al. 2011). They also have similar breeding periods, but with some differences in reproductive output: while *L. delicata* lays 1 to 6 eggs in only one clutch per season, *L. guichenoti* clutches are smaller (1-5 eggs per clutch) but they usually lay two clutches per season (Chapple et al. 2011; 2014). This difference in reproductive output through the breeding season may involve different degree of sensitivity to maternal effects and its interaction with other aspects of early environment.
+
+### Husbandry
+
+*Breeding colony* -- We tested juveniles coming from a breeding colony established in the lab since 2019. There is a total of 270 and 180 adults of *L. delicata* and *L.* guichenoti respectively, housed in big containers (41.5 L x 30.5 W x 21 H cm) with six lizards (2 males and 4 females) per enclosure. Enclosures are provided with non-stick matting, shelter, and several small water dishes. Water is given daily, and they are fed approx. 40 mid-size crickets (*Acheta domestica*) per enclosure three days a week. Crickets are dusted with calcium weekly and multivitamin and calcium biweekly. To ensure a temperature gradient, we employ a heat chord and a heat lamp following a 12 h light:12 h dark cycle. Room temperatures are set to 22-24 Celsius, and warm side of enclosures is usually at 32 Celsius.
+
+*Eggs collection and incubation* -- Between mid-October 2022 to the end of February 2023, we provided females with a place to lay the eggs by means of small boxes (12.5 L x 8.3 W x 5 H cm) with moist vermiculite inside, that were placed in one extreme of the communal enclosures (see above). We checked for the presence of eggs in the boxes three days a week. After collection, we measured length and width of eggs with a digital calliper to the nearest 0.1 mm and weight them with a (OHAUS, Model spx123) digital scale ± 0.001g error. Then eggs were treated with CORT or vehicle (see CORT and Temperature manipulation below) and were placed in individual cups (80 mL) with moist vermiculite (12 parts water to 4 parts vermiculite). The cups were covered with cling wrap to retain moisture and left in LATWIT 2X5D-R1160 incubators at two different temperatures (see CORT and Temperature manipulation below) until hatching.
+
+*Hatchlings* -- Eggs in the incubator were checked three times a week for hatchlings. After hatchling, we measured juveniles\' SVL and Tail Length (TL) with a rule to the nearest mm and weighted them with a (OHAUS, Model spx123) digital scale ± 0.001g error. We then placed hatchlings in individual enclosures (18.7L x 13.2W x 6.3H cm) and provided them with non-stick matting and a small water dish. During this period, they were sprayed water every day and received 3-6 small *A. domestica* crickets three times a week. All care otherwise follows similar protocols to adults (see above).
+
+Two weeks before we started the training phase (see below), lizards were moved to the experimental arena (Fig. 1c) for acclimatation. The arenas were individual medium size (41 L x 29.7 W x 22 H cm) plastic containers with a shelter (9 L x 6 W x 1.5 H cm) on one of the extremes and a water dish on the other. These new enclosures were placed in two rooms in 7 different racks associated to 7 different CCTV systems (device model DVR-HP210475) that allowed us to record their behaviour during the experiment (see details below). The number of lizards per species and treatment in each rack was counterbalanced to control for any effect of the room or the position of the lizard in the rack. During acclimatation and all the experiment, lizards were fed with only one cricket per day dusted with calcium and multivitamin (see protocol below), and water was supplied *ad libitum.* We provided a temperature gradient by means of a heat cord and heat lamps in a 12 h light: 12 h dark cycle. The rooms temperature was set to between 22-24 Celsius. We tested temperatures with laser temperature guns to ensure such a set up established a thermal gradient and we there were no significant differences between treatments or species (see Supplementary Material).
+
+### CORT and Temperature manipulation
+
+To test empirically the effect of early environment we manipulated CORT concentration in eggs and incubated them under one of two temperature regimes (\'Cold\' -- 23ºC ± 3ºC or \'Hot\' -- 30ºC ± 3ºC) in a 2x2 factorial design (Fig. 1a). We first allocated eggs to one of two different treatments: in one of the treatments, eggs were topically supplied with 5µL of CORT dissolved in 70% Ethanol and 30% DMSO (vehicle) at a final (10 pg CORT/mL) concentration (CORT treatment); while eggs in the other group (Control treatment) received an equal volume of the vehicle. CORT concentration employed in the CORT treatment represents 2 standard deviations above the mean natural concentration obtained in eggs from both species (non-published data). Then, eggs were incubated in one of the two previously mentioned temperature regimes (\'Cold\' or \'Hot\') until hatching. The number of eggs per clutch assigned to each hormone and temperature treatment were counterbalanced in both species.
+
+INSERT Fig 1
+
+### Learning
+
+To estimate learning skills, we tested skinks\' ability to locate a food reward in a series of behavioural tasks (Fig. 2) (see Leal and Powell, 2012; Clark *et al.*, 2013). First, we performed a training phase where lizards had to learn to eat from white 3D-printed PLA ramps (9 L x 4 W x 5 H cm) identical to the ones from the experiment except for the colour (see below). We divided this training phase into three stages (see Fig. 2): in the first stage, lizards had to eat a small, frozen cricket (*A. domestica*) from an opaque petri dish (3D x 1.6H cm) placed in the middle of their enclosure; in the second stage, the petri dish with the cricket was placed on top of the white 3D printed ramps; and finally, the cricket was left inside a well (3D x 1.75H cm) on the top of the ramp in the third and last stage. Every trial began when we left the feeding block (petri dish, ramp, or both) inside the enclosure and finished one hour later when we took it away. At the end of the experiment, we recorded whether the cricket has been consumed or not. Trial was considered successful if the lizard could locate and consume the reward, while completion of each stage required the lizards to eat the crickets in at least 5 out of 6 trials. This phase lasted 38 days until all the lizards were able to eat from the ramp; only in one case we decided not to use the lizard because its behaviour was not consistent over the course of the training phase (see Supplementary material).
+
+In the next phase, we trained lizards to associate between colour and a food reward (colour association task in Fig. 2). The test was like the third stage of the training phase, but here lizards were presented with three feeders that differed in the colour. We placed the food reward (small, frozen, *A. domestica* crickets) inside the wells of the three feeders, covering two of the crickets with 3D-printed lids (3D x 0.5H cm) so prey was only accessible in one ramp. The food reward was placed in all three wells to avoid the use of chemical cues to determine the correct choice; our lids had a series of small holes on the top for the same reason. The colours of the feeders were green, red, and blue, as previous studies demonstrate that squamates can discriminate between these colours (REF). To control for potential colour preference that could bias our results, we split the subjects in two groups counterbalanced by treatment and species; in one group the correct choice (i.e., the ramp with non-covered cricket) was the blue one in the associative task and red in the reversal, while we did the opposite for the other half. In all trials, the position of the feeders was changed randomly to ensure subjects were using colour rather than spatial cues for the association. Lizards were tested in this task once a day for 35 days.
+
+After the colour association phase, we performed a choice reversal task. This task was like the colour association test, except that the attainability of prey was indicated by a different colour, requiring the lizards to form a novel association between the new colour and the food reward. This test was done once a day for 40 days.
+
+            All trials were done daily between the 6^th^ of March until the 26^th^ of June 2023, beginning at 11 am until 12 pm. Trials in the learning phases (colour associative task and reversal tasks) were recorded with different CCTV systems always using the same camera per individual. Videos were analysed manually using a standard video player (IINA) by PR, who recorded whether the first choice made by each subject was the correct feeder or not.
+
+INSERT Fig 2
+
+### Statistical analyses
 
 ## Results
 
@@ -69,6 +105,5 @@ tab <- data %>%
   ) 
 flextable(tab[2:3,])
 ```
-
 
 # References
