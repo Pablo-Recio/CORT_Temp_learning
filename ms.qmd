@@ -69,15 +69,37 @@ INSERT Fig 2
 #| label: dataload
 #| echo: false
 #| warning: false
-
+ 
 # Load packages
-pacman::P_load(tydiverse, flextable, brms, ggplot2)
+pacman::p_load(tidyverse, flextable, brms, ggplot2)
 
 # Load data
-	data  <-  read.csv("./data/Lizards_associative_learning.csv")
+	data  <-  read.csv("./data/Learning.csv")
+```
 
+```{r, dataclean}
+#| label: dataclean
+#| echo: false
+#| warning: false
+
+# Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
+
+data_associative <- data %>%
+  group_by(lizard_id) %>%
+  mutate(
+    trial_associative = ifelse(!is.na(trial_associative), min(trial_associative, na.rm = TRUE), NA),
+    trial_associative = trial_associative - min(trial_associative, na.rm = TRUE) + 1
+  ) %>%
+  ungroup()
+
+# Split data
+deli <- data_associative %>% filter (species == "delicata")
+guich <- data_associative %>% filter (species == "guichenoti")
 
 ```
+
+
+
 
 
 We calculated $R^2$ as follows
