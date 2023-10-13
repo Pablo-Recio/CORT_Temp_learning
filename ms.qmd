@@ -26,14 +26,6 @@ pacman::p_load(tidyverse, flextable)
 
 [@ODea2019]
 
-```{r, dataload}
-#| label: dataload
-#| echo: false
-#| warning: false
-
-# Load data
-	data  <-  read.csv("./output/data/data_activity.csv")
-```
 
 ## Methods
 
@@ -73,7 +65,17 @@ INSERT Fig 2
 
 ## Results
 
-@fig-fig1
+```{r, dataload}
+#| label: dataload
+#| echo: false
+#| warning: false
+
+# Load data
+	data  <-  read.csv("./output/data/Lizards_associative_learning.csv")
+  show(data)
+
+```
+
 
 We calculated $R^2$ as follows
 
