@@ -70,9 +70,12 @@ INSERT Fig 2
 #| echo: false
 #| warning: false
 
+# Load packages
+pacman::P_load(tydiverse, flextable, brms, ggplot2)
+
 # Load data
-	data  <-  read.csv("./output/data/Lizards_associative_learning.csv")
-  show(data)
+	data  <-  read.csv("./data/Lizards_associative_learning.csv")
+
 
 ```
 
