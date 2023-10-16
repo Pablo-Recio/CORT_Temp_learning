@@ -82,19 +82,36 @@ pacman::p_load(tidyverse, flextable, brms, ggplot2)
 #| echo: false
 #| warning: false
 
-# Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
-
+# Removing individuals who did not participate (more than 15 NAs)
 data_associative <- data %>%
   group_by(lizard_id) %>%
-  mutate(
-    trial_associative = ifelse(!is.na(trial_associative), min(trial_associative, na.rm = TRUE), NA),
-    trial_associative = trial_associative - min(trial_associative, na.rm = TRUE) + 1
-  ) %>%
+  filter(sum(is.na(FC_associative)) <= 15) %>%
   ungroup()
+data_associative <- as.data.frame(data_associative)
+
+# Removing trials [36-40] (Only in associative)
+data_associative <- data_associative %>%
+group_by(lizard_id) %>%
+filter(trial_associative <= 35) %>%
+ungroup()
+data_associative <- as.data.frame(data_associative)
+
+# Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
+
+data_associative <- data_associative %>%
+  group_by(lizard_id) %>%
+  mutate(
+    first_non_na = min(which(!is.na(FC_associative))),
+    Associative_Trial = ifelse(!is.na(first_non_na),trial_associative - first_non_na + 1, trial_associative))%>%
+    filter(Associative_Trial >= 1) %>%
+   ungroup()
+  
+data_associative <- as.data.frame(data_associative)
+write.csv(data_associative, file= "./output/Checking/data_associative.csv")
 
 # Split data
-deli <- data_associative %>% filter (species == "delicata")
-guich <- data_associative %>% filter (species == "guichenoti")
+deli_associative <- data_associative %>% filter (species == "delicata")
+guich_associative <- data_associative %>% filter (species == "guichenoti")
 
 ```
 
