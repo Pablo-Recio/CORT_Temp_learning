@@ -71,7 +71,7 @@ pacman::p_load(tidyverse, flextable)
 #| warning: false
  
 # Load packages
-pacman::p_load(tidyverse, flextable, brms, ggplot2)
+pacman::p_load(tidyverse, flextable, brms, ggplot2,lme4, zoo)
 
 # Load data
 	data  <-  read.csv("./data/Learning.csv")
@@ -116,6 +116,21 @@ guich_associative <- data_associative %>% filter (species == "guichenoti")
 #
 #
 #
+#
+#| label: dataclean
+#| echo: false
+#| warning: false
+
+null <- glmer(FC_associative ~ 1 + (1|lizard_id), data = deli_associative, family = binomial(link = "logit"))
+GMM_deli <- glmer(FC_associative ~ Associative_Trial*trt + group*Associative_Trial + (1|lizard_id), data = deli_associative, family = binomial(link = "logit"))
+install.packages("lmtest")
+library(lmtest)
+lrtest(null, GMM_deli)
+anova(GMM_deli)
+plot_deli <- ggplot(deli_associative, aes(x = Associative_Trial, y = FC_associative, color=trt)) +  geom_line() +  
+geom_smooth(method = "glm", formula = y ~ x, method.args = list(family = "binomial")) +
+  facet_grid(as.factor(deli_associative$group))
+print(plot_deli)
 #
 #
 #
