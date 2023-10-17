@@ -19,7 +19,7 @@ editor_options:
 ```{r}
 #| label: setup
 
-pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here)
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest)
 
 source(here("R", "func.R"))
 ```
@@ -72,9 +72,6 @@ INSERT Fig 2
 #| echo: false
 #| warning: false
  
-# Load packages
-pacman::p_load(tidyverse, flextable, brms, ggplot2,lme4, zoo, lmerTest)
-
 # Load data
 	data  <-  read.csv("./data/Learning.csv")
 ```
@@ -84,20 +81,16 @@ pacman::p_load(tidyverse, flextable, brms, ggplot2,lme4, zoo, lmerTest)
 #| echo: false
 #| warning: false
 
-# Removing individuals who did not participate (more than 15 NAs)
+# Remove individuals who did not participate (more than 15 NAs), remove trials [36-40] (Only in associative) and split treatment into Temp and Cort
 data_associative <- data %>%
   group_by(lizard_id) %>%
-  filter(sum(is.na(FC_associative)) <= 15) %>%
-  ungroup()  %>% data.frame()
-
-# Removing trials [36-40] (Only in associative)
-data_associative <- data_associative %>%
-group_by(lizard_id) %>%
-filter(trial_associative <= 35) %>%
-ungroup()  %>% mutate(temp = gsub("[AB]_", "", trt),
-                      cort = gsub("_[2][38]", "", trt))  %>% 
-                mutate(group = factor(group, levels = c("R_B", "B_R"))) %>% data.frame()
-
+    filter(sum(is.na(FC_associative)) <= 15) %>%
+    filter(trial_associative <= 35) %>%
+  ungroup()  %>% 
+    mutate(temp = gsub("[AB]_", "", trt),
+          cort = gsub("_[2][38]", "", trt))  %>% 
+    mutate(group = factor(group, levels = c("R_B", "B_R"))) %>%
+  data.frame()
 
 # Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
 
@@ -107,36 +100,51 @@ data_associative <- data_associative %>%
     first_non_na = min(which(!is.na(FC_associative))),
     Associative_Trial = ifelse(!is.na(first_non_na),trial_associative - first_non_na + 1, trial_associative))%>%
     filter(Associative_Trial >= 1) %>%
-   ungroup()
+   ungroup() %>% data.frame()
   
-data_associative <- as.data.frame(data_associative)
 write.csv(data_associative, file= "./output/Checking/data_associative.csv")
 
-# Split data
+# Split data by species
 deli_associative <- data_associative %>% filter (species == "delicata")
 guich_associative <- data_associative %>% filter (species == "guichenoti")
 
 ```
 
 
-```{r, models}
-#| label: dataclean
+```{r, models1}
+#| label: models1
 #| echo: false
 #| warning: false
 
-    null <- glmer(FC_associative ~ 1 + (1 + Associative_Trial|lizard_id), data = deli_associative, family = binomial(link = "logit"))
-GMM_deli <- glmer(FC_associative ~ Associative_Trial*trt + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = binomial(link = "logit"))
+# Generalized Mixed Models delicata
+GMM_deli <- glmer(FC_associative ~ Associative_Trial*temp*cort + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = binomial(link = "logit"))
+summary(GMM_deli)
 
-GMM_deli2 <- glmer(FC_associative ~temp*cort*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = binomial(link = "logit"))
-summary(GMM_deli2)
+emmeans(GMM_deli, pairwise ~ temp*Associative_Trial)
+emmeans(GMM_deli, pairwise ~ cort*Associative_Trial)
 
-emmeans(GMM_deli2, pairwise ~ temp*Associative_Trial)
-emmeans(GMM_deli2, pairwise ~ cort*Associative_Trial)
+# Generalized Mixed Models guichenoti
+GMM_guich <- glmer(FC_associative ~ Associative_Trial*temp*cort + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = guich_associative, family = binomial(link = "logit"))
+summary(GMM_guich)
 
-## Bayesian 
-  mod <- brm(FC_associative ~ trt*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = bernoulli(link = "logit"), chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
-  summary(mod)
+emmeans(GMM_guich, pairwise ~ temp*Associative_Trial)
+emmeans(GMM_guich, pairwise ~ cort*Associative_Trial)
+emmeans(GMM_guich, pairwise ~ temp*cort*Associative_Trial)
 
+```
+
+```{r, models2}
+#| label: models2
+#| echo: false
+#| warning: false
+
+# Bayesian model delicata
+  deli_mod <- brm(FC_associative ~ cort*temp*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = bernoulli(link = "logit"), chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+  summary(deli_mod)
+
+# Bayesian model guichenoti
+  guich_mod <- brm(FC_associative ~ cort*temp*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = guich_associative, family = bernoulli(link = "logit"), chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+  summary(deli_mod)
 # R2
 bayes_R2(mod)
 
@@ -149,15 +157,31 @@ temp28 <- c((posterior[,"b_Intercept"] + posterior[,"b_trtB_28"]), posterior[,"b
 
 pmcmc(temp23 - temp28)
 dharma(GMM_deli2)
-install.packages("lmtest")
-library(lmtest)
-lrtest(null, GMM_deli)
-anova(GMM_deli)
-plot_deli <- ggplot(deli_associative, aes(x = Associative_Trial, y = FC_associative, color=trt)) +  
-geom_smooth(method = "glm", formula = y ~ x, method.args = list(family = "binomial")) +
-  facet_grid(as.factor(deli_associative$group)) + labs(y = "Colour Association Task", x = "Trial")
-print(plot_deli)
+
+
 ```
+
+```{r, plots}
+#| label: plots
+#| echo: false
+#| warning: false
+ 
+# Plot delicata
+plot_deli <- ggplot(deli_associative, aes(x = Associative_Trial, y = FC_associative, color=interaction(cort,temp))) +  
+  geom_smooth(method = "glm", formula = y ~ x, method.args = list(family = "binomial"),na.action = na.exclude) +
+  facet_grid(as.factor(deli_associative$group)) + 
+  labs(y = "Colour Association Task", x = "Trial")  
+print(plot_deli)
+
+# Plot guichenoti
+plot_guich <- ggplot(guich_associative, aes(x = Associative_Trial, y = FC_associative, color=interaction(cort,temp))) +  
+  geom_smooth(method = "glm", formula = y ~ x, method.args = list(family = "binomial"),na.action = na.exclude) +
+  facet_grid(as.factor(guich_associative$group)) + 
+  labs(y = "Colour Association Task", x = "Trial") 
+print(plot_guich)
+```
+
+
 
 
 We calculated $R^2$ as follows
