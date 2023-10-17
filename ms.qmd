@@ -19,7 +19,9 @@ editor_options:
 ```{r}
 #| label: setup
 
-pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms)
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here)
+
+source(here("R", "func.R"))
 ```
 
 ## Introduction
@@ -145,7 +147,7 @@ plyr::ldply(lapply(posterior, function(x) quantile(x, c(0.025, 0.975))))
 temp23 <- c(posterior[,"b_Intercept"], (posterior[,"b_Intercept"]+ posterior[,"b_trtB_23"]))
 temp28 <- c((posterior[,"b_Intercept"] + posterior[,"b_trtB_28"]), posterior[,"b_trtB_23"])
 
-
+pmcmc(temp23 - temp28)
 dharma(GMM_deli2)
 install.packages("lmtest")
 library(lmtest)
