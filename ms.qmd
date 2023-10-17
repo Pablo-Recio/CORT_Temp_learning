@@ -19,7 +19,7 @@ editor_options:
 ```{r}
 #| label: setup
 
-pacman::p_load(tidyverse, flextable)
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms)
 ```
 
 ## Introduction
@@ -71,7 +71,7 @@ INSERT Fig 2
 #| warning: false
  
 # Load packages
-pacman::p_load(tidyverse, flextable, brms, ggplot2,lme4, zoo)
+pacman::p_load(tidyverse, flextable, brms, ggplot2,lme4, zoo, lmerTest)
 
 # Load data
 	data  <-  read.csv("./data/Learning.csv")
@@ -86,15 +86,16 @@ pacman::p_load(tidyverse, flextable, brms, ggplot2,lme4, zoo)
 data_associative <- data %>%
   group_by(lizard_id) %>%
   filter(sum(is.na(FC_associative)) <= 15) %>%
-  ungroup()
-data_associative <- as.data.frame(data_associative)
+  ungroup()  %>% data.frame()
 
 # Removing trials [36-40] (Only in associative)
 data_associative <- data_associative %>%
 group_by(lizard_id) %>%
 filter(trial_associative <= 35) %>%
-ungroup()
-data_associative <- as.data.frame(data_associative)
+ungroup()  %>% mutate(temp = gsub("[AB]_", "", trt),
+                      cort = gsub("_[2][38]", "", trt))  %>% 
+                mutate(group = factor(group, levels = c("R_B", "B_R"))) %>% data.frame()
+
 
 # Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
 
@@ -121,15 +122,38 @@ guich_associative <- data_associative %>% filter (species == "guichenoti")
 #| echo: false
 #| warning: false
 
-null <- glmer(FC_associative ~ 1 + (1|lizard_id), data = deli_associative, family = binomial(link = "logit"))
-GMM_deli <- glmer(FC_associative ~ Associative_Trial*trt + group*Associative_Trial + (1|lizard_id), data = deli_associative, family = binomial(link = "logit"))
+    null <- glmer(FC_associative ~ 1 + (1 + Associative_Trial|lizard_id), data = deli_associative, family = binomial(link = "logit"))
+GMM_deli <- glmer(FC_associative ~ Associative_Trial*trt + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = binomial(link = "logit"))
+
+GMM_deli2 <- glmer(FC_associative ~temp*cort*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = binomial(link = "logit"))
+summary(GMM_deli2)
+
+emmeans(GMM_deli2, pairwise ~ temp*Associative_Trial)
+emmeans(GMM_deli2, pairwise ~ cort*Associative_Trial)
+
+## Bayesian 
+  mod <- brm(FC_associative ~ trt*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = bernoulli(link = "logit"), chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+  summary(mod)
+
+# R2
+bayes_R2(mod)
+
+# Extract posteriors
+posterior <- posterior_samples(mod, pars = "^b")
+plyr::ldply(lapply(posterior, mean))
+plyr::ldply(lapply(posterior, function(x) quantile(x, c(0.025, 0.975))))
+temp23 <- c(posterior[,"b_Intercept"], (posterior[,"b_Intercept"]+ posterior[,"b_trtB_23"]))
+temp28 <- c((posterior[,"b_Intercept"] + posterior[,"b_trtB_28"]), posterior[,"b_trtB_23"])
+
+
+dharma(GMM_deli2)
 install.packages("lmtest")
 library(lmtest)
 lrtest(null, GMM_deli)
 anova(GMM_deli)
 plot_deli <- ggplot(deli_associative, aes(x = Associative_Trial, y = FC_associative, color=trt)) +  
 geom_smooth(method = "glm", formula = y ~ x, method.args = list(family = "binomial")) +
-  facet_grid(as.factor(deli_associative$group))
+  facet_grid(as.factor(deli_associative$group)) + labs(y = "Colour Association Task", x = "Trial")
 print(plot_deli)
 ```
 
