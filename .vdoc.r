@@ -19,7 +19,7 @@
 #
 #| label: setup
 
-pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest)
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom)
 
 source(here("R", "func.R"))
 #
@@ -141,12 +141,28 @@ emmeans(GMM_guich, pairwise ~ temp*cort*Associative_Trial)
 # Bayesian model delicata
   deli_mod <- brm(FC_associative ~ cort*temp*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = bernoulli(link = "logit"), chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
   summary(deli_mod)
-
+  plot(deli_mod)
+flextable_summary <- flextable(deli_mod) %>%
+  set_table_properties(width = .8, layout = "autofit") %>%
+  theme_zebra() %>%
+tidy_summary <- data.frame(term = rownames(fixed_effects),
+                            estimate = fixed_effects,
+                            conf.low = summary_table$ci[,"lower"],
+                            conf.high = summary_table$ci[,"upper"])
+flextable::set_header_labels(
+    term = "Term",
+    estimate = "Estimate",
+    conf.low = "Lower CI",
+    conf.high = "Upper CI"
+  ) %>%
+  flextable::rename(columns = "term" ~ "Fixed Effects")
 # Bayesian model guichenoti
   guich_mod <- brm(FC_associative ~ cort*temp*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = guich_associative, family = bernoulli(link = "logit"), chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
-  summary(deli_mod)
+  summary(guich_mod)
+  plot(guich_mod)
 # R2
-bayes_R2(mod)
+bayes_R2(deli_mod)
+bayes_R2(guich_mod)
 
 # Extract posteriors
 posterior <- posterior_samples(mod, pars = "^b")
