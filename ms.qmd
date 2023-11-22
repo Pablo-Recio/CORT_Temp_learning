@@ -143,22 +143,35 @@ guich_reversal <- data_reversal %>% filter (species == "guichenoti")
 #| label: models1
 #| echo: false
 #| warning: false
-
+library(emmeans)
+library(lme4)
 # Generalized Mixed Models delicata
 GMM_deli <- glmer(FC_associative ~ Associative_Trial*temp*cort + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = deli_associative, family = binomial(link = "logit"))
 summary(GMM_deli)
-
 emmeans(GMM_deli, pairwise ~ temp*Associative_Trial)
-emmeans(GMM_deli, pairwise ~ cort*Associative_Trial)
+emmeans(GMM_deli, pairwise ~ cort*temp*Associative_Trial)
 
 # Generalized Mixed Models guichenoti
-GMM_guich <- glmer(FC_associative ~ Associative_Trial*temp*cort + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = guich_associative, family = binomial(link = "logit"))
+GMM_guich <- glmer(FC_associative ~ Associative_Trial*temp*cort + group*Associative_Trial + (1 + Associative_Trial|lizard_id), data = guich_associative, family = binomial(link = "logit"), control = glmerControl(maxit = 1000))
 summary(GMM_guich)
 
-emmeans(GMM_guich, pairwise ~ temp*Associative_Trial)
-emmeans(GMM_guich, pairwise ~ cort*Associative_Trial)
 emmeans(GMM_guich, pairwise ~ temp*cort*Associative_Trial)
 
+# Generalized Mixed Models delicata REVERSAL
+GMM_deli_rev <- glmer(FC_reversal ~ trial_reversal*temp*cort + group*trial_reversal + (1 + trial_reversal|lizard_id), data = deli_reversal, family = binomial(link = "logit"))
+summary(GMM_deli)
+
+emmeans(GMM_deli_rev, pairwise ~ cort*temp*trial_reversal)
+emmeans(GMM_deli_rev, pairwise ~ temp*trial_reversal)
+
+# Generalized Mixed Models guichenoti REVERSAL
+MM_guich <- glmer(FC_reversal ~ trial_reversal*temp*cort + group*trial_reversal + (1 + trial_reversal|lizard_id), data = guich_reversal, family = binomial(link = "logit"))
+summary(GMM_guich)
+
+emmeans(GMM_guich, pairwise ~ temp*cort*Associative_Trial)
+```
+
+```{r, models2}
 ```
 
 ```{r, modelsasso}
