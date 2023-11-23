@@ -41,7 +41,7 @@ hist<-ggplot(data, aes(x = age.start, y = ..density..)) +
     legend.text = element_text(size = 12, family = "sans")  
   )
 print(hist)
-ggsave("./output/figures/hist.png", plot=hist, width = 30, height = 12, units = "cm", dpi = 3000) 
+ggsave("./output/figures/hist.png", plot=hist, width = 30, height = 12, units = "cm", dpi = 1000) 
 
 ## Merge
 
