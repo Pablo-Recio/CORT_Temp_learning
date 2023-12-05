@@ -19,20 +19,20 @@ data<- data %>%
      levels = c("A", "B"), 
      labels=c("A"="Control", "B"="CORT"))) %>%
 	mutate(species = factor(species,
-	 labels=c("delicata"="L. delicata", "guichenoti"="L. guichenoti")))
+	 labels=c("delicata"="L. delicata", "guichenoti"="L. guichenoti"))) %>%
   data.frame()
 
 
 ## Histogram ages by treatment
-hist<-ggplot(data, aes(x = age.start, y = ..density..)) +  
+hist<-ggplot(data, aes(x = age.start, y = after_stat(density))) +  
   geom_density(alpha = 0.7,
   aes(fill = interaction(cort, temp))) +
   scale_fill_manual(values = c("CORT.Cold"="darkblue", "Control.Cold"="cyan", "CORT.Hot"="black", "Control.Hot"="grey"),
-    labels=c("CORT-Cold (n=11)", "Control-Cold (n=12)", "CORT-Hot (n=11)", "Control-Hot (n=10)")
+    labels=c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")
   ) +
   facet_wrap(~species, scales = "free_y", ncol = 2) +  
   theme(strip.background = element_blank()) +
-  labs(y="", x = "Age") +
+  labs(y="Density", x = "Age") +
   theme_classic() +
   theme(
     axis.title = element_text(size = 18, family = "sans"),  
