@@ -32,7 +32,7 @@ hist<-ggplot(data, aes(x = age.start, y = after_stat(density))) +
   ) +
   facet_wrap(~species, scales = "free_y", ncol = 2) +  
   theme(strip.background = element_blank()) +
-  labs(y="Density", x = "Age") +
+  labs(y="Density", x = "Age", fill="Treatments") +
   theme_classic() +
   theme(
     axis.title = element_text(size = 18, family = "sans"),  
