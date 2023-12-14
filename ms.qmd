@@ -26,8 +26,24 @@ source(here("R", "func.R"))
 
 ## Introduction
 
-[@ODea2019]
 
+Cognition can be defined as the mechanisms by which animals acquire, process, and store information from their environment through perception, learning, memory, and decision making (@shettleworth_2009); and it underpins several aspects of animals' ecology such as habitat selection, foraging decisions, mate choice, antipredatory strategies, and/or social behaviours (@dukas_evolutionary_2004). Among cognitive traits, learning represents the acquisition of neuronal representations of new information (@dukas_evolutionary_2004) and is, as such, essential for dealing with environmental changes (@dukas_evolutionary_2004; @leal_behavioural_2012; @buchanan_condition_2013). 
+
+
+
+Effects of maternal effects and early environment on learning. Why temperature and GCs?
+
+Cognition it is affected by the conditions in which organisms develop (Burger, 1991; Lemaire et al., 2000; Amiel and Shine, 2012; Amiel et al., 2014; Abayarathna and Webb, 2020).
+
+Among these effects, maternal glucocorticoids (GCs) have been demonstrated to influence offspring phenotype across taxa (Lemaire et al., 2000; Belliure et al., 2004; Haussmann et al., 2012; Monaghan, 2014; Owen et al., 2018; Haq et al., 2021). For instance, restraint stress in pregnant rats leads to impairments in neurogenesis and learning (Lemaire et al., 2000; Zhu et al., 2004); and direct experimental elevation of maternal GCs can affect morphology and behaviour of lizards (Belliure et al., 2004; Owen et al., 2018).
+In this vein, the temperature at which embryos develop (also referred as early thermal environment) is a pervasive mechanism of phenotypic variation in ectotherms (Noble et al., 2017); having substantial and unpredictable effects on diverse traits such as growth (Shine et al., 1995), behaviour (Burger, 1989; 1990; 1991; Dayananda and Webb, 2017; Vila-Pouca et al., 2018; 2019), and survival (Burger, 1989; Vila-Pouca et al., 2019).
+
+How are temperature and GCs related to each other?
+Metabolic effects, effects on the brain morphology and function.
+
+Objectives, hypothesis and predictions
+
+Here, we investigated how prenatal Corticosterone (CORT) - the main GCs in reptiles - and incubation temperature interact to shape learning abilities in two species of skinks, the delicate skink (_Lampropholis delicata_) and the common garden skink (_L. guichenoti_). We experimentally increased CORT levels in the eggs of these two species of skinks and then incubated them at two different temperatures in a 2X2 factorial design. Then, we subjected the juveniles to a colour-associative and a reversal task to explore their learning skills. We hypothesized that changes in CORT levels and temperature during development will have sustained effects on brain's morphology, physiology, and gene expression, ultimately affecting learning skills. We predicted that individuals exposed to high levels of CORT and/or low temperatures will perform worse in the learning tasks than control individuals or individuals exposed to high temperatures. We also expected incubation at high temperatures to decrease the impact of CORT on learning, while cold incubation temperatures were expected to increase CORT detrimental effects. 
 
 ## Methods
 
