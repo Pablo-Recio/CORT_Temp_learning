@@ -2,51 +2,68 @@
 # 1_data_process
 ####################################
 
-## Load packages
-	install.packages("pacman")
-	pacman::p_load(tidyverse, readxl, ggplot2, dplyr, magrittr)
+# Packages
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom)
+source(here("R", "func.R"))
 
-## Load data	
-data<-read.csv("./data/learning.csv")
+# Load data
+data  <-  read.csv("./data/Learning.csv")
 
-data<- data %>%
+# Remove individuals who did not participate (more than 15 NAs), remove trials [36-40] (Only in associative) and split treatment into Temp and Cort
+data_associative <- data %>%
+  group_by(lizard_id) %>%
+    filter(sum(is.na(FC_associative)) <= 15) %>%
+    filter(trial_associative <= 35) %>%
+  ungroup()  %>% 
     mutate(temp = gsub("[AB]_", "", trt),
           cort = gsub("_[2][38]", "", trt))  %>% 
+    mutate(group = factor(group,
+     levels = c("R_B", "B_R"), 
+     labels=c("R_B"="Red", "B_R"="Blue"))) %>%
     mutate(temp = factor(temp,
      levels = c("23", "28"), 
      labels=c("23"="Cold", "28"="Hot"))) %>%
     mutate(cort = factor(cort,
      levels = c("A", "B"), 
      labels=c("A"="Control", "B"="CORT"))) %>%
-	mutate(species = factor(species,
-	 labels=c("delicata"="L. delicata", "guichenoti"="L. guichenoti"))) %>%
   data.frame()
 
+data_reversal <- data %>%
+  group_by(lizard_id) %>%
+    filter(sum(is.na(FC_reversal)) <= 15) %>%
+   ungroup()  %>% 
+    mutate(temp = gsub("[AB]_", "", trt),
+          cort = gsub("_[2][38]", "", trt))  %>% 
+    mutate(group = factor(group,
+     levels = c("R_B", "B_R"), 
+     labels=c("R_B"="Red", "B_R"="Blue"))) %>%
+    mutate(temp = factor(temp,
+     levels = c("23", "28"), 
+     labels=c("23"="Cold", "28"="Hot"))) %>%
+    mutate(cort = factor(cort,
+     levels = c("A", "B"), 
+     labels=c("A"="Control", "B"="CORT"))) %>%
+  data.frame() 
 
-## Histogram ages by treatment
-hist<-ggplot(data, aes(x = age.start, y = after_stat(density))) +  
-  geom_density(alpha = 0.7,
-  aes(fill = interaction(cort, temp))) +
-  scale_fill_manual(values = c("CORT.Cold"="darkblue", "Control.Cold"="cyan", "CORT.Hot"="black", "Control.Hot"="grey"),
-    labels=c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")
-  ) +
-  facet_wrap(~species, scales = "free_y", ncol = 2) +  
-  theme(strip.background = element_blank()) +
-  labs(y="Density", x = "Age", fill="Treatments") +
-  theme_classic() +
-  theme(
-    axis.title = element_text(size = 18, family = "sans"),  
-    axis.text = element_text(size = 10, family = "sans"),  
-    legend.title = element_text(size = 14, family = "sans"), 
-    legend.text = element_text(size = 12, family = "sans")  
-  )
-print(hist)
-ggsave("./output/figures/hist.png", plot=hist, width = 30, height = 12, units = "cm", dpi = 1000) 
+# Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
+data_associative <- data_associative %>%
+  group_by(lizard_id) %>%
+  mutate(
+    first_non_na = min(which(!is.na(FC_associative))),
+    Associative_Trial = ifelse(!is.na(first_non_na),trial_associative - first_non_na + 1, trial_associative))%>%
+    filter(Associative_Trial >= 1) %>%
+   ungroup() %>% data.frame()
+  
+write.csv(data_associative, file= "./output/Checking/data_associative.csv")
 
-## Merge
+# Split data by species
+deli_associative <- data_associative %>% filter (species == "delicata")
+write.csv(deli_associative, file= "./output/databases_clean/deli_associative.csv")
+guich_associative <- data_associative %>% filter (species == "guichenoti")
+write.csv(guich_associative, file= "./output/databases_clean/guich_associative.csv")
 
-
-
-# At the end of processing you write the file
-	write_csv(data_activity, "./output/data/data_activity.csv")
-
+# Split data by species
+deli_reversal <- data_reversal %>% filter (species == "delicata")
+write.csv(deli_reversal, file= "./output/databases_clean/deli_reversal.csv")
+guich_reversal <- data_reversal %>% filter (species == "guichenoti")
+write.csv(guich_reversal, file= "./output/databases_clean/guich_reversal.csv")
