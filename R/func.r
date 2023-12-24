@@ -1,11 +1,7 @@
-```{r}
-#| label: setup
 
+
+# Packages
 pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes)
-
-source(here("R", "func.R"))
-```
-
 
 
 ```{r, models1}
