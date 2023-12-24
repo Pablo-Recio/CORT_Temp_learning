@@ -229,3 +229,30 @@ pmcmc <- function(x, null = 0, twotail = TRUE){
     (1 - max(table(x<=null) / length(x)))
   }
 }
+
+
+
+
+
+We calculated $R^2$ as follows
+
+$$
+R^2 = \frac{SS_{reg}}{SS_{tot}}
+$$ {#eq-r2}
+
+@eq-r2
+
+
+We have a total of `r length(unique(data$Lizard_id))`
+
+```{r,tb1}
+#| label: tbl-tb1
+#| tbl-cap: "Summary of the data"
+
+tab <- data %>% 
+  group_by(Lizard_id) %>% 
+  summarise(
+    n = n()
+  ) 
+flextable(tab[2:3,])
+```
