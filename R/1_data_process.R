@@ -3,7 +3,7 @@
 ####################################
 
 # Packages
-pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom)
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, forcats)
 source(here("R", "func.R"))
 
 # Load data
@@ -43,6 +43,7 @@ data_reversal <- data %>%
     mutate(cort = factor(cort,
      levels = c("A", "B"),
      labels=c("A"="Control", "B"="CORT"))) %>%
+    mutate(trial_reversal = ordered(trial_reversal)) %>%
   data.frame()
 
 # Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
@@ -52,6 +53,7 @@ data_associative <- data_associative %>%
     first_non_na = min(which(!is.na(FC_associative))),
     Associative_Trial = ifelse(!is.na(first_non_na),trial_associative - first_non_na + 1, trial_associative))%>%
     filter(Associative_Trial >= 1) %>%
+    mutate(Associative_Trial = fct_inorder(as.factor(Associative_Trial))) %>%
   ungroup() %>% 
   data.frame()
   

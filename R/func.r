@@ -1,7 +1,7 @@
 #################### 
 # PACKAGES
 ####################
-pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes, pmcmc)
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes)
 #
 #################### 
 # MODELS
@@ -16,7 +16,7 @@ fit_asso <- function(data_asso) {
   # Load the data
   data <- read.csv(data_asso)
   # Fit the model
-  model <- brm(FC_associative ~ cort*temp*trial_associative + group*trial_associative + (1 + trial_associative|lizard_id),
+  model <- brm(FC_associative ~ cort*temp*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id),
               data = data,
               family = bernoulli(link = "logit"),
               chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
@@ -32,29 +32,27 @@ fit_rev <- function(data_rev) {
   # Load the data
   data <- read.csv(data_rev)
   # Fit the model
-  model <- brm(FC_reversal ~ cort*temp*trial_reversal + group*trial_reversal (1 + trial_reversal|lizard_id),
+  model <- brm(FC_reversal ~ cort*temp*trial_reversal + group*trial_reversal + (1 + trial_reversal|lizard_id),
               data = data,
               family = bernoulli(link = "logit"),
               chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
 return(model)
 }
 #
-# Extract posteriors functions:
+# Extract posteriors function:
 #' @title extract_posteriors function
 #' @description Obtain posteriors for all factors from different models
 #' @param model Path to the model
 #' @return Data frame with posteriors
-posteriors <- function(model) {
+extract_posteriors <- function(model) {
   # Extract posteriors
-  extract_posteriors <- posterior_samples(model, pars = "^b")
+  posterior <- posterior_samples(model, pars = "^b")
   # Calculate means
   means <- plyr::ldply(lapply(posterior, mean))
   # Calculate quantiles
   quantiles <- plyr::ldply(lapply(posterior, function(x) quantile(x, c(0.025, 0.975))))
-  # Calculate p-values using pmcmc
-  p_values <- pmcmc(posterior, null = 0, twotail = TRUE)
   # Combine means, quantiles, and p-values into a single data frame
-  result <- cbind(means, quantiles, p_values)
+  result <- cbind(means, quantiles)
   return(result)
 }
 

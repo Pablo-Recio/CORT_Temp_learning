@@ -1,11 +1,33 @@
 ####################################
-# 2_Models
+# 2_MODELS
 ####################################
-
 pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom)
+#
+######## 2.A) BUILD ALL MODELS
+#### The function here is to fit all the (brm) models for future analyses using the databases from output/clean_databases already processed using the code in "1_data_process.R"
 source(here("R", "func.R"))
-
+# A) Associative task
+### L. delicata
+deli_asso<-fit_asso(here("output/databases_clean/deli_associative.csv"))
+### L. guichenoti
+guich_asso<-fit_asso(here("output/databases_clean/guich_associative.csv"))
+# B) Reversal task
+### L. delicata
+deli_rev<-fit_rev(here("output/databases_clean/deli_reversal.csv"))
+### L. guichenoti
+guich_rev<-fit_rev(here("output/databases_clean/guich_reversal.csv"))
+#
+#
 ######## 2.B) EXTRACT POSTERIORS FOR ALL MODELS
+source(here("R", "func.R"))
+posteriors_deli_asso <- extract_posteriors(deli_asso)
+posteriors_guich_asso <- extract_posteriors(guich_asso)
+posteriors_deli_rev <- extract_posteriors(deli_rev)
+posteriors_guich_rev <- extract_posteriors(guich_rev)
+#
+emtrends_results <- emtrends(deli_asso, ~ cort * temp * Associative_Trial|group, var = "Associative_Trial", infer = TRUE)
+# Display the results
+summary(emtrends_results)
 
 posterior <- posterior_samples(deli_mod, pars = "^b")
 plyr::ldply(lapply(posterior, mean))
