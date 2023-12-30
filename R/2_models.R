@@ -13,7 +13,7 @@ bias_levels <- unique(data_associative$group)
 global_asso <- data.frame()
 for(species_level in species_levels) {
   for(bias_level in bias_levels) {
-    res <- fit_asso(sp = species_levels, bias = bias_levels)
+    res <- fit_asso(sp = species_level, bias = bias_level)
     # Add columns for species and bias to the result
     res$species_level <- species_level
     res$bias_level <- bias_level
@@ -22,6 +22,24 @@ for(species_level in species_levels) {
   }
 }
 write.csv(global_asso, here("output/Checking/global_asso.csv"))
+data_trial <- filter(data_associative, data_associative$species=="delicata")
+data_trial$group <- relevel(data_trial$group, ref = "Blue")
+data_trial$trt <- relevel(data_trial$trt, ref = "Control Cold")
+m <- brm(FC_associative ~ trt*Associative_Trial + Associative_Trial*group + (1 + Associative_Trial|lizard_id),
+                data = data_trial,
+                family = bernoulli(link = "logit"),
+                chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+posterior_trial <- as_draws(m)
+write.csv(posterior_trial, here("output/Checking/posterior_trial.csv"))
+data_trial_2 <- filter(data_associative, data_associative$species=="delicata")
+data_trial_2$group <- relevel(data_trial$group, ref = "Blue")
+data_trial_2$trt <- relevel(data_trial$trt, ref = "CORT Cold")
+m2 <- brm(FC_associative ~ trt*Associative_Trial + Associative_Trial*group + (1 + Associative_Trial|lizard_id),
+                data = data_trial_2,
+                family = bernoulli(link = "logit"),
+                chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+posterior_trial_2 <- as_draws(m2)
+write.csv(posterior_trial_2, here("output/Checking/posterior_trial_2.csv"))
 #
 ## Reversal task
 source(here("R", "func.R"))
@@ -39,6 +57,7 @@ for(species_level in species_levels) {
   }
 }
 write.csv(global_rev, here("output/Checking/global_rev.csv"))
+#
 ######## 2.B) Make comparisons between estimates and create pmcmcs
 
 # pmcmc for specific comparisons

@@ -4,7 +4,6 @@
 
 # Packages
 pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, forcats)
-source(here("R", "func.R"))
 
 # Load data
 data  <-  read.csv("./data/Learning.csv")

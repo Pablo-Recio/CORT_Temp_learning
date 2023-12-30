@@ -21,27 +21,27 @@ fit_asso <- function(sp, bias) {
     ungroup()
   data.frame()
   #Define levels of treatment
-  treatment_levels <- unique(data$trt)
-  # Initialize an empty data frame for result_df
+  treatment_levels <- c("Control Cold", "CORT Cold", "Control Hot", "CORT Hot")
+   # Initialize an empty data frame for result_df
   result_df <- data.frame()
   # Use purrr::map_dfr for iteration and result_df construction
-  result_df <- purrr::map_dfr(treatment_levels, function(treatment_level) {
+  result_df <- for(treatment_level in treatment_levels) {
     # Subset data for the current treatment level
-    subset_data <- filter(data, trt == treatment_level)
+    data$trt <- relevel(data$trt, ref = treatment_level)
     # Fit the model
-    model <- brm(FC_associative ~ Associative_Trial + (1 + lizard_id),
-                data = subset_data,
+    model <- brm(FC_associative ~ Associative_Trial * trt + (1 + Associative_Trial | lizard_id),
+                data = data,
                 family = bernoulli(link = "logit"),
                 chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
     # Extract Associative_Trial posteriors
     posterior <- as_draws(model)
     posterior_df <- as.data.frame(posterior)
-    associative_trial_samples <- posterior_df[, grepl("b_Associative_Trial", colnames(posterior_df))]
+    associative_trial_samples <- posterior_df[, grepl("b_Associative_Trial|b_Intercept", colnames(posterior_df))]
     # Make data frame with all posteriors including treatment_level
     df <- data.frame(associative_trial_samples,
           treatment_level = treatment_level)
     return(df)
-    })
+    }
 return(result_df)
 }
 #
@@ -65,16 +65,16 @@ fit_rev <- function(sp, bias) {
   # Use purrr::map_dfr for iteration and result_df construction
   result_df <- purrr::map_dfr(treatment_levels, function(treatment_level) {
     # Subset data for the current treatment level
-    subset_data <- filter(data, trt == treatment_level)
+    data$trt <- relevel(data$trt, treatment_level)
     # Fit the model
-    model <- brm(FC_reversal ~ trial_reversal + (1 + lizard_id),
-                data = subset_data,
+    model <- brm(FC_reversal ~ trial_reversal*trt + (1 + trial_reversal | lizard_id),
+                data = data,
                 family = bernoulli(link = "logit"),
                 chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
     # Extract Associative_Trial posteriors
     posterior <- as_draws(model)
     posterior_df <- as.data.frame(posterior)
-    reversal_trial_samples <- posterior_df[, grepl("b_trial_reversal", colnames(posterior_df))]
+    reversal_trial_samples <- posterior_df[, grepl("b_Intercept", "b_trial_reversal", colnames(posterior_df))]
     # Make data frame with all posteriors including treatment_level
     df <- data.frame(reversal_trial_samples,
           treatment_level = treatment_level)
@@ -115,14 +115,14 @@ pmcmc <- function(x, null = 0, twotail = TRUE){
 
 
 # Extract the mean of Associative_Trial estimates
-row_means <- rowMeans(associative_trial_samples)
-global_mean <- mean(row_means)
+# row_means <- rowMeans(associative_trial_samples)
+# global_mean <- mean(row_means)
 # Extract the quantiles of Associative_Trial estimates
-row_quantiles <- apply(associative_trial_samples, 1, function(x) quantile(x, c(0.025, 0.975)))
-global_quantiles <- quantile(row_quantiles, c(0.025, 0.975))
+# row_quantiles <- apply(associative_trial_samples, 1, function(x) quantile(x, c(0.025, 0.975)))
+# global_quantiles <- quantile(row_quantiles, c(0.025, 0.975))
 # Make df data frame
-df <- data.frame(
-  treatment_level = treatment_level,
-  global_mean = global_mean,
-  quantile_0.025 = global_quantiles[1],
-  quantile_0.975 = global_quantiles[2])
+# df <- data.frame(
+  #treatment_level = treatment_level,
+  #global_mean = global_mean,
+  #quantile_0.025 = global_quantiles[1],
+  #quantile_0.975 = global_quantiles[2])
