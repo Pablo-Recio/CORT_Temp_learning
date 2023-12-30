@@ -15,35 +15,31 @@ data_associative <- data %>%
     filter(sum(is.na(FC_associative)) <= 15) %>%
     filter(trial_associative <= 35) %>%
   ungroup()  %>%
-    mutate(temp = gsub("[AB]_", "", trt),
-          cort = gsub("_[2][38]", "", trt))  %>%
     mutate(group = factor(group,
      levels = c("R_B", "B_R"),
      labels=c("R_B"="Red", "B_R"="Blue"))) %>%
-    mutate(temp = factor(temp,
-     levels = c("23", "28"),
-     labels=c("23"="Cold", "28"="Hot"))) %>%
-    mutate(cort = factor(cort,
-     levels = c("A", "B"),
-     labels=c("A"="Control", "B"="CORT"))) %>%
-  data.frame()
+    mutate(trt = factor(trt,
+     levels = c("A_23", "A_28", "B_23", "B_28"),
+     labels=c("A_23"="Control Cold",
+             "A_28"="Control Hot",
+             "B_23"="CORT Cold",
+             "B_28"="CORT Hot"))) %>%
+data.frame()
 
 data_reversal <- data %>%
   group_by(lizard_id) %>%
     filter(sum(is.na(FC_reversal)) <= 15) %>%
    ungroup()  %>%
-    mutate(temp = gsub("[AB]_", "", trt),
-          cort = gsub("_[2][38]", "", trt))  %>%
     mutate(group = factor(group,
      levels = c("R_B", "B_R"),
      labels=c("R_B"="Red", "B_R"="Blue"))) %>%
-    mutate(temp = factor(temp,
-     levels = c("23", "28"),
-     labels=c("23"="Cold", "28"="Hot"))) %>%
-    mutate(cort = factor(cort,
-     levels = c("A", "B"),
-     labels=c("A"="Control", "B"="CORT"))) %>%
-    mutate(trial_reversal = ordered(trial_reversal)) %>%
+    mutate(trt = factor(trt,
+     levels = c("A_23", "A_28", "B_23", "B_28"),
+     labels=c("A_23"="Control Cold",
+             "A_28"="Control Hot",
+             "B_23"="CORT Cold",
+             "B_28"="CORT Hot"))) %>%
+    mutate(trial_reversal=as.numeric(trial_reversal)) %>%
   data.frame()
 
 # Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
@@ -53,20 +49,8 @@ data_associative <- data_associative %>%
     first_non_na = min(which(!is.na(FC_associative))),
     Associative_Trial = ifelse(!is.na(first_non_na),trial_associative - first_non_na + 1, trial_associative))%>%
     filter(Associative_Trial >= 1) %>%
-    mutate(Associative_Trial = fct_inorder(as.factor(Associative_Trial))) %>%
   ungroup() %>% 
   data.frame()
   
-write.csv(data_associative, file= "./output/Checking/data_associative.csv")
-
-# Split data by species
-deli_associative <- data_associative %>% filter(species == "delicata")
-write.csv(deli_associative, file= "./output/databases_clean/deli_associative.csv")
-guich_associative <- data_associative %>% filter(species == "guichenoti")
-write.csv(guich_associative, file= "./output/databases_clean/guich_associative.csv")
-
-# Split data by species
-deli_reversal <- data_reversal %>% filter(species == "delicata")
-write.csv(deli_reversal, file= "./output/databases_clean/deli_reversal.csv")
-guich_reversal <- data_reversal %>% filter(species == "guichenoti")
-write.csv(guich_reversal, file= "./output/databases_clean/guich_reversal.csv")
+write.csv(data_associative, file= "./output/databases_clean/data_associative.csv")
+write.csv(data_reversal, file= "./output/databases_clean/data_reversal.csv")

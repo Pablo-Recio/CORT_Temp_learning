@@ -3,45 +3,51 @@
 ####################################
 pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom)
 #
-######## 2.A) BUILD ALL MODELS
-#### The function here is to fit all the (brm) models for future analyses using the databases from output/clean_databases already processed using the code in "1_data_process.R"
+######## 2.A) BUILD ALL MODELS AND EXTRACT POSTERIORS
+#### Here we fit all the (brm) models and extract the posteriors per each of the treatments using output/clean_databases already processed using the code in "1_data_process.R"
+#### All this posteriors are processed by fit_asso function and a glbal database with the extimates of Associative_Trial per each treatment level, species, and group is created
+## Associative task
 source(here("R", "func.R"))
-# A) Associative task
-### L. delicata
-deli_asso<-fit_asso(here("output/databases_clean/deli_associative.csv"))
-### L. guichenoti
-guich_asso<-fit_asso(here("output/databases_clean/guich_associative.csv"))
-# B) Reversal task
-### L. delicata
-deli_rev<-fit_rev(here("output/databases_clean/deli_reversal.csv"))
-### L. guichenoti
-guich_rev<-fit_rev(here("output/databases_clean/guich_reversal.csv"))
+species_levels <- unique(data_associative$species)
+bias_levels <- unique(data_associative$group)
+global_asso <- data.frame()
+for(species_level in species_levels) {
+  for(bias_level in bias_levels) {
+    res <- fit_asso(sp = species_levels, bias = bias_levels)
+    # Add columns for species and bias to the result
+    res$species_level <- species_level
+    res$bias_level <- bias_level
+    # Combine the result with the global result
+    global_asso <- bind_rows(global_asso, res)
+  }
+}
+write.csv(global_asso, here("output/Checking/global_asso.csv"))
 #
-#
-######## 2.B) EXTRACT POSTERIORS FOR ALL MODELS
+## Reversal task
 source(here("R", "func.R"))
-posteriors_deli_asso <- extract_posteriors(deli_asso)
-posteriors_guich_asso <- extract_posteriors(guich_asso)
-posteriors_deli_rev <- extract_posteriors(deli_rev)
-posteriors_guich_rev <- extract_posteriors(guich_rev)
-#
-emtrends_results <- emtrends(deli_asso, ~ cort * temp * Associative_Trial|group, var = "Associative_Trial", infer = TRUE)
-# Display the results
-summary(emtrends_results)
+species_levels <- unique(data_reversal$species)
+bias_levels <- unique(data_reversal$group)
+global_rev <- data.frame()
+for(species_level in species_levels) {
+  for(bias_level in bias_levels) {
+    res <- fit_rev(sp = species_levels, bias = bias_levels)
+    # Add columns for species and bias to the result
+    res$species_level <- species_level
+    res$bias_level <- bias_level
+    # Combine the result with the global result
+    global_rev <- bind_rows(global_rev, res)
+  }
+}
+write.csv(global_rev, here("output/Checking/global_rev.csv"))
+######## 2.B) Make comparisons between estimates and create pmcmcs
 
-posterior <- posterior_samples(deli_mod, pars = "^b")
-plyr::ldply(lapply(posterior, mean))
-plyr::ldply(lapply(posterior, function(x) quantile(x, c(0.025, 0.975))))
-
-######## 2.C) pmcmc FOR ALL MODELS
+# pmcmc for specific comparisons
 
 # pmcmc for differences between 'Groups'
 
-# Also pmcmc for differences between both species
+# pmcmc for differences between both species
 
-
-######## 2.D) MAKE TABLE WITH POSTERIORS AND pmcmc
-
+######## 2.C) MAKE TABLE WITH POSTERIORS AND pmcmc
 
 ######## 2.E) PLOTS MODELS 
 # Plot delicata associative

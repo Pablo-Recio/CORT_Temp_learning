@@ -7,36 +7,80 @@ pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4,
 # MODELS
 ####################
 #
-# Fit Associative models function:
+# Fit Associative models and extract posteriors both per each treatment:
 #' @title fit_asso Function
 #' @description Fit brm models for different the associative task
-#' @param data_asso Path to the database file
-#' @return Fitted brm model
-fit_asso <- function(data_asso) {
-  # Load the data
-  data <- read.csv(data_asso)
-  # Fit the model
-  model <- brm(FC_associative ~ cort*temp*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id),
-              data = data,
-              family = bernoulli(link = "logit"),
-              chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
-return(model)
+#' @param sp To select the species of interest
+#' @param bias To select the 'group' we want, i.e. to analyse those who learn Red first and Blue second
+#' @return Posteriors of fitted brm model for each treatment
+fit_asso <- function(sp, bias) {
+  # Subsample the data
+  data <- data_associative %>%
+    group_by(lizard_id) %>%
+      filter(species %in% sp, group %in% bias) %>%
+    ungroup()
+  data.frame()
+  #Define levels of treatment
+  treatment_levels <- unique(data$trt)
+  # Initialize an empty data frame for result_df
+  result_df <- data.frame()
+  # Use purrr::map_dfr for iteration and result_df construction
+  result_df <- purrr::map_dfr(treatment_levels, function(treatment_level) {
+    # Subset data for the current treatment level
+    subset_data <- filter(data, trt == treatment_level)
+    # Fit the model
+    model <- brm(FC_associative ~ Associative_Trial + (1 + lizard_id),
+                data = subset_data,
+                family = bernoulli(link = "logit"),
+                chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+    # Extract Associative_Trial posteriors
+    posterior <- as_draws(model)
+    posterior_df <- as.data.frame(posterior)
+    associative_trial_samples <- posterior_df[, grepl("b_Associative_Trial", colnames(posterior_df))]
+    # Make data frame with all posteriors including treatment_level
+    df <- data.frame(associative_trial_samples,
+          treatment_level = treatment_level)
+    return(df)
+    })
+return(result_df)
 }
 #
 # Fit Reversal models function:
 #' @title fit_rev Function
 #' @description Fit brm models for different the reversal task
-#' @param data_rev Path to the database file
-#' @return Fitted brm model
-fit_rev <- function(data_rev) {
-  # Load the data
-  data <- read.csv(data_rev)
-  # Fit the model
-  model <- brm(FC_reversal ~ cort*temp*trial_reversal + group*trial_reversal + (1 + trial_reversal|lizard_id),
-              data = data,
-              family = bernoulli(link = "logit"),
-              chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
-return(model)
+#' @param sp To select the species of interest
+#' @param bias To select the 'group' we want, i.e. to analyse those who learn Red first and Blue second
+#' @return Posteriors of fitted brm model for each treatment
+fit_rev <- function(sp, bias) {
+  # Subsample the data
+  data <- data_reversal %>%
+    group_by(lizard_id) %>%
+      filter(species %in% sp, group %in% bias) %>%
+    ungroup()
+  data.frame()
+  #Define levels of treatment
+  treatment_levels <- unique(data$trt)
+  # Initialize an empty data frame for result_df
+  result_df <- data.frame()
+  # Use purrr::map_dfr for iteration and result_df construction
+  result_df <- purrr::map_dfr(treatment_levels, function(treatment_level) {
+    # Subset data for the current treatment level
+    subset_data <- filter(data, trt == treatment_level)
+    # Fit the model
+    model <- brm(FC_reversal ~ trial_reversal + (1 + lizard_id),
+                data = subset_data,
+                family = bernoulli(link = "logit"),
+                chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+    # Extract Associative_Trial posteriors
+    posterior <- as_draws(model)
+    posterior_df <- as.data.frame(posterior)
+    reversal_trial_samples <- posterior_df[, grepl("b_trial_reversal", colnames(posterior_df))]
+    # Make data frame with all posteriors including treatment_level
+    df <- data.frame(reversal_trial_samples,
+          treatment_level = treatment_level)
+    return(df)
+    })
+return(result_df)
 }
 #
 # Extract posteriors function:
@@ -68,3 +112,17 @@ pmcmc <- function(x, null = 0, twotail = TRUE){
     (1 - max(table(x<=null) / length(x)))
   }
 }
+
+
+# Extract the mean of Associative_Trial estimates
+row_means <- rowMeans(associative_trial_samples)
+global_mean <- mean(row_means)
+# Extract the quantiles of Associative_Trial estimates
+row_quantiles <- apply(associative_trial_samples, 1, function(x) quantile(x, c(0.025, 0.975)))
+global_quantiles <- quantile(row_quantiles, c(0.025, 0.975))
+# Make df data frame
+df <- data.frame(
+  treatment_level = treatment_level,
+  global_mean = global_mean,
+  quantile_0.025 = global_quantiles[1],
+  quantile_0.975 = global_quantiles[2])
