@@ -18,11 +18,11 @@ data_associative <- data %>%
      levels = c("R_B", "B_R"),
      labels=c("R_B"="Red", "B_R"="Blue"))) %>%
     mutate(trt = factor(trt,
-     levels = c("A_23", "A_28", "B_23", "B_28"),
-     labels=c("A_23"="Control Cold",
-             "A_28"="Control Hot",
-             "B_23"="CORT Cold",
-             "B_28"="CORT Hot"))) %>%
+     levels = c("B_23", "A_23", "A_23", "B_28"),
+     labels=c("B_23"="CORT Cold",
+              "A_23"="Control Cold",
+              "B_28"="CORT Hot",
+              "A_28"="Control Hot"))) %>%
 data.frame()
 
 data_reversal <- data %>%
@@ -33,11 +33,11 @@ data_reversal <- data %>%
      levels = c("R_B", "B_R"),
      labels=c("R_B"="Red", "B_R"="Blue"))) %>%
     mutate(trt = factor(trt,
-     levels = c("A_23", "A_28", "B_23", "B_28"),
-     labels=c("A_23"="Control Cold",
-             "A_28"="Control Hot",
-             "B_23"="CORT Cold",
-             "B_28"="CORT Hot"))) %>%
+     levels = c("B_23", "A_23", "A_23", "B_28"),
+     labels=c("B_23"="CORT Cold",
+              "A_23"="Control Cold",
+              "B_28"="CORT Hot",
+              "A_28"="Control Hot"))) %>%
     mutate(trial_reversal=as.numeric(trial_reversal)) %>%
   data.frame()
 

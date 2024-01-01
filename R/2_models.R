@@ -5,61 +5,29 @@ pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4,
 #
 ######## 2.A) BUILD ALL MODELS AND EXTRACT POSTERIORS
 #### Here we fit all the (brm) models and extract the posteriors per each of the treatments using output/clean_databases already processed using the code in "1_data_process.R"
-#### All this posteriors are processed by fit_asso function and a glbal database with the extimates of Associative_Trial per each treatment level, species, and group is created
-## Associative task
+#### All this posteriors are processed by fit_asso function and a golbal database with the estimates of Associative_Trial per each treatment level, species, and group is created
 source(here("R", "func.R"))
+## Associative task
 species_levels <- unique(data_associative$species)
 bias_levels <- unique(data_associative$group)
-global_asso <- data.frame()
-for(species_level in species_levels) {
-  for(bias_level in bias_levels) {
-    res <- fit_asso(sp = species_level, bias = bias_level)
-    # Add columns for species and bias to the result
-    res$species_level <- species_level
-    res$bias_level <- bias_level
-    # Combine the result with the global result
-    global_asso <- bind_rows(global_asso, res)
-  }
-}
+global_asso <- fit_m(type = "asso", sp = species_levels, bias = bias_levels)
 write.csv(global_asso, here("output/Checking/global_asso.csv"))
-data_trial <- filter(data_associative, data_associative$species=="delicata")
-data_trial$group <- relevel(data_trial$group, ref = "Blue")
-data_trial$trt <- relevel(data_trial$trt, ref = "Control Cold")
-m <- brm(FC_associative ~ trt*Associative_Trial + Associative_Trial*group + (1 + Associative_Trial|lizard_id),
-                data = data_trial,
-                family = bernoulli(link = "logit"),
-                chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
-posterior_trial <- as_draws(m)
-write.csv(posterior_trial, here("output/Checking/posterior_trial.csv"))
-data_trial_2 <- filter(data_associative, data_associative$species=="delicata")
-data_trial_2$group <- relevel(data_trial$group, ref = "Blue")
-data_trial_2$trt <- relevel(data_trial$trt, ref = "CORT Cold")
-m2 <- brm(FC_associative ~ trt*Associative_Trial + Associative_Trial*group + (1 + Associative_Trial|lizard_id),
-                data = data_trial_2,
-                family = bernoulli(link = "logit"),
-                chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
-posterior_trial_2 <- as_draws(m2)
-write.csv(posterior_trial_2, here("output/Checking/posterior_trial_2.csv"))
 #
 ## Reversal task
-source(here("R", "func.R"))
 species_levels <- unique(data_reversal$species)
 bias_levels <- unique(data_reversal$group)
-global_rev <- data.frame()
-for(species_level in species_levels) {
-  for(bias_level in bias_levels) {
-    res <- fit_rev(sp = species_levels, bias = bias_levels)
-    # Add columns for species and bias to the result
-    res$species_level <- species_level
-    res$bias_level <- bias_level
-    # Combine the result with the global result
-    global_rev <- bind_rows(global_rev, res)
-  }
-}
+global_rev <- fit_m(type = "rev", sp = species_levels, bias = bias_levels)
 write.csv(global_rev, here("output/Checking/global_rev.csv"))
 #
-######## 2.B) Make comparisons between estimates and create pmcmcs
-
+######## 2.B) TIDY POSTERIOR DFs
+source(here("R", "func.R"))
+## Associative task
+tidy_posts_asso <- tidy_post(global_asso)
+write.csv(tidy_posts_asso, here("output/Checking/tidy_posts_asso.csv"))
+## Reversal task
+tidy_posts_rev <- tidy_post(global_rev)
+write.csv(tidy_posts_rev, here("output/Checking/tidy_posts_rev.csv"))
+#
 # pmcmc for specific comparisons
 
 # pmcmc for differences between 'Groups'
