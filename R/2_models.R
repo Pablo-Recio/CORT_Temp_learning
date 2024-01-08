@@ -19,6 +19,21 @@ bias_levels <- unique(data_reversal$group)
 global_rev <- fit_m(type = "rev", sp = species_levels, bias = bias_levels)
 write.csv(global_rev, here("output/Checking/global_rev.csv"))
 #
+model <- brm(FC_associative ~ trt*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id),
+              data = deli_associative,
+              family = bernoulli(link = "logit"),
+              chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+posteriors_model <- as_draws(model)
+posteriors_model_tidy <- tidy_post(posteriors_model)
+#
+data_associative$trt <- relevel(data_associative$trt, ref="Control Cold")
+model <- brm(FC_associative ~ trt*Associative_Trial + group*Associative_Trial + (1 + Associative_Trial|lizard_id),
+              data = deli_associative,
+              family = bernoulli(link = "logit"),
+              chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+posteriors_model2 <- as_draws(model)
+posteriors_model2_tidy <- tidy_post(posteriors_model2)
+#
 ######## 2.B) TIDY POSTERIOR DFs
 source(here("R", "func.R"))
 ## Associative task
