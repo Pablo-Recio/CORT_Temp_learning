@@ -14,15 +14,15 @@ pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4,
 #' @param sp To select the species of interest
 #' @param bias To select the 'group' we want, i.e. to analyse those who learn Red first and Blue second
 #' @return Estimates of fitted brm model for each treatment, species, and group (df)
-fit_m <- function(type, sp, bias) {
+fit_m <- function(type, sp, bias, refit = TRUE) {
   #Specify the type
   if (type == "asso"){
     data <- data_associative
-    formula <- FC_associative ~ Associative_Trial + (1 + lizard_id)
+    formula <- FC_associative ~ Associative_Trial + (1 + Associative_Trial|lizard_id)
   }else{
     if(type == "rev"){
       data <- data_reversal
-      formula <- FC_reversal ~ trial_reversal + (1 + lizard_id)
+      formula <- FC_reversal ~ trial_reversal + (1 + trial_reversal|lizard_id)
     } else {
       cat("Option not valid\n")
       return(NULL)  # Return NULL in case of an invalid option
@@ -47,11 +47,20 @@ fit_m <- function(type, sp, bias) {
       result_df <- purrr::map_dfr(treatment_levels, function(treatment_level) {
         # Subset data for the current treatment level
         sub_data$trt <- treatment_level
+        
+      if(refit){
         # Fit the model
         model <- brm(formula,
                     data = sub_data,
                     family = bernoulli(link = "logit"),
                     chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+        
+        # Write the model to a file'
+        saveRDS(model, file = paste0(here("output/models/"), type, "_", species_level, "_", bias_level, "_", treatment_level, ".rds"))
+        } else {
+          # Read the model from a file
+          model <- readRDS(file = paste0(here("output/models/"), type, "_", species_level, "_", bias_level, "_", treatment_level, ".rds"))
+        } 
         # Extract estimates of "trial" and the Intercept
         posterior <- as_draws(model)
         posterior_df <- as.data.frame(posterior)
