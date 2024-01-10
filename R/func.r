@@ -1,83 +1,66 @@
 #################### 
-# PACKAGES
 ####################
 pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes)
 #
-#################### 
-# MODELS & RAW POSTERIORS
 ####################
-#
+####################
 # Fit models and extract posteriors both per each treatment:
 #' @title fit_m Function
 #' @description Fit brm models for different the associative task
-#' @param type To define if we are analysing the reversal or the associative
+#' @param type To define if we are analysing the associative ("asso) or the reversal ("rev")
 #' @param sp To select the species of interest
-#' @param bias To select the 'group' we want, i.e. to analyse those who learn Red first and Blue second
-#' @return Estimates of fitted brm model for each treatment, species, and group (df)
-fit_m <- function(type, sp, bias, refit = TRUE) {
+#' @return Raw posteriors of fitted brm model for each treatment, species, and group (df)
+fit_m <- function(type, sp, refit = TRUE) {
   #Specify the type
   if (type == "asso"){
-    data <- data_associative
-    formula <- FC_associative ~ Associative_Trial + (1 + Associative_Trial|lizard_id)
+    data <- data_asso
+    formula <- FC_associative ~ Associative_Trial*cort*temp + Associative_Trial*group + (1 + Associative_Trial|lizard_id)
   }else{
     if(type == "rev"){
-      data <- data_reversal
-      formula <- FC_reversal ~ trial_reversal + (1 + trial_reversal|lizard_id)
+      data <- data_rev
+      formula <- FC_reversal ~ trial_reversal*cort*temp + trial_reversal*group + (1 + trial_reversal|lizard_id)
     } else {
-      cat("Option not valid\n")
+      stop("Option not valid")
       return(NULL)  # Return NULL in case of an invalid option
     }
   }
-  # Create global database for all the posteriors of all the models
-  global <- data.frame()
-  # Start the loop for all species and groups
-  for(species_level in sp) {
-    for(bias_level in bias) {
-      # Subsample the data
+  #Specify species
+    if (sp == "deli"){
       sub_data <- data %>%
-        group_by(lizard_id) %>%
-          filter(species_level %in% sp, bias_level %in% bias) %>%
-        ungroup()
-      data.frame()
-      #Define levels of treatment
-      treatment_levels <- c("CORT Cold", "Control Cold", "CORT Hot", "Control Hot")
-      # Initialize an empty data frame for result_df
-      result_df <- data.frame()
-      # Use purrr::map_dfr for iteration and result_df construction
-      result_df <- purrr::map_dfr(treatment_levels, function(treatment_level) {
-        # Subset data for the current treatment level
-        sub_data$trt <- treatment_level
-        
-      if(refit){
-        # Fit the model
-        model <- brm(formula,
-                    data = sub_data,
-                    family = bernoulli(link = "logit"),
-                    chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
-        
-        # Write the model to a file'
-        saveRDS(model, file = paste0(here("output/models/"), type, "_", species_level, "_", bias_level, "_", treatment_level, ".rds"))
-        } else {
-          # Read the model from a file
-          model <- readRDS(file = paste0(here("output/models/"), type, "_", species_level, "_", bias_level, "_", treatment_level, ".rds"))
-        } 
-        # Extract estimates of "trial" and the Intercept
-        posterior <- as_draws(model)
-        posterior_df <- as.data.frame(posterior)
-        trial_samples <- posterior_df[, grepl("b_Associative_Trial|b_Intercept", colnames(posterior_df))]
-        # Make data frame with all posteriors including treatment_level
-        df <- data.frame(trial_samples,
-              treatment_level = treatment_level,
-              species_level = species_level,
-              bias_level = bias_level)
-        return(df)
-       })
-    global <- bind_rows(global, result_df)
+            group_by(lizard_id) %>%
+            filter(species == "delicata") %>%
+            ungroup() %>%
+      data.frame() 
+    } else {
+      if(sp == "guich"){
+        sub_data <- data %>%
+              group_by(lizard_id) %>%
+              filter(species == "guichenoti") %>%
+              ungroup() %>%
+        data.frame()
+      } else {
+        stop("Species non valid")
+      }
     }
-  }
-return(global)
+  #Fit the model only if it has not been fit yet (if refit=TRUE)
+  if(refit){
+    # Fit the model
+    model <- brm(formula,
+                data = sub_data,
+                family = bernoulli(link = "logit"),
+                chains = 4, cores = 4, iter = 2000, warmup = 1000, control = list(adapt_delta = 0.99))
+    # Write the model to a file
+    saveRDS(model, file = paste0(here("output/models/"), type, "_", sp, "_", ".rds"))
+  } else {
+      # Read the model from a file
+      model <- readRDS(file = paste0(here("output/models/"), type, "_", sp, "_", ".rds"))
+  } 
+  # Extract posteriors
+  posteriors <- as_draws_df(model, pars = c("^b_", "^sd_"))
+  return(posteriors)
 }
-#
+###################
+###################
 # Tidy estimates from fit_m
 #' @title tidy_post
 #' @description The df obtained by fit_m contains the estimates of the Intercept and fixed effects of "Choice ~ trial (1 + lizard)"
@@ -97,29 +80,13 @@ tidy_post <- function(df) {
   new_df <- bind_rows(res1, res2,res3,res4)
 return(new_df) 
 }
-#
-# Extract posteriors function:
-#' @title extract_posteriors function
-#' @description Obtain posteriors for all factors from different models
-#' @param model Path to the model
-#' @return Data frame with posteriors
-extract_posteriors <- function(model) {
-  # Extract posteriors
-  posterior <- posterior_samples(model, pars = "^b")
-  # Calculate means
-  means <- plyr::ldply(lapply(posterior, mean))
-  # Calculate quantiles
-  quantiles <- plyr::ldply(lapply(posterior, function(x) quantile(x, c(0.025, 0.975))))
-  # Combine means, quantiles, and p-values into a single data frame
-  result <- cbind(means, quantiles)
-  return(result)
-}
-
-
+####################
+####################
+# Estimate p-values using pmcm
 #' @title pMCMC Function
- #' @param x The vector for the posterior distribution. Note that this will test the null hypothesis that the parameter of interest is significantly different from 0. 
- #' @param null A numeric value decsribing what the null hypothesis should be
- #' @param twotail Whether to conduct a one-tailed hypothesis or a two-tailed hypotheses. Default = true indicating a two-tailed test will be done.
+#' @param x The vector for the posterior distribution. Note that this will test the null hypothesis that the parameter of interest is significantly different from 0. 
+#' @param null A numeric value decsribing what the null hypothesis should be
+#' @param twotail Whether to conduct a one-tailed hypothesis or a two-tailed hypotheses. Default = true indicating a two-tailed test will be done.
 pmcmc <- function(x, null = 0, twotail = TRUE){
   if(twotail){
     2*(1 - max(table(x<=null) / length(x)))
@@ -127,17 +94,5 @@ pmcmc <- function(x, null = 0, twotail = TRUE){
     (1 - max(table(x<=null) / length(x)))
   }
 }
-
-
-# Extract the mean of Associative_Trial estimates
-# row_means <- rowMeans(associative_trial_samples)
-# global_mean <- mean(row_means)
-# Extract the quantiles of Associative_Trial estimates
-# row_quantiles <- apply(associative_trial_samples, 1, function(x) quantile(x, c(0.025, 0.975)))
-# global_quantiles <- quantile(row_quantiles, c(0.025, 0.975))
-# Make df data frame
-# df <- data.frame(
-  #treatment_level = treatment_level,
-  #global_mean = global_mean,
-  #quantile_0.025 = global_quantiles[1],
-  #quantile_0.975 = global_quantiles[2])
+####################
+####################

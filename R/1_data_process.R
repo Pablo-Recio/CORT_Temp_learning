@@ -9,7 +9,7 @@ pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4,
 data  <-  read.csv("./data/Learning.csv")
 
 # Remove individuals who did not participate (more than 15 NAs), remove trials [36-40] (Only in associative) and split treatment into Temp and Cort
-data_associative <- data %>%
+data_asso <- data %>%
   group_by(lizard_id) %>%
     filter(sum(is.na(FC_associative)) <= 15) %>%
     filter(trial_associative <= 35) %>%
@@ -17,32 +17,36 @@ data_associative <- data %>%
     mutate(group = factor(group,
      levels = c("R_B", "B_R"),
      labels=c("R_B"="Red", "B_R"="Blue"))) %>%
-    mutate(trt = factor(trt,
-     levels = c("B_23", "A_23", "A_23", "B_28"),
-     labels=c("B_23"="CORT Cold",
-              "A_23"="Control Cold",
-              "B_28"="CORT Hot",
-              "A_28"="Control Hot"))) %>%
+    mutate(temp = gsub("[AB]_", "", trt),
+          cort = gsub("_[2][38]", "", trt))  %>%
+    mutate(temp = factor(temp,
+      levels = c("23", "28"),
+      labels = c("23" = "Cold", "28" = "Hot"))) %>%
+    mutate(cort = factor(cort,
+      levels = c("B", "A"),
+      labels = c("B" = "CORT", "A" = "Control"))) %>%
 data.frame()
 
-data_reversal <- data %>%
+data_rev <- data %>%
   group_by(lizard_id) %>%
     filter(sum(is.na(FC_reversal)) <= 15) %>%
    ungroup()  %>%
     mutate(group = factor(group,
      levels = c("R_B", "B_R"),
      labels=c("R_B"="Red", "B_R"="Blue"))) %>%
-    mutate(trt = factor(trt,
-     levels = c("B_23", "A_23", "A_23", "B_28"),
-     labels=c("B_23"="CORT Cold",
-              "A_23"="Control Cold",
-              "B_28"="CORT Hot",
-              "A_28"="Control Hot"))) %>%
+    mutate(temp = gsub("[AB]_", "", trt),
+          cort = gsub("_[2][38]", "", trt))  %>%
+    mutate(temp = factor(temp,
+      levels = c("23", "28"),
+      labels = c("23" = "Cold", "28" = "Hot"))) %>%
+    mutate(cort = factor(cort,
+      levels = c("B", "A"),
+      labels = c("B" = "CORT", "A" = "Control"))) %>%
     mutate(trial_reversal=as.numeric(trial_reversal)) %>%
   data.frame()
 
 # Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
-data_associative <- data_associative %>%
+data_asso <- data_asso %>%
   group_by(lizard_id) %>%
   mutate(
     first_non_na = min(which(!is.na(FC_associative))),
@@ -51,5 +55,4 @@ data_associative <- data_associative %>%
   ungroup() %>% 
   data.frame()
   
-write.csv(data_associative, file= "./output/databases_clean/data_associative.csv")
-write.csv(data_reversal, file= "./output/databases_clean/data_reversal.csv")
+
