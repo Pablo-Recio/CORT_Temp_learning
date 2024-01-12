@@ -98,7 +98,62 @@ guich_rev_blue <- fit_m("rev", "guich", "blue")
 write.csv(guich_rev_blue, file= "./output/Checking/guich_rev_blue.csv")
 ```
 
-```{r, resultsAssodeli}
+```{r, resultsAsso}
+# Rename some of the posteriors and make new estimates for the learning rate for the Associative task
+## 1) L. delicata
+### Group = red
+d_a_r_CORTCold <- deli_asso_red$b_Associative_Trial #"Learning estimate" for treatment CORT-Cold for L. delicata, red as the right choice
+d_a_r_ControlCold <- (deli_asso_red$'b_Associative_Trial:cortControl' + deli_asso_red$b_Associative_Trial)
+d_a_r_CORTHot <- (deli_asso_red$'b_Associative_Trial:tempHot' + deli_asso_red$b_Associative_Trial)
+d_a_r_ControlHot <- (deli_asso_red$'b_Associative_Trial:cortControl:tempHot' + deli_asso_red$b_Associative_Trial)
+### Group = blue
+d_a_b_CORTCold <- deli_asso_blue$b_Associative_Trial
+d_a_b_ControlCold <- (deli_asso_blue$'b_Associative_Trial:cortControl' + deli_asso_blue$b_Associative_Trial)
+d_a_b_CORTHot <- (deli_asso_blue$'b_Associative_Trial:tempHot' + deli_asso_blue$b_Associative_Trial)
+d_a_b_ControlHot <- (deli_asso_blue$'b_Associative_Trial:cortControl:tempHot' + deli_asso_blue$b_Associative_Trial)
+## 2) L. guichenoti
+### Group = red
+g_a_r_CORTCold <- guich_asso_red$b_Associative_Trial
+g_a_r_ControlCold <- (guich_asso_red$'b_Associative_Trial:cortControl' + guich_asso_red$b_Associative_Trial)
+g_a_r_CORTHot <- (guich_asso_red$'b_Associative_Trial:tempHot' + guich_asso_red$b_Associative_Trial)
+g_a_r_ControlHot <- (guich_asso_red$'b_Associative_Trial:cortControl:tempHot' + guich_asso_red$b_Associative_Trial)
+### Group = blue
+g_a_b_CORTCold <- guich_asso_blue$b_Associative_Trial
+g_a_b_ControlCold <- (guich_asso_blue$'b_Associative_Trial:cortControl' + guich_asso_blue$b_Associative_Trial)
+g_a_b_CORTHot <- (guich_asso_blue$'b_Associative_Trial:tempHot' + guich_asso_blue$b_Associative_Trial)
+g_a_b_ControlHot <- (guich_asso_blue$'b_Associative_Trial:cortControl:tempHot' + guich_asso_blue$b_Associative_Trial)
+```
+
+```{r, resultsRev}
+# Rename some of the posteriors and make new estimates for the learning rate for the Reversal task
+## 1) L. delicata
+### Group = red
+d_r_r_CORTCold <- deli_rev_red$b_trial_reversal
+d_r_r_ControlCold <- (deli_rev_red$'b_trial_reversal:cortControl' + deli_rev_red$b_trial_reversal)
+d_r_r_CORTHot <- (deli_rev_red$'b_trial_reversal:tempHot' + deli_rev_red$b_trial_reversal)
+d_r_r_ControlHot <- (deli_rev_red$'b_trial_reversal:cortControl:tempHot' + deli_rev_red$b_trial_reversal)
+### Group = blue
+d_r_b_CORTCold <- deli_rev_blue$b_trial_reversal
+d_r_b_ControlCold <- (deli_rev_blue$'b_trial_reversal:cortControl' + deli_rev_blue$b_trial_reversal)
+d_r_b_CORTHot <- (deli_rev_blue$'b_trial_reversal:tempHot' + deli_rev_blue$b_trial_reversal)
+d_r_b_ControlHot <- (deli_rev_blue$'b_trial_reversal:cortControl:tempHot' + deli_rev_blue$b_trial_reversal)
+## 2) L. guichenoti
+### Group = red
+g_r_r_CORTCold <- guich_rev_red$b_trial_reversal
+g_r_r_ControlCold <- (guich_rev_red$'b_trial_reversal:cortControl' + guich_rev_red$b_trial_reversal)
+g_r_r_CORTHot <- (guich_rev_red$'b_trial_reversal:tempHot' + guich_rev_red$b_trial_reversal)
+g_r_r_ControlHot <- (guich_rev_red$'b_trial_reversal:cortControl:tempHot' + guich_rev_red$b_trial_reversal)
+### Group = blue
+g_r_b_CORTCold <- guich_rev_blue$b_trial_reversal
+g_r_b_ControlCold <- (guich_rev_blue$'b_trial_reversal:cortControl' + guich_rev_blue$b_trial_reversal)
+g_r_b_CORTHot <- (guich_rev_blue$'b_trial_reversal:tempHot' + guich_rev_blue$b_trial_reversal)
+g_r_b_ControlHot <- (guich_rev_blue$'b_trial_reversal:cortControl:tempHot' + guich_rev_blue$b_trial_reversal)
+```
+
+```{r, results}
+```
+
+```{r, resultsRev}
 
 ```
 

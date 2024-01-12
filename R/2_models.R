@@ -2,7 +2,21 @@
 # 2_MODELS
 ####################################
 pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom)
+data2 <- data_asso %>%
+          mutate(temp = factor(temp,
+                levels = c("Hot", "Cold"))) %>%
+          filter(group == "Red") %>%
+          filter(species == "delicata") %>%
+        data.frame()
 
+model2 <- brm(FC_associative ~ Associative_Trial*cort*temp + (1 + Associative_Trial|lizard_id),
+                data = data2,
+                family = bernoulli(link = "logit"),
+                chains = 4, cores = 4, iter = 3000, warmup = 1000, control = list(adapt_delta = 0.99))
+postm2 <- as_draws_df(model2)
+mean(postm2$b_Associative_Trial)
+write.csv(postm2, here("output/Checking/postm2.csv"))
+mean(postm2$b_Associative_Trial + postm2$'b_Associative_Trial:tempCold')
 ######## 2.B) TIDY POSTERIOR DFs
 source(here("R", "func.R"))
 ## Associative task
