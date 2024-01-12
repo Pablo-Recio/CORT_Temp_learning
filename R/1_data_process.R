@@ -25,10 +25,17 @@ data_asso <- data %>%
     mutate(cort = factor(cort,
       levels = c("B", "A"),
       labels = c("B" = "CORT", "A" = "Control"))) %>%
+    mutate( # Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
+      first_non_na = min(which(!is.na(FC_associative))),
+      Associative_Trial = ifelse(!is.na(first_non_na),trial_associative - first_non_na + 1, trial_associative))%>% 
+      filter(Associative_Trial >= 1) %>%
+  ungroup() %>% 
 data.frame()
+
 
 data_rev <- data %>%
   group_by(lizard_id) %>%
+    filter(sum(is.na(FC_associative)) <= 15) %>%
     filter(sum(is.na(FC_reversal)) <= 15) %>%
    ungroup()  %>%
     mutate(group = factor(group,
@@ -45,14 +52,4 @@ data_rev <- data %>%
     mutate(trial_reversal=as.numeric(trial_reversal)) %>%
   data.frame()
 
-# Standarize data by trial (i.e. make the first trial where each individual participated their trial 1)
-data_asso <- data_asso %>%
-  group_by(lizard_id) %>%
-  mutate(
-    first_non_na = min(which(!is.na(FC_associative))),
-    Associative_Trial = ifelse(!is.na(first_non_na),trial_associative - first_non_na + 1, trial_associative))%>%
-    filter(Associative_Trial >= 1) %>%
-  ungroup() %>% 
-  data.frame()
-  
 

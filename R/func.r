@@ -4,6 +4,27 @@ pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4,
 #
 ####################
 ####################
+# Extract sample size per group
+#' @title sample
+#' @description Estract sample size per group
+#' @param sp To select the species of interest ("deli"/"guich")
+#' @param bias To select group depending on the colour assigned as correct for each task ("blue"/"red")
+#' @param corti To select cort treatment ("CORT"/"Control")
+#' @param therm To select temp treatment ("Cold"/"Hot")
+sample <- function(sp, bias, corti, therm){
+  #Specify database
+  data <- data_asso
+  # Count sample
+  sample_size <- data %>%
+                filter(species == sp, group == bias, cort == corti, temp == therm, Associative_Trial == 1) %>%
+                group_by(lizard_id) %>%
+                summarise(n = n()) %>%
+                summarise(total_count = sum(n)) %>%
+                pull(total_count)
+  return(sample_size)
+}
+####################
+####################
 # Fit models and extract posteriors both per each treatment:
 #' @title fit_m Function
 #' @description Fit brm models for different the associative task
@@ -116,3 +137,11 @@ pmcmc <- function(x, null = 0, twotail = TRUE){
 }
 ####################
 ####################
+# Function to format numbers with 2 decimal places
+#' @title format_dec
+#' @param x The object
+#' @param n The number of decimals
+format_dec <- function(x, n) {
+  z <- sprintf(paste0("%.",n,"f"), x)
+  return(as.numeric(z))
+}
