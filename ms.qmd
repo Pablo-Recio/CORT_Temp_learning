@@ -130,23 +130,23 @@ write.csv(guich_rev_blue, file= "./output/Checking/guich_rev_blue.csv")
 dar_CORTCold <- deli_asso_red$b_Associative_Trial #Slope for treatment CORT-Cold for L. delicata, red as the right choice
 dar_ControlCold <- (deli_asso_red$'b_Associative_Trial:cortControl' + deli_asso_red$b_Associative_Trial)
 dar_CORTHot <- (deli_asso_red$'b_Associative_Trial:tempHot' + deli_asso_red$b_Associative_Trial)
-dar_ControlHot <- (deli_asso_red$'b_Associative_Trial:cortControl:tempHot' + deli_asso_red$b_Associative_Trial)
+dar_ControlHot <- (deli_asso_red$'b_Associative_Trial:cortControl:tempHot' + deli_asso_red$b_Associative_Trial+ deli_asso_red$'b_Associative_Trial:cortControl' + deli_asso_red$'b_Associative_Trial:tempHot')
 ### Group = blue
 dab_CORTCold <- deli_asso_blue$b_Associative_Trial
 dab_ControlCold <- (deli_asso_blue$'b_Associative_Trial:cortControl' + deli_asso_blue$b_Associative_Trial)
 dab_CORTHot <- (deli_asso_blue$'b_Associative_Trial:tempHot' + deli_asso_blue$b_Associative_Trial)
-dab_ControlHot <- (deli_asso_blue$'b_Associative_Trial:cortControl:tempHot' + deli_asso_blue$b_Associative_Trial)
+dab_ControlHot <- (deli_asso_blue$'b_Associative_Trial:cortControl:tempHot' + deli_asso_blue$b_Associative_Trial + deli_asso_blue$'b_Associative_Trial:cortControl' + deli_asso_blue$'b_Associative_Trial:tempHot')
 ## 2) L. guichenoti
 ### Group = red
 gar_CORTCold <- guich_asso_red$b_Associative_Trial
 gar_ControlCold <- (guich_asso_red$'b_Associative_Trial:cortControl' + guich_asso_red$b_Associative_Trial)
 gar_CORTHot <- (guich_asso_red$'b_Associative_Trial:tempHot' + guich_asso_red$b_Associative_Trial)
-gar_ControlHot <- (guich_asso_red$'b_Associative_Trial:cortControl:tempHot' + guich_asso_red$b_Associative_Trial)
+gar_ControlHot <- (guich_asso_red$'b_Associative_Trial:cortControl:tempHot' + guich_asso_red$b_Associative_Trial + guich_asso_red$'b_Associative_Trial:cortControl' + guich_asso_red$'b_Associative_Trial:tempHot')
 ### Group = blue
 gab_CORTCold <- guich_asso_blue$b_Associative_Trial
 gab_ControlCold <- (guich_asso_blue$'b_Associative_Trial:cortControl' + guich_asso_blue$b_Associative_Trial)
 gab_CORTHot <- (guich_asso_blue$'b_Associative_Trial:tempHot' + guich_asso_blue$b_Associative_Trial)
-gab_ControlHot <- (guich_asso_blue$'b_Associative_Trial:cortControl:tempHot' + guich_asso_blue$b_Associative_Trial)
+gab_ControlHot <- (guich_asso_blue$'b_Associative_Trial:cortControl:tempHot' + guich_asso_blue$b_Associative_Trial + guich_asso_blue$'b_Associative_Trial:cortControl' + guich_asso_blue$'b_Associative_Trial:tempHot')
 ```
 
 ```{r, resultsRev}
@@ -156,28 +156,29 @@ gab_ControlHot <- (guich_asso_blue$'b_Associative_Trial:cortControl:tempHot' + g
 drr_CORTCold <- deli_rev_red$b_trial_reversal
 drr_ControlCold <- (deli_rev_red$'b_trial_reversal:cortControl' + deli_rev_red$b_trial_reversal)
 drr_CORTHot <- (deli_rev_red$'b_trial_reversal:tempHot' + deli_rev_red$b_trial_reversal)
-drr_ControlHot <- (deli_rev_red$'b_trial_reversal:cortControl:tempHot' + deli_rev_red$b_trial_reversal)
+drr_ControlHot <- (deli_rev_red$'b_trial_reversal:cortControl:tempHot' + deli_rev_red$b_trial_reversal + deli_rev_red$'b_trial_reversal:cortControl' + deli_rev_red$'b_trial_reversal:tempHot')
 ### Group = blue
 drb_CORTCold <- deli_rev_blue$b_trial_reversal
 drb_ControlCold <- (deli_rev_blue$'b_trial_reversal:cortControl' + deli_rev_blue$b_trial_reversal)
 drb_CORTHot <- (deli_rev_blue$'b_trial_reversal:tempHot' + deli_rev_blue$b_trial_reversal)
-drb_ControlHot <- (deli_rev_blue$'b_trial_reversal:cortControl:tempHot' + deli_rev_blue$b_trial_reversal)
+drb_ControlHot <- (deli_rev_blue$'b_trial_reversal:cortControl:tempHot' + deli_rev_blue$b_trial_reversal + deli_rev_blue$'b_trial_reversal:cortControl' + deli_rev_blue$'b_trial_reversal:tempHot')
 ## 2) L. guichenoti
 ### Group = red
 grr_CORTCold <- guich_rev_red$b_trial_reversal
 grr_ControlCold <- (guich_rev_red$'b_trial_reversal:cortControl' + guich_rev_red$b_trial_reversal)
 grr_CORTHot <- (guich_rev_red$'b_trial_reversal:tempHot' + guich_rev_red$b_trial_reversal)
-grr_ControlHot <- (guich_rev_red$'b_trial_reversal:cortControl:tempHot' + guich_rev_red$b_trial_reversal)
+grr_ControlHot <- (guich_rev_red$'b_trial_reversal:cortControl:tempHot' + guich_rev_red$b_trial_reversal + guich_rev_red$'b_trial_reversal:cortControl' + guich_rev_red$'b_trial_reversal:tempHot')
 ### Group = blue
 grb_CORTCold <- guich_rev_blue$b_trial_reversal
 grb_ControlCold <- (guich_rev_blue$'b_trial_reversal:cortControl' + guich_rev_blue$b_trial_reversal)
 grb_CORTHot <- (guich_rev_blue$'b_trial_reversal:tempHot' + guich_rev_blue$b_trial_reversal)
-grb_ControlHot <- (guich_rev_blue$'b_trial_reversal:cortControl:tempHot' + guich_rev_blue$b_trial_reversal)
+grb_ControlHot <- (guich_rev_blue$'b_trial_reversal:cortControl:tempHot' + guich_rev_blue$b_trial_reversal + guich_rev_blue$'b_trial_reversal:cortControl' + guich_rev_blue$'b_trial_reversal:tempHot')
 ```
+
 
 ```{r, Tabledata}
 #| label: Tabledata
-#| fig-cap: "Data models"
+#| tbl-cap: 'Data models'
 source(here("R", "func.R"))
 #
 ############################## CREATING BIG DF FOR TABLE ##############################
@@ -274,7 +275,7 @@ set_flextable_defaults(
 # Split the table_data df by task
 real_table <- flextable(new_table_data) %>%
     bold(~ `p-value_Associative` < 0.01, ~ `p-value_Associative` + Mean_Associative + `95% CI_Associative`) %>%
-    bold(~ `p-value_Reversal` < 0.01, ~ `p-value_Reversal` + Mean_Reversal + `95% CI_Reversal`) %>%
+    bold(~ `p-value_Reversal` < 0.05, ~ `p-value_Reversal` + Mean_Reversal + `95% CI_Reversal`) %>%
     set_table_properties(width = 1) %>%
     align(align="center", part="all") %>% 
     add_header_row(values = c("", "Associative task", "Reversal task"), colwidths = c(3, 3, 3)) %>%
@@ -292,28 +293,10 @@ real_table <- flextable(new_table_data) %>%
     vline(i = (1:16), j = c(3,6), part = "body") %>% # To make some vertical lines on body
     vline(j=c(3,6), part = "header") %>% # To make some vertical lines on header
     autofit() 
-
-print(real_table)
-
+real_table
 ```
 
 
-```{r, plots}
-```
-
-```{r, results})                   
-```
-
-```{r, resultsRev}
-
-```
-
-
-```{r, results}
-```
-
-```{r, plots}
-```
 
 
 ## References
