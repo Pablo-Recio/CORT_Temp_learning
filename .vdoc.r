@@ -181,7 +181,7 @@ grb_ControlHot <- (guich_rev_blue$'b_trial_reversal:cortControl:tempHot' + guich
 #
 #
 #| label: Tabledata
-#| tbl-cap: "\beta estimates of Associative learning slope for all the different treatments per each task, species and group. Mean shows the aritmetic mean of the /beta estimates obtain from the posteriors of the model, and 95% CI indicates the 95% confidence interval of the mean. All p-values were obtained using pmcmc and test the hypothesis that the mean /beta estimates is equal to zero. In bold those values that are significant (p-value <0.05)"
+#| tbl-cap: "Estimates of Associative learning slope for all the different treatments per each task, species and group. Mean shows the aritmetic mean of the estimates obtained from the posteriors of the model, and 95% CI indicates the 95% confidence interval of the mean. All p-values were obtained using pmcmc and test the hypothesis that the mean is equal to zero. In bold, those values that are significant (p-value <0.05)"
 source(here("R", "func.R"))
 #
 ############################## CREATING BIG DF FOR TABLE ##############################
@@ -322,8 +322,13 @@ real_table
 #
 #
 #
+#
+#
+#
+#
+#
 #| label: Tablebias
-#| tbl-cap: "Biases"
+#| tbl-cap: "Probability of choosing right when the assigned feeder was blue (Prob Blue) or red (Prob Red) for each species and each treatment"
 source(here("R", "func.R"))
 # First we estimate the probability of choosing right in the first trial using the intercepts from the posteriors
 ## 1) L. delicata
@@ -426,6 +431,7 @@ colour_table <- flextable(table_df) %>%
   vline(j = c(2,4), part = "all") %>% # To make some vertical lines on body
 autofit()
 colour_table
+format_dec(mean((probright_dbCORTCold + probright_dbControlCold + probright_dbCORTHot + probright_dbControlHot/4), 3))
 #
 #
 #
@@ -434,6 +440,16 @@ colour_table
 #
 #
 #
+#
+
+
+#
+#
+#
+#
+#
+#
+
 #
 #
 #

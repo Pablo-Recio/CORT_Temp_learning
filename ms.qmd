@@ -323,12 +323,12 @@ real_table
 # Suplementary Material
 
 #### Colour preference in the Associative task
-To test if lizards were biased towards blue as our preliminary analyses indicated, we employed the intercept estimates from our posterior distribution to get the predicted probability of choosing the right in the first trial using the formula: 
+To test if lizards were biased towards the assigned colour as our preliminary analyses suggested, we employed the intercept  from our posterior distribution. We first estimated the predicted probability of making the right choice in the first trial, by using the formula: 
 $$\text{Probability} = \frac{1}{1 + e^{-A}}$$
-As we used the link=‘logit’ adjustment in our initial models.
+Where A was the intercept per each of the treatments, colour and species. Secondly, we tested the hypothesis that the estimated probability was higher than 0.33 (the probability expected by chance of making the right choice) using pmcmc. If the estimated probability is above 0.33. we consider it as an indication that there was a preference towards that colour that could be affecting our learning slopes. The results per treatment are summarize in @Tablebias. 
 ```{r, Tablebias}
 #| label: Tablebias
-#| tbl-cap: "Biases"
+#| tbl-cap: "Probability of choosing right when the assigned feeder was blue (Prob Blue) or red (Prob Red) for each species and each treatment"
 source(here("R", "func.R"))
 # First we estimate the probability of choosing right in the first trial using the intercepts from the posteriors
 ## 1) L. delicata
@@ -433,10 +433,20 @@ autofit()
 colour_table
 ```
 
+On average, we found that, for both species, the proportion of right choices was significantly above chance when the assigned feeder was 'Blue' (_L. delicata_: mean Prob choice = `r format_dec(mean((probright_dbCORTCold + probright_dbControlCold + probright_dbCORTHot + probright_dbControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_dbCORTCold + probright_dbControlCold + probright_dbCORTHot + probright_dbControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`; _L. guichenoti_: mean Prob choice = `r format_dec(mean((probright_gbCORTCold + probright_gbControlCold + probright_gbCORTHot + probright_gbControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_gbCORTCold + probright_gbControlCold + probright_gbCORTHot + probright_gbControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`), but not when it was 'Red' (_L. delicata_: mean Prob choice = `r format_dec(mean((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`; _L. guichenoti_: mean Prob choice = `r format_dec(mean((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`). 
 
 
-For _L. delicata_, there was no differences between treatments ('Red' group: 'Control-Cold' - 'CORTCold')
+#### Checking the models residuals and posterior distributions
 
 
+```{r, residuals}
+
+
+```
+
+
+#### Checking age per treatment and species
+  
+```{r, age}
 
 ```
