@@ -128,11 +128,20 @@ return(new_df)
 #' @param x The vector for the posterior distribution. Note that this will test the null hypothesis that the parameter of interest is significantly different from 0. 
 #' @param null A numeric value decsribing what the null hypothesis should be
 #' @param twotail Whether to conduct a one-tailed hypothesis or a two-tailed hypotheses. Default = true indicating a two-tailed test will be done.
-pmcmc <- function(x, null = 0, twotail = TRUE){
+#' @param dir The direction of the one-tail test (<) or (>)
+pmcmc <- function(x, null = 0, twotail = TRUE, dir){
   if(twotail){
     2*(1 - max(table(x<=null) / length(x)))
   } else{
-    (1 - max(table(x<=null) / length(x)))
+    if(dir == "<"){
+    (max(sum(x>=null) / length(x)))
+    } else{
+      if(dir == ">"){
+        (max(sum(x<=null) / length(x)))
+      } else{
+        stop("dir not valid")
+      }
+    }
   }
 }
 ####################

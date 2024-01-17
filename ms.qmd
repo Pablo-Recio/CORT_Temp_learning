@@ -31,11 +31,11 @@ In this study, our objective is to explore the interactive effects between prena
 
 ## Methods
 
-### Subjects
+#### Subjects
 
 _L. guichenoti_ and _L. delicata_ are small (∼35--55 mm snout-vent length (SVL)), oviparous, and generalist skinks that usually share the same habitat in suburban areas throughout south-eastern Australia [@chapple_know_2011]. Both species have similar breeding periods, but with some differences in reproductive output: while *L. delicata* lays 1 to 6 eggs in only one clutch per season, *L. guichenoti* clutches are smaller (1-5 eggs per clutch) but they usually lay two clutches per season [@chapple_know_2011; @chapple_biology_2014]. Also, some sudies have found some behavioural divergence between the two skinks [@chapple_know_2011]. _L. delicata_ is more exploratory and bolder than _L. guichenoti_ [@chapple_know_2011] which was related to the former's success as an invassive species [@chapple_know_2011; @bezzina2014does], but not with their ability to learn in an associatve learning task [@bezzina2014does].  
 
-### Husbandry
+#### Husbandry
 
 *Breeding colony* -- We tested juveniles coming from a breeding colony established in the lab since 2019. There is a total of 270 and 180 adults of *L. delicata* and *L. guichenoti* respectively, housed in big containers (41.5 L x 30.5 W x 21 H cm) with six lizards (2 males and 4 females) per enclosure. Enclosures are provided with non-stick matting, shelter, and several small water dishes. Water is given daily, and they are fed approx. 40 mid-size crickets (*Acheta domestica*) per enclosure three days a week. Crickets are dusted with calcium weekly and multivitamin and calcium biweekly. To ensure a temperature gradient, we employ a heat chord and a heat lamp following a 12 h light:12 h dark cycle. Room temperatures are set to 22-24 Celsius, and warm side of enclosures is usually at 32 Celsius.
 
@@ -45,10 +45,10 @@ _L. guichenoti_ and _L. delicata_ are small (∼35--55 mm snout-vent length (SVL
 
 Two weeks before we started the training phase (see below), lizards were moved to the experimental arena for acclimatation. The arenas were individual medium size (41 L x 29.7 W x 22 H cm) plastic containers with a shelter (9 L x 6 W x 1.5 H cm) on one of the extremes and a water dish on the other. These new enclosures were placed in two rooms in 7 different racks associated to 7 different CCTV systems (device model DVR-HP210475) that allowed us to record their behaviour during the experiment (see details below). The number of lizards per species and treatment in each rack was counterbalanced to control for any effect of the room or the position of the lizard in the rack. During acclimatation and all the experiment, lizards were fed with only one cricket per day dusted with calcium and multivitamin (see protocol below), and water was supplied *ad libitum*. We provided a temperature gradient by means of a heat cord and heat lamps in a 12 h light: 12 h dark cycle. The rooms temperature was set to between 22-24 Celsius.
 
-### CORT and Temperature manipulation
+#### CORT and Temperature manipulation
 To test empirically the effect of early environment we manipulated CORT concentration in eggs and incubated them under one of two temperature regimes ('Cold' -- 23ºC ± 3ºC or 'Hot' -- 30ºC ± 3ºC) in a 2x2 factorial design (@FigMethods A). We first allocated eggs to one of two different treatments: CORT treatment, where eggs were topically supplied with 5µL of CORT dissolved in 70% Ethanol and 30% DMSO (vehicle) at a final (10 pg CORT/mL) concentration (CORT treatment); and a Control treatment, where eggs received an equal volume of the vehicle. CORT concentration employed in the CORT treatment represents 2 standard deviations above the mean natural concentration obtained in eggs from both species (non-published data). Then, eggs were incubated in one of the two previously mentioned temperature regimes ('Cold' or 'Hot') until hatching. The number of eggs per clutch assigned to each hormone and temperature treatment were counterbalanced in both species.
 
-### Learning
+#### Learning
 To estimate learning skills, we tested skinks' ability to locate a food reward in a series of behavioural tasks (@FigMethods B) [see @leal_behavioural_2012; @clark_colour_2014]. First, we performed a training phase where lizards had to learn to eat from white 3D-printed PLA ramps (9 L x 4 W x 5 H cm) identical to the ones from the experiment except for the colour (see below). We divided this training phase into three stages: in the first stage, lizards had to eat a small, frozen cricket (*A. domestica*) from an opaque petri dish (3D x 1.6H cm) placed in the middle of their enclosure (@FigMethods B, Stage 1); in the second stage, the petri dish with the cricket was placed on top of the white 3D printed ramps (@FigMethods B, Stage 2); and finally, the cricket was left inside a well (3D x 1.75H cm) on the top of the ramp in the third and last stage (Fig. @FigMethods B, Stage 3). Every trial began when we left the feeding block (petri dish, ramp, or both) inside the enclosure and finished one hour later when we took it away. At the end of each trial, we recorded whether the cricket had been consumed or not. Trial was considered successful if the lizard could locate and consume the reward, while completion of each stage required the lizards to eat the crickets in at least 5 out of 6 trials. This phase lasted 38 days until all the lizards were able to eat from the ramp; only in one case we decided not to use the lizard because its behaviour was not consistent over the course of the training phase.
 In the next phase, we trained lizards to associate between colour and a food reward (Associative task in Fig. @FigMethods B). The test was like the third stage of the training phase, but here lizards were presented with three feeders that differed in the colour. We placed the food reward (small, frozen, *A. domestica* crickets) inside the wells of the three feeders, covering two of the crickets with 3D-printed lids (3D x 0.5H cm) so prey was only accessible in "the correct" ramp. The food reward was placed in all three wells to avoid lizard using prey chemical cues, and the lids had a series of small holes on the top to allow the release of those chemicals. The colours of the feeders were green, red, and blue, as previous studies demonstrate that squamates can discriminate between these colours [@Baden_Osorio_2019_Vert_vision]. To control for potential colour preference that could bias our results (see Supplementary Material), we split the subjects into two groups counterbalanced by treatment and species: in one group the correct choice (i.e., the ramp with the non-covered frozen cricket) was the blue one during the associative task and red in the reversal, while for the other group we assigned red as correct for the associative and blue for the reversal. In all trials, the position of the feeders was changed randomly to ensure subjects were using colour rather than spatial cues for the association. Lizards were tested in this task once a day for 35 days.
 After the colour association phase, we performed a choice reversal task (Reversal task in @FigMethods B). This task was like the colour association test, except that the attainability of prey was indicated by a different colour, requiring the lizards to form a novel association between the new colour and the food reward. This test was done once a day for 40 days.
@@ -62,11 +62,11 @@ knitr::include_graphics("./Others/LEARN_FIG_1.svg")
 
 ```
 
-### Statistical analyses
+#### Statistical analyses
 We performed the analyses with species (_L. delicata_ or _L. guichenoti_) and task ('Associative' or 'Reversal') separately. We also saw a significant effect of the colour assigned in the preliminary analises, so we decided to split the data by colour ('Blue' or 'Red') as well. As such, we run a total of different 8 models employing Bayesian multilevel models using the brm function from the brms package (**REF brm package**) in Quartos (**REF QUARTOS**). Each model consisted of four parallel chains of 3000 iterations, with a warm up interval of 1000 iterations.'Choice', i.e. whether the individual chose correct (1) or not (0) was used as the response variable, employing a Bernoulli probability distribution (link=‘logit’). The fixed effects of the model included a triple interaction between: trial ('Associative trial' or 'Reversal trial') as a numeric variable, and hormone treatmet ('CORT' versus 'Control') and the temperature at which eggs were incubated ('Cold' versus 'Hot') as factors. For the random effects, we employed lizard identity as a random intercept, and as a random slope we included the variable trial within each level of lizard identity. For all models we 
 We used the resulting posterior of these models to evaluate learning differences between treatments within and between species and colour assigned. More specifically, we calculated learning slopes by using the estimates of the trial variable per each level of the hormone-temperature interaction ('Treatments'); values bigger from zero were considered as evidence of learning, while those less or equal to zero not. We used the pmcmc method to test whether those slopes or the comparissons between 'Treatments' (e.g. slope for 'CORT-Cold' lizards minus 'CORT-Hot' lizards) were different from zero (two-tailed tests). We considered statistical significance if p-value < 0.05.
  
-### Results
+## Results
 ```{r, cleaning}
 #| label: cleaning
 source(here("R", "1_data_process.R"))
@@ -178,12 +178,10 @@ grb_ControlCold <- (guich_rev_blue$'b_trial_reversal:cortControl' + guich_rev_bl
 grb_CORTHot <- (guich_rev_blue$'b_trial_reversal:tempHot' + guich_rev_blue$b_trial_reversal)
 grb_ControlHot <- (guich_rev_blue$'b_trial_reversal:cortControl:tempHot' + guich_rev_blue$b_trial_reversal + guich_rev_blue$'b_trial_reversal:cortControl' + guich_rev_blue$'b_trial_reversal:tempHot')
 ```
-```{r, InterceptsRev}
-```
 
 ```{r, Tabledata}
 #| label: Tabledata
-#| tbl-cap: "\beta estimates of Associative learning slope for all the different treatments per each task, species and group. Mean shows the aritmetic mean of the /beta estimates obtain from the posteriors of the model, and 95% CI indicates the 95% confidence interval of the mean. All p-values were obtained using pmcmc and test the hypothesis that the mean /beta estimates is equal to zero. In bold those values that are significant (p-value <0.05)"
+#| tbl-cap: "Estimates of Associative learning slope for all the different treatments per each task, species and group. Mean shows the aritmetic mean of the estimates obtained from the posteriors of the model, and 95% CI indicates the 95% confidence interval of the mean. All p-values were obtained using pmcmc and test the hypothesis that the mean is equal to zero. In bold, those values that are significant (p-value <0.05)"
 source(here("R", "func.R"))
 #
 ############################## CREATING BIG DF FOR TABLE ##############################
@@ -211,13 +209,13 @@ estimates_rev <- list(
 # Then get the mean, co.intervals(95%), and p-values
 asso_mean <- format_dec(sapply(estimates_asso, mean), 3)
 asso_interval_025 <- format_dec(sapply(estimates_asso, function(x) quantile(x,0.025)), 3)
-asso_interval_975 <- format_dec(sapply(estimates_asso, function (x) quantile(x,0.975)), 3)
+asso_interval_975 <- format_dec(sapply(estimates_asso, function(x) quantile(x,0.975)), 3)
 asso_intervals <- paste(asso_interval_025, asso_interval_975, sep = " , ")
 asso_pvalue <- format_dec(sapply(estimates_asso, pmcmc), 3)
 #
 rev_mean <- format_dec(sapply(estimates_rev, mean), 3)
 rev_interval_025 <- format_dec(sapply(estimates_rev, function(x) quantile(x,0.025)), 3)
-rev_interval_975 <- format_dec(sapply(estimates_rev, function (x) quantile(x,0.975)), 3)
+rev_interval_975 <- format_dec(sapply(estimates_rev, function(x) quantile(x,0.975)), 3)
 rev_intervals <- paste(rev_interval_025, rev_interval_975, sep = " , ")
 rev_pvalue <- format_dec(sapply(estimates_rev, pmcmc), 3)
 #
@@ -301,22 +299,37 @@ real_table <- flextable(new_table_data) %>%
 real_table
 ```
 
-@Tabledata summarizes the estimates of learning slopes for all the treatments in each model (see Statistical analyses). On average, we found that learning slopes were lower when the 'Blue' feeders were correct compared to those assigned to the group 'Red'  for _L. delicata_ ('Blue' learning slope - 'Red'learning slope = `r format_dec(mean((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (dar_CORTCold + dar_ControlCold + dar_CORTCold + dar_ControlHot)), 3)`, p = `r pmcmc((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (dar_CORTCold + dar_ControlCold + dar_CORTCold + dar_ControlHot))`), but not for _L. guichenoti_ ('Blue' learning slope - 'Red'learning slope = `r format_dec(mean((gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTCold + gar_ControlHot)), 3)`, p = `r format_dec(pmcmc((gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTCold + gar_ControlHot)),3)`). However, because we suspect there may be a bias towards 'Blue' in the initial choice (see Supplementary Material and Figs. @Figdeli, @Figguich), we only used those individuals assigned to 'Red' to compare performance in the associative learning task. In this regard, we did not find any significant differences between treatments for _L. delicata_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(dar_ControlCold - dar_CORTCold), 3)`, p- value = `r format_dec(pmcmc(dar_ControlCold - dar_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(dar_ControlHot- dar_CORTHot), 3)`, p- value = `r format_dec(pmcmc(dar_ControlHot - dar_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(dar_ControlHot - dar_ControlCold), 3)`, p-value = `r format_dec(pmcmc(dar_ControlHot - dar_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(dar_CORTHot - dar_CORTCold), 3)`, p-value = `r format_dec(pmcmc(dar_CORTHot - dar_CORTCold), 3)`) (see @Figdeli), or _L. guichenoti_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(gar_ControlCold - gar_CORTCold), 3)`, p- value = `r format_dec(pmcmc(gar_ControlCold - gar_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(gar_ControlHot- gar_CORTHot), 3)`, p- value = `r format_dec(pmcmc(gar_ControlHot - gar_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(gar_ControlHot - gar_ControlCold), 3)`, p-value = `r format_dec(pmcmc(gar_ControlHot - gar_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(gar_CORTHot - gar_CORTCold), 3)`, p-value = `r format_dec(pmcmc(gar_CORTHot - gar_CORTCold), 3)`) (see @Figduich).
-When groups were pooled by incubation temperature or hormonal treatment, there was not significant differences in the estimated slopes caused by temperature (_L. delicata_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((dar_CORTHot + dar_ControlHot) - (dar_CORTCold + dar_ControlCold)),3)`, p-value = `r format_dec(pmcmc((dar_CORTHot + dar_ControlHot) - (dar_CORTCold + dar_ControlCold)),3)`; _L. guichenoti_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((gar_CORTHot + gar_ControlHot)-(gar_CORTCold + gar_ControlCold)),3)`, p-value = `r format_dec(pmcmc((gar_CORTHot + gar_ControlHot)-(gar_CORTCold + gar_ControlCold)),3)`) or the hormone (_L. delicata_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((dar_ControlCold + dar_ControlHot) - (dar_CORTCold + dar_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((dar_ControlCold + dar_ControlHot) - (dar_CORTCold + dar_CORTHot)), 3)` ; _L. guichenoti_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((gar_ControlCold + gar_ControlHot)-(gar_CORTCold + gar_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((gar_ControlCold + gar_ControlHot)-(gar_CORTCold + gar_CORTHot)), 3)`). We also did not find any significant differences when we compared the estimated slopes between species for the associative task (only individuals from 'Red' group: _L. delicata_ - _L. guichenoti_ = `r format_dec(mean((dar_CORTCold + dar_ControlCold + dar_CORTHot + dar_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTHot + gar_ControlHot)), 3)`, p-value = `r format_dec(pmcmc((dar_CORTCold + dar_ControlCold + dar_CORTHot + dar_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTHot + gar_ControlHot)), 3)`).     
+@Tabledata summarizes the estimates of learning slopes for all the treatments in each model (see Statistical analyses). On average, we found that learning slopes were lower when the 'Blue' feeders were correct compared to those assigned to the group 'Red'  for _L. delicata_ ('Blue' learning slope - 'Red'learning slope = `r format_dec(mean((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (dar_CORTCold + dar_ControlCold + dar_CORTCold + dar_ControlHot)), 3)`, p = `r pmcmc((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (dar_CORTCold + dar_ControlCold + dar_CORTCold + dar_ControlHot))`), but not for _L. guichenoti_ ('Blue' learning slope - 'Red'learning slope = `r format_dec(mean((gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTCold + gar_ControlHot)), 3)`, p = `r format_dec(pmcmc((gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTCold + gar_ControlHot)),3)`). However, because we suspect there may be a bias towards 'Blue' in the initial choice (see Supplementary Material and Figs. @Figdeli, @Figguich), we only used those individuals assigned to 'Red' to compare performance in the associative learning task. In this regard, we did not find any significant differences between treatments for _L. delicata_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(dar_ControlCold - dar_CORTCold), 3)`, p- value = `r format_dec(pmcmc(dar_ControlCold - dar_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(dar_ControlHot- dar_CORTHot), 3)`, p- value = `r format_dec(pmcmc(dar_ControlHot - dar_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(dar_ControlHot - dar_ControlCold), 3)`, p-value = `r format_dec(pmcmc(dar_ControlHot - dar_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(dar_CORTHot - dar_CORTCold), 3)`, p-value = `r format_dec(pmcmc(dar_CORTHot - dar_CORTCold), 3)`) (see @Figdeli), or _L. guichenoti_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(gar_ControlCold - gar_CORTCold), 3)`, p- value = `r format_dec(pmcmc(gar_ControlCold - gar_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(gar_ControlHot- gar_CORTHot), 3)`, p- value = `r format_dec(pmcmc(gar_ControlHot - gar_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(gar_ControlHot - gar_ControlCold), 3)`, p-value = `r format_dec(pmcmc(gar_ControlHot - gar_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(gar_CORTHot - gar_CORTCold), 3)`, p-value = `r format_dec(pmcmc(gar_CORTHot - gar_CORTCold), 3)`) (see @Figguich). When groups were pooled by incubation temperature or hormonal treatment, there was not significant differences in the estimated slopes caused by temperature (_L. delicata_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((dar_CORTHot + dar_ControlHot) - (dar_CORTCold + dar_ControlCold)),3)`, p-value = `r format_dec(pmcmc((dar_CORTHot + dar_ControlHot) - (dar_CORTCold + dar_ControlCold)),3)`; _L. guichenoti_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((gar_CORTHot + gar_ControlHot)-(gar_CORTCold + gar_ControlCold)),3)`, p-value = `r format_dec(pmcmc((gar_CORTHot + gar_ControlHot)-(gar_CORTCold + gar_ControlCold)),3)`) or the hormone (_L. delicata_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((dar_ControlCold + dar_ControlHot) - (dar_CORTCold + dar_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((dar_ControlCold + dar_ControlHot) - (dar_CORTCold + dar_CORTHot)), 3)` ; _L. guichenoti_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((gar_ControlCold + gar_ControlHot)-(gar_CORTCold + gar_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((gar_ControlCold + gar_ControlHot)-(gar_CORTCold + gar_CORTHot)), 3)`). We also did not find any significant differences when we compared the estimated slopes between species for the associative task (only individuals from 'Red' group: _L. delicata_ - _L. guichenoti_ = `r format_dec(mean((dar_CORTCold + dar_ControlCold + dar_CORTHot + dar_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTHot + gar_ControlHot)), 3)`, p-value = `r format_dec(pmcmc((dar_CORTCold + dar_ControlCold + dar_CORTHot + dar_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTHot + gar_ControlHot)), 3)`).     
 
+```{r, Figdeli}
+#| label: Figdeli
+#| fig.cap: "Deli"
+```
 
+```{r, figguich}
+#| label: Figguich
+#| fig.cap: "Guich"
+```
+
+[RESULTS reversal]
+
+## Discussion
 
 ## References
+\printbibliography
 
-## Suplementary Material
+\pagebreak
 
-### Colour preference in the Associative task
-To test if lizards were biased towards blue as our preliminary analyses indicated, we employed the intercept estimates from our posterior distribution. We get this intercepts for each species, group and treatment, and we estimated the probability of choosing right using the formula: 
+# Suplementary Material
 
+#### Colour preference in the Associative task
+To test if lizards were biased towards blue as our preliminary analyses indicated, we employed the intercept estimates from our posterior distribution to get the predicted probability of choosing the right in the first trial using the formula: 
+$$\text{Probability} = \frac{1}{1 + e^{-A}}$$
 As we used the link=‘logit’ adjustment in our initial models.
 ```{r, Tablebias}
 #| label: Tablebias
 #| tbl-cap: "Biases"
+source(here("R", "func.R"))
 # First we estimate the probability of choosing right in the first trial using the intercepts from the posteriors
 ## 1) L. delicata
 ### Group = red
@@ -342,107 +355,80 @@ probright_gbCORTHot <- 1/(1+exp(-(guich_asso_blue$b_tempHot + guich_asso_blue$b_
 probright_gbControlHot <- 1/(1+exp(-(guich_asso_blue$'b_cortControl:tempHot' + guich_asso_blue$b_cortControl + guich_asso_blue$b_tempHot + guich_asso_blue$b_Intercept)))
 # Second we build a df with all the mean probabilities of choosing right in the first trial for each treatment and species
 prob_df <- data.frame(
-  probright_drCORTCold = probright_drCORTCold,
-  probright_drControlCold = probright_drControlCold,
-  probright_drCORTHot = probright_drCORTHot,
-  probright_drControlHot = probright_drControlHot,
-  probright_dbCORTCold = probright_dbCORTCold,
-  probright_dbControlCold = probright_dbControlCold,
-  probright_dbCORTHot = probright_dbCORTHot,
-  probright_dbControlHot = probright_dbControlHot,
-  probright_grCORTCold = probright_grCORTCold,
-  probright_grControlCold = probright_grControlCold,
-  probright_grCORTHot = probright_grCORTHot,
-  probright_grControlHot = probright_grControlHot,
-  probright_gbCORTCold = probright_gbCORTCold,
-  probright_gbControlCold = probright_gbControlCold,
-  probright_gbCORTHot = probright_gbCORTHot,
-  probright_gbControlHot = probright_gbControlHot
-) %>% #This way we get a df with 16 variables
-  summarise_all(.funs = mean) %>% #This way we get a df with 16 variables and 1 row
-  gather(key = "column", value = "value", .) %>% #To transpose the df
+  probright_drCORTCold_t = format_dec(mean(probright_drCORTCold), 3),
+  probright_drControlCold_t = format_dec(mean(probright_drControlCold), 3),
+  probright_drCORTHot_t = format_dec(mean(probright_drCORTHot), 3),
+  probright_drControlHot_t = format_dec(mean(probright_drControlHot), 3),
+  probright_dbCORTCold_t = format_dec(mean(probright_dbCORTCold), 3),
+  probright_dbControlCold_t = format_dec(mean(probright_dbControlCold), 3),
+  probright_dbCORTHot_t = format_dec(mean(probright_dbCORTHot), 3),
+  probright_dbControlHot_t = format_dec(mean(probright_dbControlHot), 3),
+  probright_grCORTCold_t = format_dec(mean(probright_grCORTCold), 3),
+  probright_grControlCold_t = format_dec(mean(probright_grControlCold), 3),
+  probright_grCORTHot_t = format_dec(mean(probright_grCORTHot), 3),
+  probright_grControlHot_t = format_dec(mean(probright_grControlHot), 3),
+  probright_gbCORTCold_t = format_dec(mean(probright_gbCORTCold), 3),
+  probright_gbControlCold_t = format_dec(mean(probright_gbControlCold), 3),
+  probright_gbCORTHot_t = format_dec(mean(probright_gbCORTHot), 3),
+  probright_gbControlHot_t = format_dec(mean(probright_gbControlHot), 3)) %>%
+gather(key = "column", value = "value", .) %>%
+rename("prob_choice" = "value") %>%
+data.frame()
+write.csv(prob_df, file= "./output/Checking/prob_df.csv")
+# Then we build a df with the statistical test (one-tailed pmcmc) that the probability is >0.33 (the probability of choosing right by chance)
+comp_pval <- data.frame(
+  probright_drCORTCold_t = format_dec(pmcmc(probright_drCORTCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_drControlCold_t = format_dec(pmcmc(probright_drControlCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_drCORTHot_t = format_dec(pmcmc(probright_drCORTHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_drControlHot_t = format_dec(pmcmc(probright_drControlHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_dbCORTCold_t = format_dec(pmcmc(probright_dbCORTCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_dbControlCold_t = format_dec(pmcmc(probright_dbControlCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_dbCORTHot_t = format_dec(pmcmc(probright_dbCORTHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_dbControlHot_t = format_dec(pmcmc(probright_dbControlHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_grCORTCold_t = format_dec(pmcmc(probright_grCORTCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_grControlCold_t = format_dec(pmcmc(probright_grControlCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_grCORTHot_t = format_dec(pmcmc(probright_grCORTHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_grControlHot_t = format_dec(pmcmc(probright_grControlHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_gbCORTCold_t = format_dec(pmcmc(probright_gbCORTCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_gbControlCold_t = format_dec(pmcmc(probright_gbControlCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_gbCORTHot_t = format_dec(pmcmc(probright_gbCORTHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_gbControlHot_t = format_dec(pmcmc(probright_gbControlHot, null = 0.33, twotail = FALSE, dir=">"), 3)) %>%
+gather(key = "column", value = "value", .) %>%
+rename("p_value" = "value") %>%
+data.frame()
+write.csv(comp_pval, file= "./output/Checking/comp_pval.csv")
+# Now we merge them and organise them to have the final dt for the table
+table_df <- merge(prob_df, comp_pval, by ="column") %>%
   mutate(Specie = gsub(".*_(d|g).*", "\\1",column)) %>%
   mutate(Group = gsub(".*_(dr|db|gr|gb).*", "\\1",column)) %>%
   mutate(Treatment = gsub(".*(CORTCold|ControlCold|CORTHot|ControlHot).*", "\\1",column)) %>% #Last three commands used to get the species, group and treatment from the column names
   mutate(Treatment = factor(Treatment, 
                     levels = c("CORTCold", "ControlCold", "CORTHot", "ControlHot"),
-                    labels = c("CORTCold"="CORT-Cold", "ControlCold"="Control-Cold", "CORTHot"="CORT-Hot", "ControlHot"="Control-Hot"))) %>%
+                    labels = c("CORTCold" = "CORT-Cold", "ControlCold" = "Control-Cold", "CORTHot" = "CORT-Hot", "ControlHot" = "Control-Hot"))) %>%
   mutate(Specie = factor(Specie,
                 levels = c("d", "g"),
                 labels = c("d" = "L. delicata", "g" = "L. guichenoti"))) %>%
   mutate(Group = recode(Group, "dr" = "Red", "db" = "Blue", "gr" = "Red", "gb" = "Blue")) %>%
-  pivot_wider(names_from = Group, values_from = c(value, column)) %>% #To split the df in Red and Blue
+  select(-column) %>%
+  pivot_wider(names_from = Group, values_from = c(prob_choice, p_value)) %>% #To split the df in Red and Blue
+  select(Specie, Treatment, prob_choice_Blue, p_value_Blue, prob_choice_Red, p_value_Red) %>%
+  arrange(Specie, Treatment) %>% # To arrange the rows the way I wantdata.frame()
 data.frame()
-
-write.csv(prob_df, file= "./output/Checking/prob_df.csv")
-
-# Then we build a df with the statistical comparison between probabilities (Blue minus Red) for each treatment and species and p-values for each comparison
-comp_prob <- data.frame(
-  (probright_dbCORTCold - probright_drCORTCold),
-  (probright_dbControlCold - probright_drControlCold),
-  (probright_dbCORTHot - probright_drCORTHot),
-  (probright_dbControlHot - probright_drControlHot),
-  (probright_gbCORTCold - probright_grCORTCold),
-  (probright_gbControlCold - probright_grControlCold),
-  (probright_gbCORTHot - probright_grCORTHot),
-  (probright_gbControlHot - probright_grControlHot)
-) %>% 
-  summarise_all(.funs = mean) %>% #This way we get a df with 16 variables and 1 row
-  gather(key = "column", value = "value", .) %>% #To transpose the df
-  mutate(Specie = gsub(".*_(d|g).*", "\\1",column)) %>%
-  mutate(Treatment = gsub(".*(CORTCold|ControlCold|CORTHot|ControlHot).*", "\\1",column)) %>% #Last three commands used to get the species, group and treatment from the column names
-  mutate(Treatment = factor(Treatment, 
-                    levels = c("CORTCold", "ControlCold", "CORTHot", "ControlHot"),
-                    labels = c("CORTCold"="CORT-Cold", "ControlCold"="Control-Cold", "CORTHot"="CORT-Hot", "ControlHot"="Control-Hot"))) %>%
-  mutate(Specie = factor(Specie,
-                levels = c("d", "g"),
-                labels = c("d" = "L. delicata", "g" = "L. guichenoti"))) %>%
-  rename("[Blue - Red]" = "value") %>%
-data.frame()
-#
-comp_pval <- data.frame(
-  pmcmc(probright_dbCORTCold - probright_drCORTCold),
-  pmcmc(probright_dbControlCold - probright_drControlCold),
-  pmcmc(probright_dbCORTHot - probright_drCORTHot),
-  pmcmc(probright_dbControlHot - probright_drControlHot),
-  pmcmc(probright_gbCORTCold - probright_grCORTCold),
-  pmcmc(probright_gbControlCold - probright_grControlCold),
-  pmcmc(probright_gbCORTHot - probright_grCORTHot),
-  pmcmc(probright_gbControlHot - probright_grControlHot)
-) %>% 
-  summarise_all(.funs = mean) %>% #This way we get a df with 16 variables and 1 row
-  gather(key = "column", value = "value", .) %>% #To transpose the df
-  mutate(Specie = gsub(".*_(d|g).*", "\\1",column)) %>%
-  mutate(Treatment = gsub(".*(CORTCold|ControlCold|CORTHot|ControlHot).*", "\\1",column)) %>% #Last three commands used to get the species, group and treatment from the column names
-  mutate(Treatment = factor(Treatment, 
-                    levels = c("CORTCold", "ControlCold", "CORTHot", "ControlHot"),
-                    labels = c("CORTCold"="CORT-Cold", "ControlCold"="Control-Cold", "CORTHot"="CORT-Hot", "ControlHot"="Control-Hot"))) %>%
-  mutate(Specie = factor(Specie,
-                levels = c("d", "g"),
-                labels = c("d" = "L. delicata", "g" = "L. guichenoti"))) %>%
-  rename("p-value" = "value") %>%
-data.frame()
-#Create the final database and the table
-table_df <- merge(prob_df, comp_prob, by = c("Specie", "Treatment")) %>%
-  merge(comp_pval, by = c("Specie", "Treatment")) %>%
-  select(Specie, Treatment, value_Blue, value_Red, X.Blue...Red., p.value) %>%
-  mutate(Treatment = factor(Treatment, 
-                    levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")))%>%
-data.frame()
-table_df <- table_df %>%
-#
+write.csv(table_df, file= "./output/Checking/table_df.csv")
+#################
 colour_table <- flextable(table_df) %>%
-  bold(~ `p.value` < 0.05, ~ `p.value` + X.Blue...Red.) %>%
+  bold(~ `p_value_Blue` < 0.05, ~ `p_value_Blue` + prob_choice_Blue) %>%
+  bold(~ `p_value_Red` < 0.05, ~ `p_value_Red` + prob_choice_Red) %>%
   set_table_properties(width = 1) %>%
   align(align="center", part="all") %>% 
-  set_header_labels(value_Blue = "Blue",
-                    value_Red = "Red",
-                    p.value = "p-value",
-                    X.Blue...Red. = "[Blue - Red]") %>%
-  italic(j = 1, italic = TRUE, part = "body") %>% # To have names od species in italics
-  colformat_num(columns = c("Blue", "Red", "[Blue-Red]", "p-value"), digits = 3) %>% # To set the number of decimals
+  set_header_labels(prob_choice_Blue = "Prob Blue", 
+                    p_value_Blue = "p-value Blue", 
+                    prob_choice_Red = "Prob Red", 
+                    p_value_Red = "p-value Red") %>%
+  italic(j = 1, italic = TRUE, part = "body") %>% # To have names of species in italics
   flextable::compose(i = c(2:4,6:8), j = 1, value = as_paragraph(""), part = "body") %>% # To remove some of the values in the first column
   hline(i = c(4), j = c(1:6), part = "body") %>% # To make some horizontal lines
+  vline(j = c(2,4), part = "all") %>% # To make some vertical lines on body
 autofit()
 colour_table
 ```

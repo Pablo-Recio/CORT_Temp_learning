@@ -1,9 +1,17 @@
-"","column","value","Specie","Treatment"
-"1","pmcmc.probright_dbCORTCold...probright_drCORTCold.",0.000250000000000083,"L. delicata","CORT-Cold"
-"2","pmcmc.probright_dbControlCold...probright_drControlCold.",0.00150000000000006,"L. delicata","Control-Cold"
-"3","pmcmc.probright_dbCORTHot...probright_drCORTHot.",0.0620000000000001,"L. delicata","CORT-Hot"
-"4","pmcmc.probright_dbControlHot...probright_drControlHot.",0.0625,"L. delicata","Control-Hot"
-"5","pmcmc.probright_gbCORTCold...probright_grCORTCold.",0.01275,"L. guichenoti","CORT-Cold"
-"6","pmcmc.probright_gbControlCold...probright_grControlCold.",0.0155000000000001,"L. guichenoti","Control-Cold"
-"7","pmcmc.probright_gbCORTHot...probright_grCORTHot.",0.1305,"L. guichenoti","CORT-Hot"
-"8","pmcmc.probright_gbControlHot...probright_grControlHot.",0.1195,"L. guichenoti","Control-Hot"
+"","column","p_value"
+"1","probright_drCORTCold_t",0.992
+"2","probright_drControlCold_t",0.881
+"3","probright_drCORTHot_t",0.695
+"4","probright_drControlHot_t",0.834
+"5","probright_dbCORTCold_t",0.001
+"6","probright_dbControlCold_t",0
+"7","probright_dbCORTHot_t",0.01
+"8","probright_dbControlHot_t",0.036
+"9","probright_grCORTCold_t",1
+"10","probright_grControlCold_t",0.945
+"11","probright_grCORTHot_t",0.917
+"12","probright_grControlHot_t",0.793
+"13","probright_gbCORTCold_t",0.516
+"14","probright_gbControlCold_t",0.025
+"15","probright_gbCORTHot_t",0.191
+"16","probright_gbControlHot_t",0.081
