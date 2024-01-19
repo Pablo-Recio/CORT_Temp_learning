@@ -23,6 +23,7 @@ editor_options:
 pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes)
 ```
 
+
 ## Introduction
 
 Cognition is defined as the processes by which animals gather, preserve, and use information from their environment through perception, learning, memory, and decision making [@shettleworth]. These cognitive processes underpin several aspects of animals' ecology such as foraging, mate choice, antipredatory strategies, and/or social behaviours, that are crucial for the survival and reproduction of animals [@dukas_evolutionary_2004]. Particularly, learning - the acquisition of neuronal representations of new information [@dukas_evolutionary_2004] - is seen as fundamental for coping with environmental changes by enabling individuals to create new associations between events [@dukas_evolutionary_2004; @leal_behavioural_2012; @buchanan_condition_2013]. However, the capacity of individuals to acquire new information exhibits natural variation influenced by factors like age, sex, gut microbiota, or the environment where animals develop [@szuran_water_1994; @lemaire_prenatal_2000; @zhu_prenatal_2004; @amiel_hotter_2012; @amiel_egg_2014; @carazo_sex_2014; @noble_age-dependent_2014; @alemohammad_2022_microbiota_learning]. The developmental environment, in particular, plays a pivotal role, as the brain is especially susceptible to environmental influences during early stages of development [@zhu_prenatal_2004]. Hence, investigating the effects of the developmental environment on learning can be essential to understand the evolution of learning and predict animals' responses towards environmental change.  
@@ -49,6 +50,7 @@ In the next phase, we trained lizards to associate between colour and a food rew
 After the colour association phase, we performed a choice reversal task (Reversal task in @FigMethods B). This task was like the colour association test, except that the attainability of prey was indicated by a different colour, requiring the lizards to form a novel association between the new colour and the food reward. This test was done once a day for 40 days.  
 The full experiment was done daily between the 6^th^ of March until the 26^th^ of June 2023, between 11 to 12 am, when the lizards were active. Trials in the learning phases (colour associative task and reversal tasks) were recorded with different CCTV systems always using the same camera per individual. Videos were analysed manually using a standard video player (IINA) by PR, who recorded whether the first choice made by each subject was the correct feeder or not. A choice was considered to be made if the head of the lizard was inside the well of one of the ramps. PR was blinded to the treatments of the lizards during the analyses of the video. We considered a trial failed if there was no choice in one hour of recording and those trials were considered as 'non data' in the analyses. We excluded from our analyses those individuals with more than 15 trials failed (i.e. they did not make a choice), and we considered the first trial to be the first one where the individual made a choice.  
 
+
 ```{r, FigMethods}
 #| label: FigMethods
 #| fig.cap: "Experimental design of early environment manipulation (**A**) and learning tasks (**B**). Stages 1-3 indicate the different phases of the habituation process. In the associative and reversal tasks, white lids show the ramps where the food reward was not attainable."
@@ -57,10 +59,12 @@ knitr::include_graphics("./Others/LEARN_FIG_1.svg")
 
 ```
 
+
 #### Statistical analyses  
 We performed the analyses with species (_L. delicata_ or _L. guichenoti_) and task ('Associative' or 'Reversal') separately. We also saw a significant effect of the colour assigned in the preliminary analises, so we decided to split the data by colour ('Blue' or 'Red') as well. As such, we run a total of different 8 models employing Bayesian multilevel models using the brm function from the brms package (**REF brm package**) in Quartos (**REF QUARTOS**). Each model consisted of four parallel chains of 3000 iterations, with a warm up interval of 1000 iterations.'Choice', i.e. whether the individual chose correct (1) or not (0) was used as the response variable. The fixed effects of the model included a triple interaction between: trial ('Associative trial' or 'Reversal trial') as a numeric variable, and hormone treatmet ('CORT' versus 'Control') and the temperature at which eggs were incubated ('Cold' versus 'Hot') as factors. For the random effects, we employed lizard identity as a random intercept, and as a random slope we included the variable trial ('Associative' or 'Reversal') within each level of lizard identity.  
 We used the resulting posterior of these models to evaluate learning differences between treatments within and between species and colour assigned. More specifically, we calculated learning slopes by using the estimates of the trial variable per each level of the hormone-temperature interaction ('Treatments'); values bigger from zero were considered as evidence of learning, while those less or equal to zero not. We used the pmcmc method to test whether those slopes or the comparissons between 'Treatments' (e.g. slope for 'CORT-Cold' lizards minus 'CORT-Hot' lizards) were different from zero (two-tailed tests). We considered statistical significance if p-value < 0.05.  
 ## Results
+
 ```{r, cleaning}
 #| label: cleaning
 source(here("R", "1_data_process.R"))
@@ -92,7 +96,9 @@ for(i in 1:length(specie)){
 }
 ```
 
+
 Originally, we started with 96 lizards, 48 per species and 12 per treatment per species. However, due to natural mortality (n = 11), no completion of the training stage (n = 1), or no motivation during the learning tasks (n = 3; see above), we ended up with a total of 81 lizards. Final sample sizes per treatment and species are disclosed on @Tabledata.  
+
 ```{r, models}
 #| label: models
 # Fitting the model and extraction of posteriors for both types of task and species using fit_m function (see func.r in R folder). The result everytime the function is used is a df with the posteriors of the model. The functions saves the model automatically in output/models; and when the parameter refit = FALSE then the posteriors are extracted from the model previously written instead of fitting the model again each time.
@@ -293,8 +299,10 @@ real_table <- flextable(new_table_data) %>%
 real_table
 ```
 
+
 Results of the associative task are summarized in @Tabledata and figures @Figdeli, @Figguich. On average, we found that the estimated learning slopes were lower when the blue feeders were the correct choice compared to those assigned to the group 'Red'  for _L. delicata_ ('Blue' learning slope - 'Red'learning slope = `r format_dec(mean((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (dar_CORTCold + dar_ControlCold + dar_CORTCold + dar_ControlHot)), 3)`, p = `r format_dec(pmcmc((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (dar_CORTCold + dar_ControlCold + dar_CORTCold + dar_ControlHot)), 3)`), but not for _L. guichenoti_ ('Blue' learning slope - 'Red'learning slope = `r format_dec(mean((gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTCold + gar_ControlHot)), 3)`, p = `r format_dec(pmcmc((gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTCold + gar_ControlHot)),3)`). However, further analyses using the first trial indicated a potential bias towards 'Blue' in the initial choice (see Supplementary Material and Figs. @Figdeli, @Figguich); and in consequence, we only used those individuals assigned to 'Red' to compare between-treatment performance in the associative learning task. In this regard, we did not find any significant differences between treatments for _L. delicata_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(dar_ControlCold - dar_CORTCold), 3)`, p- value = `r format_dec(pmcmc(dar_ControlCold - dar_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(dar_ControlHot- dar_CORTHot), 3)`, p- value = `r format_dec(pmcmc(dar_ControlHot - dar_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(dar_ControlHot - dar_ControlCold), 3)`, p-value = `r format_dec(pmcmc(dar_ControlHot - dar_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(dar_CORTHot - dar_CORTCold), 3)`, p-value = `r format_dec(pmcmc(dar_CORTHot - dar_CORTCold), 3)`) (see @Figdeli), or _L. guichenoti_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(gar_ControlCold - gar_CORTCold), 3)`, p- value = `r format_dec(pmcmc(gar_ControlCold - gar_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(gar_ControlHot- gar_CORTHot), 3)`, p- value = `r format_dec(pmcmc(gar_ControlHot - gar_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(gar_ControlHot - gar_ControlCold), 3)`, p-value = `r format_dec(pmcmc(gar_ControlHot - gar_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(gar_CORTHot - gar_CORTCold), 3)`, p-value = `r format_dec(pmcmc(gar_CORTHot - gar_CORTCold), 3)`) (see @Figguich). When groups were pooled by incubation temperature or hormonal treatment, there was not significant differences in the estimated slopes caused by temperature (_L. delicata_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((dar_CORTHot + dar_ControlHot) - (dar_CORTCold + dar_ControlCold)),3)`, p-value = `r format_dec(pmcmc((dar_CORTHot + dar_ControlHot) - (dar_CORTCold + dar_ControlCold)),3)`; _L. guichenoti_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((gar_CORTHot + gar_ControlHot)-(gar_CORTCold + gar_ControlCold)),3)`, p-value = `r format_dec(pmcmc((gar_CORTHot + gar_ControlHot)-(gar_CORTCold + gar_ControlCold)),3)`) or the hormone (_L. delicata_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((dar_ControlCold + dar_ControlHot) - (dar_CORTCold + dar_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((dar_ControlCold + dar_ControlHot) - (dar_CORTCold + dar_CORTHot)), 3)` ; _L. guichenoti_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((gar_ControlCold + gar_ControlHot)-(gar_CORTCold + gar_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((gar_ControlCold + gar_ControlHot)-(gar_CORTCold + gar_CORTHot)), 3)`). We also did not find any significant differences when we compared the estimated slopes between species for the associative task (_L. delicata_ - _L. guichenoti_ = `r format_dec(mean((dar_CORTCold + dar_ControlCold + dar_CORTHot + dar_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTHot + gar_ControlHot)), 3)`, p-value = `r format_dec(pmcmc((dar_CORTCold + dar_ControlCold + dar_CORTHot + dar_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTHot + gar_ControlHot)), 3)`).  
 In the reversal tesk, we decided to pool both groups 'Blue' and 'Red' to make the between-treatment comparisons for two reasons. First, we did not find any significant differences caused group on the learning slopes (_L. delicata_: 'Blue' learning slope - 'Red'learning slope = `r format_dec(mean((drb_CORTCold + drb_ControlCold + drb_CORTHot + drb_ControlHot) - (drr_CORTCold + drr_ControlCold + drr_CORTCold + drr_ControlHot)), 3)`, p = `r format_dec(pmcmc((drb_CORTCold + drb_ControlCold + drb_CORTHot + drb_ControlHot) - (drr_CORTCold + drr_ControlCold + drr_CORTCold + drr_ControlHot)), 3)`; _L. guichenoti_: 'Blue' learning slope - 'Red'learning slope = `r format_dec(mean((grb_CORTCold + grb_ControlCold + grb_CORTHot + grb_ControlHot) - (grr_CORTCold + grr_ControlCold + grr_CORTCold + grr_ControlHot)), 3)`, p = `r format_dec(pmcmc((grb_CORTCold + grb_ControlCold + grb_CORTHot + grb_ControlHot) - (grr_CORTCold + grr_ControlCold + grr_CORTCold + grr_ControlHot)), 3)`). Second, we were expecting an acquired bias towards the colour assigned in the associative task as part of the design. Nonetheless, we did not find any significant differences between treatments in _L. delicata_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean((drr_ControlCold + drb_ControlCold) - (drr_CORTCold + drb_CORTCold)), 3)`, p- value = `r format_dec(pmcmc((drr_ControlCold + drb_ControlCold) - (drr_CORTCold + drb_CORTCold)), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean((drr_ControlHot + drb_ControlHot) - (drr_CORTHot + drb_CORTHot)), 3)`, p- value = `r format_dec(pmcmc((drr_ControlHot + drb_ControlHot) - (drr_CORTHot + drb_CORTHot)), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean((drr_ControlHot + drb_ControlHot) - (drr_ControlCold + drb_ControlCold)), 3)`, p-value = `r format_dec(pmcmc((drr_ControlHot + drb_ControlHot) - (drr_ControlCold + drb_ControlCold)), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean((drr_CORTHot + drb_CORTHot) - (drr_CORTCold + drb_CORTCold)), 3)`, p-value = `r format_dec(pmcmc((drr_CORTHot + drb_CORTHot) - (drr_CORTCold + drb_CORTCold)), 3)`) (see @Figdeli) or _L. guichenoti_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean((grr_ControlCold + grb_ControlCold) - (grr_CORTCold + grb_CORTCold)), 3)`, p- value = `r format_dec(pmcmc((grr_ControlCold + grb_ControlCold) - (grr_CORTCold + grb_CORTCold)), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean((grr_ControlHot + grb_ControlHot) - (grr_CORTHot + grb_CORTHot)), 3)`, p- value = `r format_dec(pmcmc((grr_ControlHot + grb_ControlHot) - (grr_CORTHot + grb_CORTHot)), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean((grr_ControlHot + grb_ControlHot) - (grr_ControlCold + grb_ControlCold)), 3)`, p-value = `r format_dec(pmcmc((grr_ControlHot + grb_ControlHot) - (grr_ControlCold + grb_ControlCold)), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean((grr_CORTHot + grb_CORTHot) - (grr_CORTCold + grb_CORTCold)), 3)`, p-value = `r format_dec(pmcmc((grr_CORTHot + grb_CORTHot) - (grr_CORTCold + grb_CORTCold)), 3)`) (see @Figguich). We did not find any effect of incubation temperature (_L. delicata_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((drr_CORTHot + drr_ControlHot + drb_CORTHot + drb_ControlHot) - (drr_CORTCold + drr_ControlCold + drb_CORTCold + drb_ControlCold)),3)`, p-value = `r format_dec(pmcmc((drr_CORTHot + drr_ControlHot + drb_CORTHot + drb_ControlHot) - (drr_CORTCold + drr_ControlCold + drb_CORTCold + drb_ControlCold)),3)`; _L. guichenoti_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((grr_CORTHot + grr_ControlHot + grb_CORTHot + grb_ControlHot) -(grr_CORTCold + grr_ControlCold + grb_CORTCold + grb_ControlCold)),3)`, p-value = `r format_dec(pmcmc((grr_CORTHot + grr_ControlHot + grb_CORTHot + grb_ControlHot) -(grr_CORTCold + grr_ControlCold + grb_CORTCold + grb_ControlCold)),3)`) or the hormone (_L. delicata_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((drr_ControlCold + drr_ControlHot + drb_ControlCold + drb_ControlHot) - (drr_CORTCold + drr_CORTHot + drb_CORTCold + drb_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((drr_ControlCold + drr_ControlHot + drb_ControlCold + drb_ControlHot) - (drr_CORTCold + drr_CORTHot + drb_CORTCold + drb_CORTHot)), 3)`;_L. guichenoti_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((grr_ControlCold + grr_ControlHot + grb_ControlCold + grb_ControlHot)-(grr_CORTCold + grr_CORTHot + grb_CORTCold + grb_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((grr_ControlCold + grr_ControlHot + grb_ControlCold + grb_ControlHot)-(grr_CORTCold + grr_CORTHot + grb_CORTCold + grb_CORTHot)), 3)`) when groups were pooled. Finally, we did not find any significant differences when we compared the estimated slopes between species for the reversal task (_L. delicata_ - _L. guichenoti_ = `r format_dec(mean((drr_CORTCold + drr_ControlCold + drr_CORTHot + drr_ControlHot + drb_CORTCold + drb_ControlCold + drb_CORTHot + drb_ControlHot) - (grr_CORTCold + grr_ControlCold + grr_CORTHot + grr_ControlHot + grb_CORTCold + grb_ControlCold + grb_CORTHot + grb_ControlHot)), 3)`, p-value = `r format_dec(pmcmc((drr_CORTCold + drr_ControlCold + drr_CORTHot + drr_ControlHot + drb_CORTCold + drb_ControlCold + drb_CORTHot + drb_ControlHot) - (grr_CORTCold + grr_ControlCold + grr_CORTHot + grr_ControlHot + grb_CORTCold + grb_ControlCold + grb_CORTHot + grb_ControlHot)), 3)`). 
+
 
 ```{r, Figdeli}
 #| label: Figdeli
@@ -305,6 +313,7 @@ In the reversal tesk, we decided to pool both groups 'Blue' and 'Red' to make th
 #| label: Figguich
 #| fig.cap: "Guich"
 ```
+
 
 [RESULTS reversal]
 
@@ -322,6 +331,7 @@ To test if lizards were biased towards the assigned colour as our preliminary an
 $$\text{Probability} = \frac{1}{1 + e^{-Intercept}}$$
 
 Second, we tested the hypothesis that the estimated probability was higher than 0.33 (the probability expected by chance of choosing the correct feeder) using pmcmc. If the estimated probability is above 0.33. we consider it as an indication that there was a preference towards that colour that could be affecting learning slopes. The results per treatment are summarized in @Tablebias. 
+
 ```{r, Tablebias}
 #| label: Tablebias
 #| tbl-cap: "Probability of choosing the correct feeder in the first trial when the correct feeder was blue (Prob Blue) or red (Prob Red) for each species and each treatment. p-values were obtained using pmcmc and test the hypothesis that the probability is >0.33. In bold, those values that are significant (p-value <0.05)"
@@ -429,10 +439,12 @@ autofit()
 colour_table
 ```
 
+
 On average, we found that, for both species, the proportion of correct choices in the first trial was significantly above chance when the correct feeder was blue (_L. delicata_: mean Prob choice = `r format_dec(mean((probright_dbCORTCold + probright_dbControlCold + probright_dbCORTHot + probright_dbControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_dbCORTCold + probright_dbControlCold + probright_dbCORTHot + probright_dbControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`; _L. guichenoti_: mean Prob choice = `r format_dec(mean((probright_gbCORTCold + probright_gbControlCold + probright_gbCORTHot + probright_gbControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_gbCORTCold + probright_gbControlCold + probright_gbCORTHot + probright_gbControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`), but not when it was red (_L. delicata_: mean Prob choice = `r format_dec(mean((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`; _L. guichenoti_: mean Prob choice = `r format_dec(mean((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`). 
 
 
 #### Checking the models residuals and posterior distributions
+
 
 
 ```{r, residuals}
@@ -441,15 +453,11 @@ On average, we found that, for both species, the proportion of correct choices i
 ```
 
 
+
 #### Checking age per treatment and species
   
+
 ```{r, age}
-# To check if there is any difference in age between treatments and species
-data_age <- data_asso %>%
-  filter(Associative_Trial == 1) %>% # To get only one measure per ind (one trial)
-data.frame()
-# Test first if age follows a normal distribution in each species
-ggplot(data_age, aes(x = age.start), color = trt) +
-  geom_histogram(bins = 10) +
-  facet_wrap(~ species, ncol = 2)
+
 ```
+
