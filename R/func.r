@@ -13,10 +13,10 @@ pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4,
 #' @param therm To select temp treatment ("Cold"/"Hot")
 sample <- function(sp, bias, corti, therm){
   #Specify database
-  data <- data_asso
+  data <- data_clean
   # Count sample
   sample_size <- data %>%
-                filter(species == sp, group == bias, cort == corti, temp == therm, Associative_Trial == 1) %>%
+                filter(species == sp, group == bias, cort == corti, temp == therm, Trial == 1) %>%
                 group_by(lizard_id) %>%
                 summarise(n = n()) %>%
                 summarise(total_count = sum(n)) %>%
@@ -27,26 +27,14 @@ sample <- function(sp, bias, corti, therm){
 ####################
 # Fit models and extract posteriors both per each treatment:
 #' @title fit_m Function
-#' @description Fit brm models for different the associative task
-#' @param type To define if we are analysing the associative ("asso) or the reversal ("rev")
+#' @description Fit brm models for the associative task
 #' @param sp To select the species of interest ("deli"/"guich")
 #' @param bias To select group depending on the colour assigned as correct for each task ("blue"/"red")
 #' @param refir To choose whether to refit the models (TRUE, default) or use the ones already made (FALSE)
 #' @return Raw posteriors of fitted brm model for each treatment, species, and group (df)
-fit_m <- function(type, sp, bias, refit = TRUE) {
-  #Specify the type
-  if (type == "asso"){
-    data <- data_asso
-    formula <- FC_associative ~ Associative_Trial*cort*temp + (1 + Associative_Trial|lizard_id)
-  }else{
-    if(type == "rev"){
-      data <- data_rev
-      formula <- FC_reversal ~ trial_reversal*cort*temp + (1 + trial_reversal|lizard_id)
-    } else {
-      stop("Type not valid")
-      return(NULL)  # Return NULL in case of an invalid option
-    }
-  }
+fit_m <- function(sp, bias, refit = TRUE) {
+  data <- data_clean
+  formula <- FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id)
   #Specify species
     if (sp == "deli"){
       sp_data <- data %>%
@@ -91,10 +79,10 @@ fit_m <- function(type, sp, bias, refit = TRUE) {
                 family = bernoulli(link = "logit"),
                 chains = 4, cores = 4, iter = 3000, warmup = 1000, control = list(adapt_delta = 0.99))
     # Write the model to a file
-    saveRDS(model, file = paste0(here("output/models/"), type, "_", sp, "_", bias, ".rds"))
+    saveRDS(model, file = paste0(here("output/models/"), sp, "_", bias, ".rds"))
   } else {
       # Read the model from a file
-      model <- readRDS(file = paste0(here("output/models/"), type, "_", sp, "_", bias, ".rds"))
+      model <- readRDS(file = paste0(here("output/models/"), sp, "_", bias, ".rds"))
   } 
   # Extract posteriors
   posteriors <- as_draws_df(model)

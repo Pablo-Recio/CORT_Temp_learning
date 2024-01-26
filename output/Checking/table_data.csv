@@ -1,0 +1,17 @@
+"","Specie","Group","Treatment","Mean","95% CI","p-value"
+"1","L. delicata","Red","CORT-Cold (n = 5)",0.102,"0.056 , 0.151",0
+"2","L. delicata","Red","Control-Cold (n = 6)",0.056,"0.018 , 0.095",0.005
+"3","L. delicata","Red","CORT-Hot (n = 5)",0.066,"0.023 , 0.109",0.002
+"4","L. delicata","Red","Control-Hot (n = 5)",0.082,"0.037 , 0.13",0
+"5","L. delicata","Blue","CORT-Cold (n = 6)",0.012,"-0.038 , 0.064",0.64
+"6","L. delicata","Blue","Control-Cold (n = 6)",-0.008,"-0.059 , 0.043",0.772
+"7","L. delicata","Blue","CORT-Hot (n = 6)",0.032,"-0.015 , 0.08",0.188
+"8","L. delicata","Blue","Control-Hot (n = 5)",0.053,"0.001 , 0.108",0.046
+"9","L. guichenoti","Red","CORT-Cold (n = 5)",0.119,"0.055 , 0.195",0.002
+"10","L. guichenoti","Red","Control-Cold (n = 4)",0.097,"0.03 , 0.17",0.007
+"11","L. guichenoti","Red","CORT-Hot (n = 5)",0.073,"0.012 , 0.136",0.024
+"12","L. guichenoti","Red","Control-Hot (n = 5)",0.077,"0.018 , 0.142",0.016
+"13","L. guichenoti","Blue","CORT-Cold (n = 5)",0.07,"0.014 , 0.131",0.014
+"14","L. guichenoti","Blue","Control-Cold (n = 3)",0.014,"-0.06 , 0.087",0.671
+"15","L. guichenoti","Blue","CORT-Hot (n = 5)",0.1,"0.036 , 0.172",0.006
+"16","L. guichenoti","Blue","Control-Hot (n = 5)",0.064,"0.005 , 0.123",0.038
