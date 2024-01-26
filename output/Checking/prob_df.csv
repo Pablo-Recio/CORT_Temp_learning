@@ -1,0 +1,17 @@
+"","column","prob_choice"
+"1","probright_drCORTCold_t",0.143
+"2","probright_drControlCold_t",0.297
+"3","probright_drCORTHot_t",0.335
+"4","probright_drControlHot_t",0.316
+"5","probright_dbCORTCold_t",0.645
+"6","probright_dbControlCold_t",0.756
+"7","probright_dbCORTHot_t",0.545
+"8","probright_dbControlHot_t",0.49
+"9","probright_grCORTCold_t",0.071
+"10","probright_grControlCold_t",0.192
+"11","probright_grCORTHot_t",0.24
+"12","probright_grControlHot_t",0.286
+"13","probright_gbCORTCold_t",0.356
+"14","probright_gbControlCold_t",0.621
+"15","probright_gbCORTHot_t",0.485
+"16","probright_gbControlHot_t",0.501
