@@ -98,16 +98,16 @@ Originally, we started with 96 lizards, 48 per species and 12 per treatment per 
 source(here("R", "func.R"))
 # Model formula: FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id)
 ## A.1) L. delicata
-deli_red <- fit_m("deli", "red", refit = FALSE)
+deli_red <- fit_m("deli", "red", refit = TRUE)
 bayes_R2(deli_red)
 
 write.csv(deli_red, file= "./output/Checking/deli_red.csv")
-deli_blue <- fit_m("deli", "blue", refit = FALSE)
+deli_blue <- fit_m("deli", "blue", refit = TRUE)
 write.csv(deli_blue, file= "./output/Checking/deli_blue.csv")
 ## A.2) L. guichenoti
-guich_red <- fit_m("guich", "red", refit = FALSE)
+guich_red <- fit_m("guich", "red", refit = TRUE)
 write.csv(guich_red, file= "./output/Checking/guich_red.csv")
-guich_blue <- fit_m("guich", "blue", refit = FALSE)
+guich_blue <- fit_m("guich", "blue", refit = TRUE)
 write.csv(guich_blue, file= "./output/Checking/guich_blue.csv")
 ```
 
