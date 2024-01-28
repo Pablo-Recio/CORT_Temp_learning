@@ -112,6 +112,7 @@ write.csv(guich_blue, file= "./output/Checking/guich_blue.csv")
 ```
 
 ```{r, results}
+#| label: results
 # Rename some of the posteriors and obtain estimates for the "learning rate" for each group and treatment. This "learning rate" consists on the slope of the posterior of the Trial parameter. The slope is the rate at which the probability of choosing the correct feeder increases with each trial. The slope is obtained by adding the posterior of the Trial parameter to the posterior of the interaction between Trial and the treatment (cort and temp). 
 ## 1) L. delicata
 ### Group = red
@@ -277,7 +278,7 @@ source(here("R", "func.R"))
 # First we estimate the probability of choosing right in the first trial using the intercepts from the posteriors
 ## 1) L. delicata
 ### Group = red
-probright_drCORTCold <- 1/(1+exp(-deli_red$b_Intercept))
+probright_drCORTCold <- exp(deli_red$b_Intercept)/(1+exp(deli_red$b_Intercept))
 probright_drControlCold <- 1/(1+exp(-(deli_red$b_cortControl + deli_red$b_Intercept)))
 probright_drCORTHot <- 1/(1+exp(-(deli_red$b_tempHot + deli_red$b_Intercept)))
 probright_drControlHot <- 1/(1+exp(-(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept)))
