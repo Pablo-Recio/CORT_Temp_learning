@@ -99,6 +99,8 @@ source(here("R", "func.R"))
 # Model formula: FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id)
 ## A.1) L. delicata
 deli_red <- fit_m("deli", "red", refit = FALSE)
+bayes_R2(deli_red)
+
 write.csv(deli_red, file= "./output/Checking/deli_red.csv")
 deli_blue <- fit_m("deli", "blue", refit = FALSE)
 write.csv(deli_blue, file= "./output/Checking/deli_blue.csv")
