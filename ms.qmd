@@ -98,16 +98,14 @@ Originally, we started with 96 lizards, 48 per species and 12 per treatment per 
 source(here("R", "func.R"))
 # Model formula: FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id)
 ## A.1) L. delicata
-deli_red <- fit_m("deli", "red", refit = TRUE)
-bayes_R2(deli_red)
-
+deli_red <- fit_m("deli", "red", refit = FALSE)
 write.csv(deli_red, file= "./output/Checking/deli_red.csv")
-deli_blue <- fit_m("deli", "blue", refit = TRUE)
+deli_blue <- fit_m("deli", "blue", refit = FALSE)
 write.csv(deli_blue, file= "./output/Checking/deli_blue.csv")
 ## A.2) L. guichenoti
-guich_red <- fit_m("guich", "red", refit = TRUE)
+guich_red <- fit_m("guich", "red", refit = FALSE)
 write.csv(guich_red, file= "./output/Checking/guich_red.csv")
-guich_blue <- fit_m("guich", "blue", refit = TRUE)
+guich_blue <- fit_m("guich", "blue", refit = FALSE)
 write.csv(guich_blue, file= "./output/Checking/guich_blue.csv")
 ```
 
@@ -232,7 +230,7 @@ For those individuals assigned to group 'Red', we did not find any significant d
 The results for 'Blue' individuals were similar. We did not find significant differences between treatments in _L.delicata_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(dab_ControlCold - dab_CORTCold), 3)`, p- value = `r format_dec(pmcmc(dab_ControlCold - dab_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(dab_ControlHot- dab_CORTHot), 3)`, p- value = `r format_dec(pmcmc(dab_ControlHot - dab_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(dab_ControlHot - dab_ControlCold), 3)`, p-value = `r format_dec(pmcmc(dab_ControlHot - dab_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(dab_CORTHot - dab_CORTCold), 3)`, p-value = `r format_dec(pmcmc(dab_CORTHot - dab_CORTCold), 3)`) (see @Figdeli), or _L. guichenoti_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(gab_ControlCold - gab_CORTCold), 3)`, p- value = `r format_dec(pmcmc(gab_ControlCold - gab_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(gab_ControlHot- gab_CORTHot), 3)`, p- value = `r format_dec(pmcmc(gab_ControlHot - gab_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(gab_ControlHot - gab_ControlCold), 3)`, p-value = `r format_dec(pmcmc(gab_ControlHot - gab_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(gab_CORTHot - gab_CORTCold), 3)`, p-value = `r format_dec(pmcmc(gab_CORTHot - gab_CORTCold), 3)`) (see @Figguich). However, here the estimated slopes from those incubated at higher temperatures seem to be bigger on average, although the difference was not significant (_L. delicata_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((dab_CORTHot + dab_ControlHot) - (dab_CORTCold + dab_ControlCold)),3)`, p-value = `r format_dec(pmcmc((dab_CORTHot + dab_ControlHot) - (dab_CORTCold + dab_ControlCold)),3)`; _L. guichenoti_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((gab_CORTHot + gab_ControlHot)-(gab_CORTCold + gab_ControlCold)),3)`, p-value = `r format_dec(pmcmc((gab_CORTHot + gab_ControlHot)-(gab_CORTCold + gab_ControlCold)),3)`). Also, 'Control' _L. delicata_ seem to have slightly higher estimated slopes than on average ('Control' learning slope - 'CORT' learning slope = `r format_dec(mean((dab_ControlCold + dab_ControlHot) - (dab_CORTCold + dab_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((dab_ControlCold + dab_ControlHot) - (dab_CORTCold + dab_CORTHot)), 3)` ) while in _L. guichenoti_ is the opposite ('Control' learning slope - 'CORT' learning slope = `r format_dec(mean((gab_ControlCold + gab_ControlHot)-(gab_CORTCold + gab_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((gab_ControlCold + gab_ControlHot)-(gab_CORTCold + gab_CORTHot)), 3)`); nevertheless, the differences found were not significant in any case. Finally, we found that learning slopes estimated for _L. guichenoti_ assigned to group 'Blue' were marginally higher than those from _L. delicata_ (_L. delicata_ - _L. guichenoti_ = `r format_dec(mean((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot)), 3)`, p-value = `r format_dec(pmcmc((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot)), 3)`).
 
 
-```{r, figdeli}
+```{r, fig-results}
 #| label: figdeli
 #| fig.cap: "Deli"
 # First step, create the Intercepts for all models
@@ -250,10 +248,7 @@ int_dab_ControlHot <- (deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortContr
 
 ```
 
-```{r, figguich}
-#| label: Figguich
-#| fig.cap: "Guich"
-```
+
 
 ## Discussion
 
@@ -268,7 +263,7 @@ cat("\\newpage")
 
 #### Colour preference
 To test if lizards were biased towards the assigned colour as our preliminary analyses suggested, we employed the intercepts  from our posterior distributions. We first estimated the predicted probability of choosing the correct feeder first in the first trial, by using the formula: 
-$$\text{Probability} = \frac{1}{1 + e^{-Intercept}}$$
+$$\text{Probability} = \frac{e^{Intercept}}{1 + e^{Intercept}}$$
 
 Second, we tested the hypothesis that the estimated probability was higher than 0.33 (the probability expected by chance of choosing the correct feeder) using pmcmc. If the estimated probability is above 0.33. we consider it as an indication that there was a preference towards that colour that could be affecting learning slopes. The results per treatment are summarized in @tbl-bias. 
 ```{r, tbl-bias}
@@ -279,25 +274,26 @@ source(here("R", "func.R"))
 ## 1) L. delicata
 ### Group = red
 probright_drCORTCold <- exp(deli_red$b_Intercept)/(1+exp(deli_red$b_Intercept))
-probright_drControlCold <- 1/(1+exp(-(deli_red$b_cortControl + deli_red$b_Intercept)))
-probright_drCORTHot <- 1/(1+exp(-(deli_red$b_tempHot + deli_red$b_Intercept)))
-probright_drControlHot <- 1/(1+exp(-(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept)))
+probright_drControlCold <- exp(deli_red$b_cortControl + deli_red$b_Intercept)/(1+exp(deli_red$b_cortControl + deli_red$b_Intercept))
+probright_drCORTHot <- exp(deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$b_tempHot + deli_red$b_Intercept))
+probright_drControlHot <- exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept))
 ### Group = blue
-probright_dbCORTCold <- 1/(1+exp(-(deli_blue$b_Intercept)))
-probright_dbControlCold <- 1/(1+exp(-(deli_blue$b_cortControl + deli_blue$b_Intercept)))
-probright_dbCORTHot <- 1/(1+exp(-(deli_blue$b_tempHot + deli_blue$b_Intercept)))
-probright_dbControlHot <- 1/(1+exp(-(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept)))
+probright_dbCORTCold <- exp(deli_blue$b_Intercept)/(1+exp(deli_blue$b_Intercept))
+probright_dbControlCold <- exp(deli_blue$b_cortControl + deli_blue$b_Intercept)/(1+exp(deli_blue$b_cortControl + deli_blue$b_Intercept))
+probright_dbCORTHot <- exp(deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$b_tempHot + deli_blue$b_Intercept))
+probright_dbControlHot <- exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept))
 ## 2) L. guichenoti
 ### Group = red
-probright_grCORTCold <- 1/(1+exp(-guich_red$b_Intercept))
-probright_grControlCold <- 1/(1+exp(-(guich_red$b_cortControl + guich_red$b_Intercept)))
-probright_grCORTHot <- 1/(1+exp(-(guich_red$b_tempHot + guich_red$b_Intercept)))
-probright_grControlHot <- 1/(1+exp(-(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept)))
+probright_grCORTCold <- exp(guich_red$b_Intercept)/(1+exp(guich_red$b_Intercept))
+probright_grControlCold <- exp(guich_red$b_cortControl + guich_red$b_Intercept)/(1+exp(guich_red$b_cortControl + guich_red$b_Intercept))
+probright_grCORTHot <- exp(guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$b_tempHot + guich_red$b_Intercept))
+probright_grControlHot <- exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept))
 ### Group = blue
-probright_gbCORTCold <- 1/(1+exp(-guich_blue$b_Intercept))
-probright_gbControlCold <- 1/(1+exp(-(guich_blue$b_cortControl + guich_blue$b_Intercept)))
-probright_gbCORTHot <- 1/(1+exp(-(guich_blue$b_tempHot + guich_blue$b_Intercept)))
-probright_gbControlHot <- 1/(1+exp(-(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept)))
+probright_gbCORTCold <- exp(guich_blue$b_Intercept)/(1+exp(guich_blue$b_Intercept))
+probright_gbControlCold <- exp(guich_blue$b_cortControl + guich_blue$b_Intercept)/(1+exp(guich_blue$b_cortControl + guich_blue$b_Intercept))
+probright_gbCORTHot <- exp(guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$b_tempHot + guich_blue$b_Intercept))
+probright_gbControlHot <- exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept))
+#
 # Second we build a df with all the mean probabilities of choosing right in the first trial for each treatment and species
 prob_df <- data.frame(
   probright_drCORTCold_t = format_dec(mean(probright_drCORTCold), 3),
@@ -410,6 +406,7 @@ Plots for the different models of the associative task:
   1.a.- Red  
 ```{r , plotmod_dar, out.width="70%", fig.align="center"}
 plot(mod_dar)
+bayes_R2(mod_dar)
 ```
 ```{r, results='asis', echo=FALSE}
 cat("\\newpage")

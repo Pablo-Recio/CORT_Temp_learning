@@ -142,3 +142,24 @@ format_dec <- function(x, n) {
   z <- sprintf(paste0("%.",n,"f"), x)
   return(as.numeric(z))
 }
+####################
+####################
+# Function to create each df for the figure
+#' @title df_fig
+#' @param df
+  # Select the original df
+  data_fig <- df
+  # Create new matrix
+  fig_matrix <- matrix(NA, nrow = 8000, ncol = 35)
+  # Loop
+  for(x in 0:34){
+    for(j in 1:8000){
+      value <- exp(u[j] + m[j] * x) / (1 + exp(u[j] + m[j] * x))
+      fig_matrix[j, x] <- value
+    }
+  fig_df <- as.data.frame(fig_matrix)
+  }
+data_fig <- deli_red
+u <- deli_red$b_Intercept
+m <- deli_red$b_Trial
+write.csv(fig_df, here("output/Checking/fig_df.csv"))
