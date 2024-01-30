@@ -1,6 +1,6 @@
 #################### 
 ####################
-pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes)
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes, ggh4x)
 #
 ####################
 ####################
@@ -198,19 +198,23 @@ df_fig <- function(data_fig, specie, group){
 #' @title plotting
 #' @param df to select the df
 plotting <- function(df){
-  a <- ggplot(df, aes(x = Trial, y = Predicted_prob, color = Treatment)) +
-  stat_smooth(method = "loess", span=3, formula = y ~ x, se = TRUE, linewidth=1, alpha = 0.1) +
-  scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="cyan", "CORT-Hot"="black", "Control-Hot"="grey")) +
-  facet_grid(Species ~ Group, scales = "free_y") +
+  plot <- ggplot(df, aes(x = Trial, y = Mean_Predicted_prob, color = Treatment)) +
+  geom_line(linewidth = 1.75) +
+  scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="cyan", "CORT-Hot"="black", "Control-Hot"="#616161")) +
+  geom_ribbon(aes(ymin = Mean_Predicted_prob - SE_Predicted_prob, ymax = Mean_Predicted_prob + SE_Predicted_prob, fill = Treatment), color = NA, alpha = 0.075) + 
+  scale_fill_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="cyan", "CORT-Hot"="black", "Control-Hot"="#616161")) +
+  theme_classic() +
+  facet_grid2(Species ~ Group, scale = "free_x", space = "free_x", axes = "all") +
   theme(strip.placement = "outside") +  
   theme(strip.background = element_blank()) +
-  labs(y = "Probability of correct choice", x = "Trial") +
-  theme_classic() +
+  labs(y = "Predicted probability of correct choice", x = "Trial") +
+  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
   theme(
-    axis.title = element_text(size = 18, family = "sans"),
-    axis.text = element_text(size = 10, family = "sans"),
-    legend.title = element_text(size = 14, family = "sans"),
-    legend.text = element_text(size = 12, family = "sans")
-  )
-  return(a)
+    axis.title = element_text(size = 15, family = "Times New Roman"),
+    axis.text = element_text(size = 10, family = "Times New Roman"),
+    legend.title = element_text(size = 12, family = "Times New Roman"),
+    legend.text = element_text(size = 10, family = "Times New Roman"),
+    strip.text = element_text(size = 13, family = "Times New Roman")
+  )  
+  return(plot)
 }

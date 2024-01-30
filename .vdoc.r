@@ -20,7 +20,7 @@
 #
 #
 #| label: setup
-pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes)
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes, ggh4x)
 #
 #
 #
@@ -229,8 +229,8 @@ real_table
 #
 #
 #
-#| label: figdeli
-#| fig.cap: "Deli"
+#| label: fig-results
+#| fig.cap: "Predicted probability of choosing the correct feeder first over trials. The lines represent the mean predicted probability of choosing the correct feeder first, and the shaded areas represent the standard deviation of the mean both obtained by using the slope and intercept estimates from the posterior distributions. The different colours represent the different treatments. The different panels represent the different species and groups."
 source(here("R", "func.R"))
 # First step, create the dfs for all models
 ## 1) L. delicata
@@ -248,13 +248,24 @@ df_gui_blue <- df_fig(as.data.frame(guich_blue), "L. guichenoti", "Blue")
 Fig_df <- rbind(df_del_red, df_del_blue, df_gui_red, df_gui_blue) %>%
   mutate(Trial = gsub("X", "", Trial)) %>%
   mutate(Trial = as.numeric(Trial)) %>%
-  rename("Predicted_prob" = "Value") %>%
+  group_by(Trial, Treatment, Group, Species) %>%
+  summarize(
+    Mean_Predicted_prob = mean(Value),
+    SE_Predicted_prob = sd(Value)
+    ) %>%
+  ungroup() %>%
+  mutate(
+    Treatment = factor(Treatment,
+                        levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")),
+    Group = factor(Group,
+                        levels = c("Red", "Blue")),
+    ) %>%
 data.frame()
 write.csv(Fig_df, file= "./output/Checking/Fig_df.csv")
 # Make the plot
 figure_results <- plotting(Fig_df)
 ggsave("./output/figures/figure_results.png", plot=figure_results, width = 18, height = 20, units = "cm", dpi = 3000)
-print(figure_results)
+knitr::include_graphics("./output/figures/figure_results.png")
 #
 #
 #
