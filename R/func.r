@@ -146,20 +146,71 @@ format_dec <- function(x, n) {
 ####################
 # Function to create each df for the figure
 #' @title df_fig
-#' @param df
+#' @param df to select the df
+#' @param specie to add data of the specie
+#' @param group to add data of group
+df_fig <- function(data_fig, specie, group){
   # Select the original df
-  data_fig <- df
-  # Create new matrix
-  fig_matrix <- matrix(NA, nrow = 8000, ncol = 35)
-  # Loop
-  for(x in 0:34){
-    for(j in 1:8000){
-      value <- exp(u[j] + m[j] * x) / (1 + exp(u[j] + m[j] * x))
-      fig_matrix[j, x] <- value
+  df <- data_fig
+  # Create a vector with treatments
+  treatments <- c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")
+  # Create new matrix and new dfs
+  treat_matrix <- matrix(NA, nrow = 8000, ncol = 35)
+  fig_df <- data.frame()
+  # Loop through treatments
+  for(t in treatments){
+    if(t == "CORT-Cold"){
+      m <- df$b_Trial
+      u <- df$b_Intercept
+    } else if(t == "Control-Cold"){
+        m <- (df$'b_Trial:cortControl' + df$b_Trial)
+        u <- (df$b_cortControl + df$b_Intercept)
+    } else if(t == "CORT-Hot"){
+        m <- (df$'b_Trial:tempHot' + df$b_Trial)
+        u <- (df$b_tempHot + df$b_Intercept)
+    } else if(t == "Control-Hot"){
+        m <- (df$'b_Trial:cortControl:tempHot' + df$b_Trial+ df$'b_Trial:cortControl' + df$'b_Trial:tempHot')
+        u <- (df$'b_cortControl:tempHot' + df$b_cortControl + df$b_tempHot + df$b_Intercept)
+    } else {
+    stop("loop wrong")
     }
-  fig_df <- as.data.frame(fig_matrix)
+    # Loop per treatment
+    for(x in 0:35){
+      for(j in 1:8000){
+        value <- exp(u[j] + m[j] * x) / (1 + exp(u[j] + m[j] * x))
+        treat_matrix[j, x] <- value
+      }
+    }
+    treat_df <- as.data.frame(treat_matrix)
+    colnames(treat_df) <- paste0("X", 1:35)  # Adjust column names
+    treat_df <- gather(treat_df, key = "Trial", value = "Value")  # Reshape data frame
+    treat_df$Treatment <- t
+    fig_df <- rbind(fig_df, treat_df)
   }
-data_fig <- deli_red
-u <- deli_red$b_Intercept
-m <- deli_red$b_Trial
-write.csv(fig_df, here("output/Checking/fig_df.csv"))
+  # Add species and group information
+  fig_df$Species <- specie
+  fig_df$Group <- group
+  return(fig_df)
+}
+####################
+####################
+# Function to create the plot
+#' @title plotting
+#' @param df to select the df
+plotting <- function(df){
+  a <- ggplot(df, aes(x = Trial, y = Predicted_prob, color = Treatment)) +
+  stat_smooth(method = "loess", span=3, formula = y ~ x, se = TRUE, linewidth=1, alpha = 0.1) +
+  scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="cyan", "CORT-Hot"="black", "Control-Hot"="grey")) +
+  facet_grid(Species ~ Group, scales = "free_y") +
+  theme(strip.placement = "outside") +  
+  theme(strip.background = element_blank()) +
+  labs(y = "Probability of correct choice", x = "Trial") +
+  theme_classic() +
+  theme(
+    axis.title = element_text(size = 18, family = "sans"),
+    axis.text = element_text(size = 10, family = "sans"),
+    legend.title = element_text(size = 14, family = "sans"),
+    legend.text = element_text(size = 12, family = "sans")
+  )
+  return(a)
+}

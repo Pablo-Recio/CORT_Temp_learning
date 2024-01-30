@@ -229,23 +229,33 @@ real_table
 #
 #
 #
-#
-#
 #| label: figdeli
 #| fig.cap: "Deli"
-# First step, create the Intercepts for all models
-## 1) Associative task
-### Group = red
-int_dar_CORTCold <- deli_red$b_Intercept
-int_dar_ControlCold <- (deli_red$b_cortControl + deli_red$b_Intercept)
-int_dar_CORTHot <- (deli_red$b_tempHot + deli_red$b_Intercept)
-int_dar_ControlHot <- (deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept)
-### Group = blue
-int_dab_CORTCold <- deli_blue$b_Intercept
-int_dab_ControlCold <- (deli_blue$b_cortControl + deli_blue$b_Intercept)
-int_dab_CORTHot <- (deli_blue$b_tempHot + deli_blue$b_Intercept)
-int_dab_ControlHot <- (deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept)
-
+source(here("R", "func.R"))
+# First step, create the dfs for all models
+## 1) L. delicata
+### Red
+df_del_red <- df_fig(as.data.frame(deli_red), "L. delicata", "Red")
+### Blue
+df_del_blue <- df_fig(as.data.frame(deli_blue), "L. delicata", "Blue")
+## 2) L. guichenoti
+### Red
+df_gui_red <- df_fig(as.data.frame(guich_red), "L. guichenoti", "Red")
+### Blue
+df_gui_blue <- df_fig(as.data.frame(guich_blue), "L. guichenoti", "Blue")
+#
+# Second step, merge the df into a big Fig_df
+Fig_df <- rbind(df_del_red, df_del_blue, df_gui_red, df_gui_blue) %>%
+  mutate(Trial = gsub("X", "", Trial)) %>%
+  mutate(Trial = as.numeric(Trial)) %>%
+  rename("Predicted_prob" = "Value") %>%
+data.frame()
+write.csv(Fig_df, file= "./output/Checking/Fig_df.csv")
+# Make the plot
+figure_results <- plotting(Fig_df)
+ggsave("./output/figures/figure_results.png", plot=figure_results, width = 18, height = 20, units = "cm", dpi = 3000)
+print(figure_results)
+#
 #
 #
 #
@@ -278,21 +288,22 @@ probright_drControlCold <- exp(deli_red$b_cortControl + deli_red$b_Intercept)/(1
 probright_drCORTHot <- exp(deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$b_tempHot + deli_red$b_Intercept))
 probright_drControlHot <- exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept))
 ### Group = blue
-probright_dbCORTCold <- 1/(1+exp(-(deli_blue$b_Intercept)))
-probright_dbControlCold <- 1/(1+exp(-(deli_blue$b_cortControl + deli_blue$b_Intercept)))
-probright_dbCORTHot <- 1/(1+exp(-(deli_blue$b_tempHot + deli_blue$b_Intercept)))
-probright_dbControlHot <- 1/(1+exp(-(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept)))
+probright_dbCORTCold <- exp(deli_blue$b_Intercept)/(1+exp(deli_blue$b_Intercept))
+probright_dbControlCold <- exp(deli_blue$b_cortControl + deli_blue$b_Intercept)/(1+exp(deli_blue$b_cortControl + deli_blue$b_Intercept))
+probright_dbCORTHot <- exp(deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$b_tempHot + deli_blue$b_Intercept))
+probright_dbControlHot <- exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept))
 ## 2) L. guichenoti
 ### Group = red
-probright_grCORTCold <- 1/(1+exp(-guich_red$b_Intercept))
-probright_grControlCold <- 1/(1+exp(-(guich_red$b_cortControl + guich_red$b_Intercept)))
-probright_grCORTHot <- 1/(1+exp(-(guich_red$b_tempHot + guich_red$b_Intercept)))
-probright_grControlHot <- 1/(1+exp(-(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept)))
+probright_grCORTCold <- exp(guich_red$b_Intercept)/(1+exp(guich_red$b_Intercept))
+probright_grControlCold <- exp(guich_red$b_cortControl + guich_red$b_Intercept)/(1+exp(guich_red$b_cortControl + guich_red$b_Intercept))
+probright_grCORTHot <- exp(guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$b_tempHot + guich_red$b_Intercept))
+probright_grControlHot <- exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept))
 ### Group = blue
-probright_gbCORTCold <- 1/(1+exp(-guich_blue$b_Intercept))
-probright_gbControlCold <- 1/(1+exp(-(guich_blue$b_cortControl + guich_blue$b_Intercept)))
-probright_gbCORTHot <- 1/(1+exp(-(guich_blue$b_tempHot + guich_blue$b_Intercept)))
-probright_gbControlHot <- 1/(1+exp(-(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept)))
+probright_gbCORTCold <- exp(guich_blue$b_Intercept)/(1+exp(guich_blue$b_Intercept))
+probright_gbControlCold <- exp(guich_blue$b_cortControl + guich_blue$b_Intercept)/(1+exp(guich_blue$b_cortControl + guich_blue$b_Intercept))
+probright_gbCORTHot <- exp(guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$b_tempHot + guich_blue$b_Intercept))
+probright_gbControlHot <- exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept))
+#
 # Second we build a df with all the mean probabilities of choosing right in the first trial for each treatment and species
 prob_df <- data.frame(
   probright_drCORTCold_t = format_dec(mean(probright_drCORTCold), 3),
@@ -404,8 +415,8 @@ resid_gab <- residuals(mod_gab)
 #
 #
 #
-plot(mod_dar)
 bayes_R2(mod_dar)
+plot(mod_dar)
 ```
 #
 cat("\\newpage")
@@ -413,6 +424,7 @@ cat("\\newpage")
 #
 #
 #
+bayes_R2(mod_dab)
 plot(mod_dab)
 #
 #
@@ -423,6 +435,7 @@ cat("\\newpage")
 #
 #
 #
+bayes_R2(mod_gar)
 plot(mod_gar)
 ```
 #
@@ -431,6 +444,7 @@ cat("\\newpage")
 #
 #
 #
+bayes_R2(mod_gab)
 plot(mod_gab)
 #
 #

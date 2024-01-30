@@ -227,27 +227,37 @@ real_table
 
 Results of the are summarized in @tbl-data and figures @Figdeli, @Figguich. On average, we found that the estimated learning slopes were lower when the blue feeders were the correct choice compared to those assigned to the group 'Red' for _L. delicata_ ('Blue' learning slope - 'Red'learning slope = `r format_dec(mean((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (dar_CORTCold + dar_ControlCold + dar_CORTCold + dar_ControlHot)), 3)`, p = `r format_dec(pmcmc((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (dar_CORTCold + dar_ControlCold + dar_CORTCold + dar_ControlHot)), 3)`), but not for _L. guichenoti_ ('Blue' learning slope - 'Red'learning slope = `r format_dec(mean((gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTCold + gar_ControlHot)), 3)`, p = `r format_dec(pmcmc((gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTCold + gar_ControlHot)),3)`). However, further analyses using the first trial indicated a potential bias towards blue in the initial choice (see Supplementary Material and Figs. @Figdeli, @Figguich) that could be affecting the estimated slopes. As such, we analysed the between treatments differences for each group separately.  
 For those individuals assigned to group 'Red', we did not find any significant differences between treatments neither for _L. delicata_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(dar_ControlCold - dar_CORTCold), 3)`, p- value = `r format_dec(pmcmc(dar_ControlCold - dar_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(dar_ControlHot- dar_CORTHot), 3)`, p- value = `r format_dec(pmcmc(dar_ControlHot - dar_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(dar_ControlHot - dar_ControlCold), 3)`, p-value = `r format_dec(pmcmc(dar_ControlHot - dar_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(dar_CORTHot - dar_CORTCold), 3)`, p-value = `r format_dec(pmcmc(dar_CORTHot - dar_CORTCold), 3)`) (see @Figdeli), or _L. guichenoti_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(gar_ControlCold - gar_CORTCold), 3)`, p- value = `r format_dec(pmcmc(gar_ControlCold - gar_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(gar_ControlHot- gar_CORTHot), 3)`, p- value = `r format_dec(pmcmc(gar_ControlHot - gar_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(gar_ControlHot - gar_ControlCold), 3)`, p-value = `r format_dec(pmcmc(gar_ControlHot - gar_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(gar_CORTHot - gar_CORTCold), 3)`, p-value = `r format_dec(pmcmc(gar_CORTHot - gar_CORTCold), 3)`) (see @Figguich). However, in both species the slope in the 'CORTCold' treatments seems bigger than the rest for group 'Red'. When groups were pooled by incubation temperature, slopes from individuals incubated at 23ºC were on average bigger in both species, but the difference was not significant (_L. delicata_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((dar_CORTHot + dar_ControlHot) - (dar_CORTCold + dar_ControlCold)),3)`, p-value = `r format_dec(pmcmc((dar_CORTHot + dar_ControlHot) - (dar_CORTCold + dar_ControlCold)),3)`; _L. guichenoti_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((gar_CORTHot + gar_ControlHot)-(gar_CORTCold + gar_ControlCold)),3)`, p-value = `r format_dec(pmcmc((gar_CORTHot + gar_ControlHot)-(gar_CORTCold + gar_ControlCold)),3)`). CORT also lead to higher slopes in both species, but the differences were not significant (_L. delicata_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((dar_ControlCold + dar_ControlHot) - (dar_CORTCold + dar_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((dar_ControlCold + dar_ControlHot) - (dar_CORTCold + dar_CORTHot)), 3)` ; _L. guichenoti_: 'Control' learning slope - 'CORT' learning slope = `r format_dec(mean((gar_ControlCold + gar_ControlHot)-(gar_CORTCold + gar_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((gar_ControlCold + gar_ControlHot)-(gar_CORTCold + gar_CORTHot)), 3)`). We also did not find any significant differences when we compared the estimated slopes between species (_L. delicata_ - _L. guichenoti_ = `r format_dec(mean((dar_CORTCold + dar_ControlCold + dar_CORTHot + dar_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTHot + gar_ControlHot)), 3)`, p-value = `r format_dec(pmcmc((dar_CORTCold + dar_ControlCold + dar_CORTHot + dar_ControlHot) - (gar_CORTCold + gar_ControlCold + gar_CORTHot + gar_ControlHot)), 3)`).  
-The results for 'Blue' individuals were similar. We did not find significant differences between treatments in _L.delicata_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(dab_ControlCold - dab_CORTCold), 3)`, p- value = `r format_dec(pmcmc(dab_ControlCold - dab_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(dab_ControlHot- dab_CORTHot), 3)`, p- value = `r format_dec(pmcmc(dab_ControlHot - dab_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(dab_ControlHot - dab_ControlCold), 3)`, p-value = `r format_dec(pmcmc(dab_ControlHot - dab_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(dab_CORTHot - dab_CORTCold), 3)`, p-value = `r format_dec(pmcmc(dab_CORTHot - dab_CORTCold), 3)`) (see @Figdeli), or _L. guichenoti_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(gab_ControlCold - gab_CORTCold), 3)`, p- value = `r format_dec(pmcmc(gab_ControlCold - gab_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(gab_ControlHot- gab_CORTHot), 3)`, p- value = `r format_dec(pmcmc(gab_ControlHot - gab_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(gab_ControlHot - gab_ControlCold), 3)`, p-value = `r format_dec(pmcmc(gab_ControlHot - gab_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(gab_CORTHot - gab_CORTCold), 3)`, p-value = `r format_dec(pmcmc(gab_CORTHot - gab_CORTCold), 3)`) (see @Figguich). However, here the estimated slopes from those incubated at higher temperatures seem to be bigger on average, although the difference was not significant (_L. delicata_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((dab_CORTHot + dab_ControlHot) - (dab_CORTCold + dab_ControlCold)),3)`, p-value = `r format_dec(pmcmc((dab_CORTHot + dab_ControlHot) - (dab_CORTCold + dab_ControlCold)),3)`; _L. guichenoti_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((gab_CORTHot + gab_ControlHot)-(gab_CORTCold + gab_ControlCold)),3)`, p-value = `r format_dec(pmcmc((gab_CORTHot + gab_ControlHot)-(gab_CORTCold + gab_ControlCold)),3)`). Also, 'Control' _L. delicata_ seem to have slightly higher estimated slopes than on average ('Control' learning slope - 'CORT' learning slope = `r format_dec(mean((dab_ControlCold + dab_ControlHot) - (dab_CORTCold + dab_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((dab_ControlCold + dab_ControlHot) - (dab_CORTCold + dab_CORTHot)), 3)` ) while in _L. guichenoti_ is the opposite ('Control' learning slope - 'CORT' learning slope = `r format_dec(mean((gab_ControlCold + gab_ControlHot)-(gab_CORTCold + gab_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((gab_ControlCold + gab_ControlHot)-(gab_CORTCold + gab_CORTHot)), 3)`); nevertheless, the differences found were not significant in any case. Finally, we found that learning slopes estimated for _L. guichenoti_ assigned to group 'Blue' were marginally higher than those from _L. delicata_ (_L. delicata_ - _L. guichenoti_ = `r format_dec(mean((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot)), 3)`, p-value = `r format_dec(pmcmc((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot)), 3)`).
-
 
 ```{r, fig-results}
 #| label: figdeli
 #| fig.cap: "Deli"
-# First step, create the Intercepts for all models
-## 1) Associative task
-### Group = red
-int_dar_CORTCold <- deli_red$b_Intercept
-int_dar_ControlCold <- (deli_red$b_cortControl + deli_red$b_Intercept)
-int_dar_CORTHot <- (deli_red$b_tempHot + deli_red$b_Intercept)
-int_dar_ControlHot <- (deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept)
-### Group = blue
-int_dab_CORTCold <- deli_blue$b_Intercept
-int_dab_ControlCold <- (deli_blue$b_cortControl + deli_blue$b_Intercept)
-int_dab_CORTHot <- (deli_blue$b_tempHot + deli_blue$b_Intercept)
-int_dab_ControlHot <- (deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept)
-
+source(here("R", "func.R"))
+# First step, create the dfs for all models
+## 1) L. delicata
+### Red
+df_del_red <- df_fig(as.data.frame(deli_red), "L. delicata", "Red")
+### Blue
+df_del_blue <- df_fig(as.data.frame(deli_blue), "L. delicata", "Blue")
+## 2) L. guichenoti
+### Red
+df_gui_red <- df_fig(as.data.frame(guich_red), "L. guichenoti", "Red")
+### Blue
+df_gui_blue <- df_fig(as.data.frame(guich_blue), "L. guichenoti", "Blue")
+#
+# Second step, merge the df into a big Fig_df
+Fig_df <- rbind(df_del_red, df_del_blue, df_gui_red, df_gui_blue) %>%
+  mutate(Trial = gsub("X", "", Trial)) %>%
+  mutate(Trial = as.numeric(Trial)) %>%
+  rename("Predicted_prob" = "Value") %>%
+data.frame()
+write.csv(Fig_df, file= "./output/Checking/Fig_df.csv")
+# Make the plot
+figure_results <- plotting(Fig_df)
+ggsave("./output/figures/figure_results.png", plot=figure_results, width = 18, height = 20, units = "cm", dpi = 3000)
+print(figure_results)
 ```
 
+The results for 'Blue' individuals were similar. We did not find significant differences between treatments in _L.delicata_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(dab_ControlCold - dab_CORTCold), 3)`, p- value = `r format_dec(pmcmc(dab_ControlCold - dab_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(dab_ControlHot- dab_CORTHot), 3)`, p- value = `r format_dec(pmcmc(dab_ControlHot - dab_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(dab_ControlHot - dab_ControlCold), 3)`, p-value = `r format_dec(pmcmc(dab_ControlHot - dab_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(dab_CORTHot - dab_CORTCold), 3)`, p-value = `r format_dec(pmcmc(dab_CORTHot - dab_CORTCold), 3)`) (see @Figdeli), or _L. guichenoti_ ('Control-Cold' - 'CORT-Cold' = `r format_dec(mean(gab_ControlCold - gab_CORTCold), 3)`, p- value = `r format_dec(pmcmc(gab_ControlCold - gab_CORTCold), 3)`; 'Control-Hot' - 'CORT-Hot' = `r format_dec(mean(gab_ControlHot- gab_CORTHot), 3)`, p- value = `r format_dec(pmcmc(gab_ControlHot - gab_CORTHot), 3)`; 'Control-Hot' - 'Control-Cold' = `r format_dec(mean(gab_ControlHot - gab_ControlCold), 3)`, p-value = `r format_dec(pmcmc(gab_ControlHot - gab_ControlCold), 3)`; 'CORT-Hot' - 'CORT-Cold' = `r format_dec(mean(gab_CORTHot - gab_CORTCold), 3)`, p-value = `r format_dec(pmcmc(gab_CORTHot - gab_CORTCold), 3)`) (see @Figguich). However, here the estimated slopes from those incubated at higher temperatures seem to be bigger on average, although the difference was not significant (_L. delicata_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((dab_CORTHot + dab_ControlHot) - (dab_CORTCold + dab_ControlCold)),3)`, p-value = `r format_dec(pmcmc((dab_CORTHot + dab_ControlHot) - (dab_CORTCold + dab_ControlCold)),3)`; _L. guichenoti_: 'Hot' learning slope - 'Cold' learning slope = `r format_dec(mean((gab_CORTHot + gab_ControlHot)-(gab_CORTCold + gab_ControlCold)),3)`, p-value = `r format_dec(pmcmc((gab_CORTHot + gab_ControlHot)-(gab_CORTCold + gab_ControlCold)),3)`). Also, 'Control' _L. delicata_ seem to have slightly higher estimated slopes than on average ('Control' learning slope - 'CORT' learning slope = `r format_dec(mean((dab_ControlCold + dab_ControlHot) - (dab_CORTCold + dab_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((dab_ControlCold + dab_ControlHot) - (dab_CORTCold + dab_CORTHot)), 3)` ) while in _L. guichenoti_ is the opposite ('Control' learning slope - 'CORT' learning slope = `r format_dec(mean((gab_ControlCold + gab_ControlHot)-(gab_CORTCold + gab_CORTHot)), 3)`, p-value = `r format_dec(pmcmc((gab_ControlCold + gab_ControlHot)-(gab_CORTCold + gab_CORTHot)), 3)`); nevertheless, the differences found were not significant in any case. Finally, we found that learning slopes estimated for _L. guichenoti_ assigned to group 'Blue' were marginally higher than those from _L. delicata_ (_L. delicata_ - _L. guichenoti_ = `r format_dec(mean((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot)), 3)`, p-value = `r format_dec(pmcmc((dab_CORTCold + dab_ControlCold + dab_CORTHot + dab_ControlHot) - (gab_CORTCold + gab_ControlCold + gab_CORTHot + gab_ControlHot)), 3)`).  
 
 
 ## Discussion
@@ -405,8 +415,8 @@ Plots for the different models of the associative task:
 1.- _L. delicata_  
   1.a.- Red  
 ```{r , plotmod_dar, out.width="70%", fig.align="center"}
-plot(mod_dar)
 bayes_R2(mod_dar)
+plot(mod_dar)
 ```
 ```{r, results='asis', echo=FALSE}
 cat("\\newpage")
@@ -414,6 +424,7 @@ cat("\\newpage")
 
   1.b.- Blue  
 ```{r , plotmod_dab, out.width="70%", fig.align="center"}
+bayes_R2(mod_dab)
 plot(mod_dab)
 ```
 
@@ -424,6 +435,7 @@ cat("\\newpage")
 2.- _L. guichenoti_  
   2.a.- Red  
 ```{r , plotmod_gar, out.width="70%", fig.align="center"}
+bayes_R2(mod_gar)
 plot(mod_gar)
 ```
 ```{r, results='asis', echo=FALSE}
@@ -432,6 +444,7 @@ cat("\\newpage")
 
   2.b.- Blue  
 ```{r , plotmod_gab, out.width="70%", fig.align="center"}
+bayes_R2(mod_gab)
 plot(mod_gab)
 ```
 
