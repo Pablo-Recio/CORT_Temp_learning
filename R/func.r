@@ -199,7 +199,7 @@ df_fig <- function(data_fig, specie, group){
 #' @param df to select the df
 plotting <- function(df){
   plot <- ggplot(df, aes(x = Trial, y = Mean_Predicted_prob, color = Treatment)) +
-  geom_line(linewidth = 1.75) +
+  geom_line(linewidth = 1) +
   scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="cyan", "CORT-Hot"="black", "Control-Hot"="#616161")) +
   geom_ribbon(aes(ymin = Mean_Predicted_prob - SE_Predicted_prob, ymax = Mean_Predicted_prob + SE_Predicted_prob, fill = Treatment), color = NA, alpha = 0.075) + 
   scale_fill_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="cyan", "CORT-Hot"="black", "Control-Hot"="#616161")) +
