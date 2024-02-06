@@ -273,6 +273,15 @@ The results for 'Blue' individuals were similar. We did not find significant dif
 
 ## Discussion
 
+Our results suggest that the early environment manipulation did not affect learning in both skinks; we found that the estimated learning slopes were not different between treatments or species. However, learning slopes were lower when the blue feeders were the correct choice compared to those assigned to the group 'Red' for _L. delicata_, but not for _L. guichenoti_. This difference could be due to a potential bias towards blue in the initial choice, as we found that the estimated probability of choosing the correct feeder in the first trial was higher than expected by chance when the correct feeder was blue (see Supplementary Material). [**EXAMPLES WITH BIASES TOWARDS BLUE**]
+Nevertheless, when lizards assigned to blue or red were analysed separately, the between treatments comparissons remain the same in both species. Furthermore, the non-significant trends we observed were not consistent between species or colour assigned. As such, we conclude that, overall, lizards learned at the same rate regardless of the early environment manipulation.   
+
+- Effect of CORT: what do others study say? Effect of sex, effect of task (brain region), effect of dose and time of exposure (discuss).
+- Effects of temperature: what do others study say? Effect of tasks and region
+
+Finally, we did not see any significant difference in learning rates when both species were compared. This result is in line with previous studies that found no differences in learning abilities between _L. delicata_ and _L. guichenoti_ [@bezzina2014does]. However, in the experiment conducted by @bezzina2014does the authors did not find any evidence of learning in neither _L. delicata_ or _L. guichenoti_. In this regard, both learning tasks were conducted in a similar way and using the same cognitive domain, so the differences in the results could be due to the different experimental designs or the complexity of stimuli discrimination. Nevertheless, to test cognitive difference between these two species, further studies should be conducted using different cognitive domains. 
+In conclusion, 
+
 ## References
 <div id="refs"></div>
 
