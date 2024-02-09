@@ -273,7 +273,7 @@ The results for 'Blue' individuals were similar. We did not find significant dif
 
 ## Discussion
 
-Our results suggest that the early environment manipulation did not affect learning; we found that the estimated learning slopes were not different between treatments or species. However, learning slopes were lower when the blue feeders were the correct choice compared to those lizards assigned to the group 'Red' for _L. delicata_, but not for _L. guichenoti_. This difference could be due to a potential bias towards blue in the initial choice, as we found that the estimated probability of choosing the correct feeder in the first trial was higher than expected by chance when the correct feeder was blue (see Supplementary Material). Moreover, those treatments and species whose learning slopes do not differ significantly from zero (see Table 1), are associated to highest bias (see Supplementary Material). Because there was a possibility that the bias towards the blue feeder was something acquired during training, we compared the light spectrum of the ramps used in the associative task and the white ones used during habituation, but we did no see any relevant similarity between the white and blue ramps (see Supplementary Material). As such, we consider this bias to not be a derivate from our experimental design. The species confidence hypothesis posits that animals should bias their attention toward colours they are familiar with, and empirical studies show that, for instance, dark and light blue T-shirts were associated with lower flight initiation distances and higher capture rates in Western fence lizards where blue is used in intraspecific communication [@putman2017fear]. However, to the best of our knowledge, noone has reported a colour bias in _L. delicata_ or _L. guichenoti_ before; and it is not considered to be involved in intraspecific communication [@torr1996patterns, @chapple_biology_2014]. Still, we recommend to select carefully the colours employed in associative tasks with these species, especially _L. delicata_, for future cognitive tasks employing visual stimuli. Nevertheless, when lizards assigned to blue or red were analysed separately, the between treatments comparissons remain the same in both species. Furthermore, the non-significant trends we observed were not consistent between species or colour assigned. As such, we conclude that, overall, lizards learned at the same rate regardless of the early environment manipulation.  
+Our results suggest that the early environment manipulation did not affect learning; we found that the estimated learning slopes were not different between treatments or species. However, learning slopes were lower when the blue feeders were the correct choice compared to those lizards assigned to the group 'Red' for _L. delicata_, but not for _L. guichenoti_. This difference could be due to a potential bias towards blue in the initial choice, as we found that the estimated probability of choosing the correct feeder in the first trial was higher than expected by chance when the correct feeder was blue (see Supplementary Material). Moreover, those treatments and species whose learning slopes do not differ significantly from zero (see Table 1), are associated to highest bias (see Supplementary Material). Because there was a possibility that the bias towards the blue feeder was something acquired during training, we compared the light spectrum and the perceived chromatic differences between the ramps used in the associative task and the white ones used during habituation, but we did no see any relevant similarity between the white and blue ramps (see Supplementary Material). As such, we consider this bias to not be a derivate from our experimental design. The species confidence hypothesis posits that animals should bias their attention toward colours they are familiar with, and empirical studies show that, for instance, dark and light blue T-shirts were associated with lower flight initiation distances and higher capture rates in Western fence lizards where blue is used in intraspecific communication [@putman2017fear]. However, to the best of our knowledge, noone has reported a colour bias in _L. delicata_ or _L. guichenoti_ before; and it is not considered to be involved in intraspecific communication [@torr1996patterns, @chapple_biology_2014]. Still, we recommend to select carefully the colours employed in associative tasks with these species, especially _L. delicata_, for future cognitive tasks employing visual stimuli. Nevertheless, when lizards assigned to blue or red were analysed separately, the between treatments comparissons remain the same in both species. Furthermore, the non-significant trends we observed were not consistent between species or colour assigned. As such, we conclude that, overall, lizards learned at the same rate regardless of the early environment manipulation.  
 As part of our predictions, we expected prenatal CORT to impair learning, as other studies have shown [@lemaire_prenatal_2000; @zhu_prenatal_2004; @farrell_developmental_2015-learn; @bebus_associative_2016]. However, in other experiments early-life increases in GCs or induced stress did not affect learning abilities or even improve them [@szuran_water_1994; @crino_corticosterone_2014-learn; @farrell_developmental_2015-learn; @bebus_associative_2016]. In this veins, GCs are known to show an inverted 'U-shaped' relationship with performance on some learning task, with low levels of GCs being beneficial for learning and memory, and high levels being detrimental [@du_dynamic_2009; @mcewen_brain_2012]. It can be arguable whether the absence of differences in learning slopes between treatments could be due to the fact that the levels of CORT we used were not high or sustained through time enough to impair learning, or that the dose did not reach the embryo. However, we believe this to be unlikely since we found that the levels of CORT we used affected other morphological and physiological traits (non-published data). In contrast, testing only one cognitive domain could have masked potential differences in learning abilities between treatments. For instance, European starlings males stressed during early stages of development performed worse in a visual associative learning task, but show no differences with control birds when the stimuli tested was acoustic [@farrell_developmental_2015-learn]; while Scrub-jays that had lower CORT levels as nestlings performed better on an associative learning test as adults, but not on a reversal learning task [@bebus_associative_2016]. GCs action involve genomic and nongenomic mechanisms that implicate different types of receptors that can be distributed unevenly in the various regions of the brain [@mcewen_brain_2012], and may be related to the learning performance in distinct tasks. As such, we consider that studying different cognitive domains could provide a more comprehensive understanding of the effects of early-life stress on learning abilities in these species.  
 Regarding incubation temperature, we predicted hot-incubated lizards to perform better in our task then those incubated at 23ºC, since most of the studies show enhanced learning abilities with higher incubation temperatures [@amiel_hotter_2012; @amiel_egg_2014; @clark_colour_2014]. Furthermore, those studies that found the opposite pattern, were only when the hot treatment was above the natural thermal range of the species [@dayananda_incubation_2017; @abayarathna_effects_2020]. However, our results do not align with these previous experiments and our predictions. In contrast, we did not find any effect of temperature in _L. delicata_ or _L. guichenoti_. In general, the incubation temperature effects observed on learning performance are associated with higher neural density in certain areas [@amiel_effects_2017], but these effects can be region-dependent [@coomber_independent_1997; @sakata_neural_2000; @amiel_effects_2017]. Hence, as ocurred with CORT, further studies using different cognitive domains should be used to understand the effects of incubation temperature on learning abilities in these species.  
 Finally, we did not see any significant difference in learning rates when both species were compared. This result is in line with previous studies that found no differences in learning abilities between _L. delicata_ and _L. guichenoti_ [@bezzina2014does]. However, in the experiment conducted by @bezzina2014does the authors did not find any evidence of learning in neither _L. delicata_ or _L. guichenoti_. In this regard, both learning tasks were conducted in a similar way and using the same cognitive domain, so the differences in the results could be due to the different experimental designs or the complexity of stimuli discrimination. Nevertheless, to test cognitive difference between these two species, further studies should be conducted using different cognitive domains.    
@@ -401,7 +401,94 @@ autofit()
 colour_table
 ```
 
-On average, we found that, for both species, the proportion of correct choices in the first trial was significantly above chance when the correct feeder was blue (_L. delicata_: mean Prob choice = `r format_dec(mean((probright_dbCORTCold + probright_dbControlCold + probright_dbCORTHot + probright_dbControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_dbCORTCold + probright_dbControlCold + probright_dbCORTHot + probright_dbControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`; _L. guichenoti_: mean Prob choice = `r format_dec(mean((probright_gbCORTCold + probright_gbControlCold + probright_gbCORTHot + probright_gbControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_gbCORTCold + probright_gbControlCold + probright_gbCORTHot + probright_gbControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`), but not when it was red (_L. delicata_: mean Prob choice = `r format_dec(mean((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`; _L. guichenoti_: mean Prob choice = `r format_dec(mean((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`). 
+On average, we found that, for both species, the proportion of correct choices in the first trial was significantly above chance when the correct feeder was blue (_L. delicata_: mean Prob choice = `r format_dec(mean((probright_dbCORTCold + probright_dbControlCold + probright_dbCORTHot + probright_dbControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_dbCORTCold + probright_dbControlCold + probright_dbCORTHot + probright_dbControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`; _L. guichenoti_: mean Prob choice = `r format_dec(mean((probright_gbCORTCold + probright_gbControlCold + probright_gbCORTHot + probright_gbControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_gbCORTCold + probright_gbControlCold + probright_gbCORTHot + probright_gbControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`), but not when it was red (_L. delicata_: mean Prob choice = `r format_dec(mean((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`; _L. guichenoti_: mean Prob choice = `r format_dec(mean((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), 3)`, p-value = `r format_dec(pmcmc(((probright_drCORTCold + probright_drControlCold + probright_drCORTHot + probright_drControlHot)/4), null = 0.33, twotail = FALSE, dir=">"), 3)`).  
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+#### Light spectrum
+To test if the bias towards blue was something acquired during training, we compared the light spectrum of the ramps used in the associative task and the white ones used during habituation. We took three measurements of ten feeders per colour with a spectophotometer, and then analysed the spectrum and the perceived differences in colour using the package pavo. The spetrum of each type of feeder are shown in @fig-spectrum; the perceived chromatic constrasts between feeders are shown in @fig-perceived1 and @fig-perceived2.  
+```{r, fig-spectrum}
+#| label: fig-spectrum
+#| fig.cap: "Light spectrum of the ramps used in the associative task and the white ones used during habituation. The different colours represent the different ramps."
+#
+# Load required packages
+pacman::p_load(pavo,plotrix,plyr,MCMCglmm,Hmisc,DIZutils)
+#
+# For importing the files, change the extension of the .jaz files to .txt files!  
+# Import spec data for pablos feeders - CHNAGE TO WHERE YOUR FILES ARE LOCATED
+specs <- getspec("./Others/Feeders", lim = c(300,700), ext = 'txt') %>%
+  procspec(specs, opt = "smooth" , span = 0.2, fixneg = "addmin") 
+# Plot smoothed raw data as reflectance curve with approximate rgb colours
+plot(specs, type = "o", col = spec2rgb(specs))
+```
+
+```{r, fig-perceived1}
+#| label: fig-perceived1
+#| fig.cap: "Perceived chromatic contrasts between feeders."
+#
+## Processing the data with the lizard visual model 
+# Processing using lizard vision model provided for Dan and Martin's Phyrnocephalus mystaceus paper
+liz_vis <- sensmodel(c(360, 440, 493, 571)) 
+#
+# Apply this over the feeder data visual as the visual system, achromatic is the receptor sensitivity, illum is the illuminate (here using an ideal white illuminate preset), bkg is the background against which we are measuring (here using an ideal background with no influence). Other conditions are applied as used in the P mystaceus paper.
+# Does produce an error about luminance but this is noted on the original P mystaceus paper code and should be okay
+# summary(feeders_lizardview) can be used to check what conditions were applied in the visual model
+feeders_lizardview <- vismodel(specs, visual = liz_vis, achromatic = "l", illum = "ideal", bkg = "ideal", vonkries = TRUE,   relative = FALSE, qcatch = "fi")
+#                             
+# Calculate colour distances between all feeder measurements
+coldistance_feeders <- coldist(feeders_lizardview,achro = TRUE, noise = "neural", n = c(1, 1, 3.5, 6),  weber = 0.1)
+#
+# Name all contrasts e.g white/green to categorise them
+annotated_coldistance_feeders <- coldistance_feeders %>%
+  separate(patch1, into = c("color1", "number1"), sep = "_") %>%
+  separate(patch2, into = c("color2", "number2"), sep = "_") %>%
+  mutate(color_comparison = paste0(color1, "/", color2)) %>%
+  mutate(color_comparison = paste0(pmin(color1, color2), "/", pmax(color1, color2))) %>% # Remove duplicate categories(e.g white/green is the same as green/white and all are called green/white)
+  subset(!(color_comparison %in% c("B/B", "G/G", "R/R", "W/W")))
+#
+# Plot the colour differences between the feeders: 
+# Note - above 1 is expected to be visually different under the selected visual system (here, lizard view)
+# dS, or chromatic contrast
+dScomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison, y = dS, fill = color_comparison)) + 
+  geom_boxplot() + 
+  theme_classic() +
+  ylab("Chromatic Contrast (dS)") +
+  xlab("Feeder Colours Comparison") +
+ scale_fill_manual(values =c("B/G" = 'steelblue',  "B/R" = 'purple', "B/W" = 'lightblue', "G/R" = 'brown', "G/W" = 'lightgreen', "R/W" = 'red')) +
+ theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
+  theme(
+    axis.title = element_text(size = 15, family = "Times New Roman"),
+    axis.text = element_text(size = 10, family = "Times New Roman"),
+    legend.title = element_text(size = 12, family = "Times New Roman"),
+    legend.text = element_text(size = 10, family = "Times New Roman"),
+    strip.text = element_text(size = 13, family = "Times New Roman")
+  ) 
+print(dScomparisons)
+```
+
+```{r, fig-perceived2}
+#| label: fig-perceived2
+#| fig.cap: "Perceived achromatic contrasts between feeders."
+#dL, or achromatic contrast
+dLcomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison, y = dL, fill = color_comparison)) + 
+  geom_boxplot() + 
+  theme_classic() +
+  ylab("Achromatic Contrast (dL") +
+  xlab("Feeder Colours Comparison") +
+ scale_fill_manual(values =c("B/G" = 'steelblue',  "B/R" = 'purple', "B/W" = 'lightblue', "G/R" = 'brown', "G/W" = 'lightgreen', "R/W" = 'red')) +
+ theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
+  theme(
+    axis.title = element_text(size = 15, family = "Times New Roman"),
+    axis.text = element_text(size = 10, family = "Times New Roman"),
+    legend.title = element_text(size = 12, family = "Times New Roman"),
+    legend.text = element_text(size = 10, family = "Times New Roman"),
+    strip.text = element_text(size = 13, family = "Times New Roman")
+  )
+print(dLcomparisons)
+```
+
 
 ```{r, results='asis', echo=FALSE}
 cat("\\newpage")
