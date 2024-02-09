@@ -499,17 +499,17 @@ cat("\\newpage")
 # Chunk for calling all the models and making the residuals
 ## L. delicata
 ### Red
-mod_dar <- readRDS(here("output/models/deli_red.rds"))
+mod_dar <- readRDS("./output/models/deli_red.rds")
 resid_dar <- residuals(mod_dar)
 ### Blue
-mod_dab <- readRDS(here("output/models/deli_blue.rds"))
+mod_dab <- readRDS("./output/models/deli_blue.rds")
 resid_dab <- residuals(mod_dab)
 ## L. guichenoti
 ### Red
-mod_gar <- readRDS(here("output/models/guich_red.rds"))
+mod_gar <- readRDS("./output/models/guich_red.rds")
 resid_gar <- residuals(mod_gar)
 ### Blue
-mod_gab <- readRDS(here("output/models/guich_blue.rds"))
+mod_gab <- readRDS("./output/models/guich_blue.rds")
 resid_gab <- residuals(mod_gab)
 ```
 
