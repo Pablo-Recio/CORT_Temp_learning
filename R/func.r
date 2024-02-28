@@ -140,7 +140,20 @@ pmcmc <- function(x, null = 0, twotail = TRUE, dir){
 #' @param n The number of decimals
 format_dec <- function(x, n) {
   z <- sprintf(paste0("%.",n,"f"), x)
-  return(as.numeric(z))
+  return(z)
+}
+####################
+####################
+# Function to format p_values
+#' @title format_dec
+#' @param x The object
+#' @param n The number of decimals
+format_p <- function(x, n) {
+  z <- sprintf(paste0("%.",n,"f"), x)
+  tmp <- ifelse(as.numeric(z) <= 0.001, "< 0.001",
+         ifelse(as.numeric(z) <= 0.05 & as.numeric(z) > 0.001, "< 0.05",
+                as.character(z)))
+  return(tmp)
 }
 ####################
 ####################
