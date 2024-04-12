@@ -20,7 +20,9 @@
 #
 #
 #| label: setup
-pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes, ggh4x)
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes, ggh4x, PupillometryR, cowplot, png, grid)
+#
+#
 #
 #
 #
@@ -52,7 +54,7 @@ pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4,
 #| label: fig-Methods
 #| fig.cap: "Experimental design of early environment manipulation (**A**) and learning tasks (**B**). Stages 1-3 indicate the different phases of the habituation process. In the associative and reversal tasks, white lids show the ramps where the food reward was not attainable."
 
-knitr::include_graphics("./Others/LEARN_FIG_1.svg")
+knitr::include_graphics("./Others/LEARN_FIG_1.png")
 
 #
 #
@@ -137,135 +139,60 @@ gab_ControlHot <- (guich_blue$'b_Trial:cortControl:tempHot' + guich_blue$b_Trial
 #
 #
 #
-#| label: tbl-data
-#| tbl-cap: "Estimates of learning slope for all the different treatments per each task, species and group. Mean shows the aritmetic mean of the estimates obtained from the posteriors of the model, and 95% CI indicates the 95% confidence interval of the mean. All p-values were obtained using pmcmc and test the hypothesis that the mean is equal to zero. In bold, those values that are significant (p-value <0.05)"
-source(here("R", "func.R"))
-#
-############################## CREATING BIG DF FOR TABLE ##############################
-# Building the vectors for titles of rows and columns
-specie <- c("L. delicata", "L. guichenoti")
-groups <- c("Red", "Blue")
-treatments <- c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")
-values <- c("Mean", "95% CI", "p-value")
-# Building the vectors for estimated means, co.intervals(95%), and p-values for the slopes obtained from posteriors. p-values are obtained using pmcmc function (see func.R), assuming a two-tailed test that testes the hypothesis that the value (slopes in this case) is 0.
-# First call the estimates
-estimates <- list(
-  dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot, 
-  dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot, 
-  gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot, 
-  gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot
-)
-#
-# Then get the mean, co.intervals(95%), and p-values
-l_mean <- format_dec(sapply(estimates, mean), 3)
-l_interval_025 <- format_dec(sapply(estimates, function(x) quantile(x,0.025)), 3)
-l_interval_975 <- format_dec(sapply(estimates, function(x) quantile(x,0.975)), 3)
-l_intervals <- paste(l_interval_025, l_interval_975, sep = " , ")
-l_pvalue <- format_p(sapply(estimates, pmcmc), 3)
-#
-# Building the df
-df <- data.frame(
-  Specie = rep(specie, each = length(groups) * length(treatments)),
-  Group = rep(rep(groups, each = length(treatments)), times = length(specie)),
-  Treatment = rep(rep(treatments, each = 1), times = length(groups) * length(specie)),
-  Mean = rep(l_mean, each = 1),
-  CI = rep(l_intervals, each = 1),
-  PValue = rep(l_pvalue, each = 1)
-)
-write.csv(df, file= "./output/Checking/df.csv")
-#
-############################## ADDING SAMPLE SIZE TO DF FOR TABLE ##############################
-# Make n_list into a df
-n_df <- as.data.frame(do.call(rbind, n_list)) %>%
-  rename("n" = V1) %>%
-  rownames_to_column("model") %>%
-  separate(model, into = c("Specie", "Group", "cort", "temp"), sep = "_") %>%
-  unite("Treatment", c("cort", "temp"), sep = "-") %>%
-  mutate(Specie = factor(Specie,
-                  labels = c(delicata = "L. delicata", guichenoti = "L. guichenoti")),
-        Treatment = factor(Treatment,
-                   levels = c("CORT-Cold", "Control-Cold", "CORT-Hot","Control-Hot")))
-# Merge both dfs, put sample size together with the treatment, and organize the new df to make it look like the table
-table_data <- merge(df, n_df) %>%
-  rename('p-value' = 'PValue', '95% CI' = 'CI') %>% #Change the names of the columns for the table
-  select(Specie, Group, Treatment, Mean, `95% CI`, `p-value`, n) %>% #To order the columns in the way I want for the table
-  mutate(Specie = factor(Specie,
-                  levels = c("L. delicata", "L. guichenoti")),
-        Group = factor(Group,
-                  levels = c("Red", "Blue")),
-        Treatment = factor(Treatment, 
-                  levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")))%>%
-  arrange(Specie, Group, Treatment) %>% # To arrange the rows the way I want
-  unite("Treatment", c("Treatment", "n"), sep = " (n = ") %>%
-  mutate(Treatment = paste0(Treatment, ")"))
-write.csv(table_data, file= "./output/Checking/table_data.csv")
-#
-############################## MAKING THE TABLE ##############################
-## Table format
-set_flextable_defaults(
- font.family = "Times New Roman",
- fint.size = 10)
-# Split the table_data df by task
-real_table <- flextable(table_data) %>%
-    bold(~ `p-value` < 0.05, ~ `p-value` + Mean + `95% CI`) %>%
-    set_table_properties(width = 1) %>%
-    align(align="center", part="all") %>% 
-    set_header_labels(Mean = "Mean",
-                      `95% CI` = "95% CI",
-                      `p-value` = "p-value",
-                      Mean_Reversal = "Mean",
-                      `95% CI_Reversal` = "95% CI",
-                      `p-value_Reversal` = "p-value") %>%
-    italic(j = 1, italic = TRUE, part = "body") %>% # To have names od species in italics
-    flextable::compose(i = c(2:8,10:16), j = 1, value = as_paragraph(""), part = "body") %>% # To remove some of the values in the first column
-    flextable::compose(i = c(2:4,6:8,10:12,14:16), j = 2, value = as_paragraph(""), part = "body") %>% # To remove some of the values in the second column
-    hline(i = c(4,12), j = c(2:6), part = "body") %>% # To make some horizontal lines
-    hline(i = c(8), j = c(1:6), part = "body") %>% # To make some horizontal lines
-    autofit() 
-real_table
 #
 #
 #
 #
-#
-#
-#| label: fig-results
-#| fig.cap: "Predicted probability of choosing the correct feeder first over trials. The lines represent the mean predicted probability of choosing the correct feeder first, and the shaded areas represent the standard deviation of the mean both obtained by using the slope and intercept estimates from the posterior distributions. The different colours represent the different treatments. The different panels represent the different species and groups."
+#| label: fig-deli
+#| fig.cap: "Results for Lampropholis delicata for both colour groups "red" (A,B) and "blue" (C, D). Panels A and C show the predicted probability of choosing the correct feeder first over trials. The lines represent the mean predicted probability of choosing the correct feeder first on each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments. Panels B and D show the distribution of the estimates of slopes per each treatment. The x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively."
 source(here("R", "func.R"))
 # First step, create the dfs for all models
-## 1) L. delicata
-### Red
-df_del_red <- df_fig(as.data.frame(deli_red), "L. delicata", "Red")
-### Blue
-df_del_blue <- df_fig(as.data.frame(deli_blue), "L. delicata", "Blue")
-## 2) L. guichenoti
-### Red
-df_gui_red <- df_fig(as.data.frame(guich_red), "L. guichenoti", "Red")
-### Blue
-df_gui_blue <- df_fig(as.data.frame(guich_blue), "L. guichenoti", "Blue")
+## Red
+fig_dar_AC_df <- df_plotAC("deli_red")
+fig_dar_BD1_df <- df_plotBD1("deli_red")
+fig_dar_BD2_df <- df_plotBD2("deli_red")
+## Blue
+fig_dab_AC_df <- df_plotAC("deli_blue")
+fig_dab_BD1_df <- df_plotBD1("deli_blue")
+fig_dab_BD2_df <- df_plotBD2("deli_blue")
 #
-# Second step, merge the df into a big Fig_df
-Fig_df <- rbind(df_del_red, df_del_blue, df_gui_red, df_gui_blue) %>%
-  mutate(Trial = gsub("X", "", Trial)) %>%
-  mutate(Trial = as.numeric(Trial)) %>%
-  group_by(Trial, Treatment, Group, Species) %>%
-  summarize(
-    Mean_Predicted_prob = mean(Value),
-    SE_Predicted_prob = sd(Value)
-    ) %>%
-  ungroup() %>%
-  mutate(
-    Treatment = factor(Treatment,
-                        levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")),
-    Group = factor(Group,
-                        levels = c("Red", "Blue")),
-    ) %>%
-data.frame()
-write.csv(Fig_df, file= "./output/Checking/Fig_df.csv")
-# Make the plot
-figure_results <- plotting(Fig_df)
-ggsave("./output/figures/figure_results.png", plot=figure_results, width = 18, height = 20, units = "cm", dpi = 3000)
-knitr::include_graphics("./output/figures/figure_results.png")
+# Second step, create the plots
+fig_dar <- plotting(sp = "deli", col = "red", df_prob = fig_dar_AC_df, df_violin = fig_dar_BD1_df, df_points = fig_dar_BD2_df)
+fig_dab <- plotting(sp = "deli", col = "blue", df_prob = fig_dab_AC_df, df_violin = fig_dab_BD1_df, df_points = fig_dab_BD2_df)
+#
+# Third step, merge plots
+fig_deli <- plot_grid(fig_dar, fig_dab, ncol = 1) +
+  theme(plot.margin = margin(1, 1, 1.25, 1, "cm")) +
+  annotate("text", x = 0.5, y = 1.01, label = "Lampropholis delicata", size = 6, color = "black", fontface = "italic")
+#
+#
+#
+#
+#
+#| label: fig-guich
+#| fig.cap: "Results for Lampropholis guichenoti for both colour groups "red" (A,B) and "blue" (C, D). Panels A and C show the predicted probability of choosing the correct feeder first over trials. The lines represent the mean predicted probability of choosing the correct feeder first on each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments. Panels B and D show the distribution of the estimates of slopes per each treatment. The x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively."
+source(here("R", "func.R"))
+# First step, create the dfs for all models
+## Red
+fig_gar_AC_df <- df_plotAC("guich_red")
+fig_gar_BD1_df <- df_plotBD1("guich_red")
+fig_gar_BD2_df <- df_plotBD2("guich_red")
+## Blue
+fig_gab_AC_df <- df_plotAC("guich_blue")
+fig_gab_BD1_df <- df_plotBD1("guich_blue")
+write.csv(fig_gab_BD1_df, file= "./output/Checking/fig_gab_BD1_df.csv")
+fig_gab_BD2_df <- df_plotBD2("guich_blue")
+#
+# Second step, create the plots
+fig_gar <- plotting(sp = "guich", col = "red", df_prob = fig_gar_AC_df, df_violin = fig_gar_BD1_df, df_points = fig_gar_BD2_df)
+fig_gab <- plotting(sp = "guich", col = "blue", df_prob = fig_gab_AC_df, df_violin = fig_gab_BD1_df, df_points = fig_gab_BD2_df)
+#
+# Third step, merge plots
+fig_guich <- plot_grid(fig_gar, fig_gab, ncol = 1) +
+  theme(plot.margin = margin(1, 1, 1.25, 1, "cm")) +
+  annotate("text", x = 0.5, y = 1.01, label = "Lampropholis guichenoti", size = 6, color = "black", fontface = "italic")
+#
+#
 #
 #
 #
