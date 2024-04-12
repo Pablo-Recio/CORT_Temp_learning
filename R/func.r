@@ -343,25 +343,26 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
       lab <- c("A", "B")
       df_violin$Treatment <- factor(df_violin$Treatment,
         levels = c("Control-Hot (n =  5 )", "CORT-Hot (n =  5 )", "Control-Cold (n = 6 )", "CORT-Cold (n = 5 )"))
-      img <- readPNG("./Others/Deli.png")
+      img <- readPNG("./Others/Red.png")
     } else if (col == "blue"){
       lab <- c("C", "D")
       df_violin$Treatment <- factor(df_violin$Treatment,
         levels = c("Control-Hot (n =  5 )", "CORT-Hot (n =  6 )", "Control-Cold (n = 6 )", "CORT-Cold (n = 6 )"))
-      img <- readPNG("./Others/Deli.png")
+      img <- readPNG("./Others/Blue.png")
     } else {
       stop("Colour not valid")
     }
   } else if (sp == "guich"){
-    img <- readPNG("./Others/Guich.png")
       if (col == "red"){
       lab <- c("A", "B")
       df_violin$Treatment <- factor(df_violin$Treatment,
         levels = c("Control-Hot (n =  5 )", "CORT-Hot (n =  5 )", "Control-Cold (n = 4 )", "CORT-Cold (n = 5 )"))
+      img <- readPNG("./Others/Red.png")
     } else if (col == "blue"){
       lab <- c("C", "D")
       df_violin$Treatment <- factor(df_violin$Treatment,
         levels = c("Control-Hot (n =  5 )", "CORT-Hot (n =  5 )", "Control-Cold (n = 3 )", "CORT-Cold (n = 5 )"))
+      img <- readPNG("./Others/Blue.png")
     } else {
       stop("Colour not valid")
     }
@@ -375,11 +376,11 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   geom_ribbon(aes(ymin = Mean_Predicted_prob - SE_Predicted_prob, ymax = Mean_Predicted_prob + SE_Predicted_prob, fill = Treatment), color = NA, alpha = 0.075) + 
   scale_fill_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="#68bde1", "CORT-Hot"="#b50101", "Control-Hot"="#fa927d")) +
   theme_classic() +
-  labs(y = "Predicted probability of correct choice", x = "Trial") +
+  labs(y = "Probability of correct choice", x = "Trial") +
   theme(
-    plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm"),
-    axis.title = element_text(size = 12, family = "Times"),
-    axis.text = element_text(size = 10, family = "Times"),
+    plot.margin = margin(6.5, 5.5, 5.5, 7, unit = "mm"),
+    axis.title = element_text(size = 11, family = "Times"),
+    axis.text = element_text(size = 9, family = "Times"),
     legend.position = "none"
   ) 
   #
@@ -395,17 +396,17 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   theme_classic() +
   labs(y = "Slope estimates", x = "Treatments") +
   theme(
-    plot.margin = margin(5.5, 5.5, 5.5, 5.5, unit = "mm"),
+    plot.margin = margin(6.5, 5.5, 5.5, 7, unit = "mm"),
     axis.text.y = element_blank(),   # Remove y-axis labels
-    axis.title = element_text(size = 12, family = "Times"),
-    axis.text = element_text(size = 10, family = "Times"),
+    axis.title = element_text(size = 11, family = "Times"),
+    axis.text = element_text(size = 9, family = "Times"),
     legend.position = "right",
-    legend.title = element_text(size = 12, family = "Times"),
-    legend.text = element_text(size = 11, family = "Times")
+    legend.title = element_text(size = 10, family = "Times"),
+    legend.text = element_text(size = 9, family = "Times")
     )
   #
   # Combine them
-  plot <- plot_grid(plot1, plot2, labels = lab, nrow = 1, rel_widths = c(0.45, 0.45)) +
-    annotation_custom(rasterGrob(img), xmin = 0.73, xmax = 0.98, ymin = 0.73, ymax = 0.98)
+  plot <- plot_grid(plot1, plot2, labels = lab, nrow = 1, rel_widths = c(0.45, 0.45), label_x = 0, label_y = 0.95) +
+    annotation_custom(rasterGrob(img), xmin = 0.88, xmax = 0.98, ymin = 0.75, ymax = 0.9)
   return(plot)
 }

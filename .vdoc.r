@@ -162,8 +162,10 @@ fig_dab <- plotting(sp = "deli", col = "blue", df_prob = fig_dab_AC_df, df_violi
 #
 # Third step, merge plots
 fig_deli <- plot_grid(fig_dar, fig_dab, ncol = 1) +
-  theme(plot.margin = margin(1, 1, 1.25, 1, "cm")) +
-  annotate("text", x = 0.5, y = 1.01, label = "Lampropholis delicata", size = 6, color = "black", fontface = "italic")
+  theme(plot.margin = margin(1, 1, 1.5, 1, "cm")) +
+  annotate("text", x = 0.5, y = 0.985, label = "Lampropholis delicata", size = 5, color = "black", fontface = "italic")
+ggsave("./output/figures/fig_deli.png", plot=fig_deli, width = 25, height = 18, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/fig_deli.png")
 #
 #
 #
@@ -180,7 +182,6 @@ fig_gar_BD2_df <- df_plotBD2("guich_red")
 ## Blue
 fig_gab_AC_df <- df_plotAC("guich_blue")
 fig_gab_BD1_df <- df_plotBD1("guich_blue")
-write.csv(fig_gab_BD1_df, file= "./output/Checking/fig_gab_BD1_df.csv")
 fig_gab_BD2_df <- df_plotBD2("guich_blue")
 #
 # Second step, create the plots
@@ -189,8 +190,10 @@ fig_gab <- plotting(sp = "guich", col = "blue", df_prob = fig_gab_AC_df, df_viol
 #
 # Third step, merge plots
 fig_guich <- plot_grid(fig_gar, fig_gab, ncol = 1) +
-  theme(plot.margin = margin(1, 1, 1.25, 1, "cm")) +
-  annotate("text", x = 0.5, y = 1.01, label = "Lampropholis guichenoti", size = 6, color = "black", fontface = "italic")
+  theme(plot.margin = margin(1, 1, 1.5, 1, "cm")) +
+  annotate("text", x = 0.5, y = 0.985, label = "Lampropholis guichenoti", size = 5, color = "black", fontface = "italic")
+ggsave("./output/figures/fig_guich.png", plot=fig_guich, width = 25, height = 18, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/fig_guich.png")
 #
 #
 #

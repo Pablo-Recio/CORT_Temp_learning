@@ -162,8 +162,10 @@ fig_dab <- plotting(sp = "deli", col = "blue", df_prob = fig_dab_AC_df, df_violi
 #
 # Third step, merge plots
 fig_deli <- plot_grid(fig_dar, fig_dab, ncol = 1) +
-  theme(plot.margin = margin(1, 1, 1.25, 1, "cm")) +
-  annotate("text", x = 0.5, y = 1.01, label = "Lampropholis delicata", size = 6, color = "black", fontface = "italic")
+  theme(plot.margin = margin(1, 1, 1.5, 1, "cm")) +
+  annotate("text", x = 0.5, y = 0.985, label = "Lampropholis delicata", size = 4.5, color = "black", fontface = "italic")
+ggsave("./output/figures/fig_deli.png", plot=fig_deli, width = 25, height = 18, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/fig_deli.png")
 ```
 
 In _L. guichenoti_, we did not find any significant differences between hormones (Control - CORT = `r format_dec(mean(c(gar_ControlCold - gar_ControlHot)) - mean(c(gar_CORTCold, gar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlCold - gar_ControlHot) - c(gar_CORTCold, gar_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(gar_ControlHot, gar_CORTHot)) - mean(c(gar_ControlCold, gar_CORTCold)), 3)`, p~mcmc~ `format_p(pmcmc(c(gar_ControlHot, gar_CORTHot) - c(gar_ControlCold, gar_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(gar_ControlHot - gar_CORTHot) - mean(gar_ControlCold - gar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gar_ControlHot - gar_CORTHot) - (gar_ControlCold - gar_CORTCold)), 3)`) for those assigned to the 'Red' group (**FIG**); and we did not find any significant effect of hormone (Control - CORT = `r format_dec(mean(c(gab_ControlCold - gab_ControlHot)) - mean(c(gab_CORTCold, gab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlCold - gab_ControlHot) - c(gab_CORTCold, gab_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(gab_ControlHot, gab_CORTHot)) - mean(c(gab_ControlCold, gab_CORTCold)), 3)`, p~mcmc~ `format_p(pmcmc(c(gab_ControlHot, gab_CORTHot) - c(gab_ControlCold, gab_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(gab_ControlHot - gab_CORTHot) - mean(gab_ControlCold - gab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gab_ControlHot - gab_CORTHot) - (gab_ControlCold - gab_CORTCold)), 3)`) for those assigned to 'Blue' (**FIG**).  
@@ -180,7 +182,6 @@ fig_gar_BD2_df <- df_plotBD2("guich_red")
 ## Blue
 fig_gab_AC_df <- df_plotAC("guich_blue")
 fig_gab_BD1_df <- df_plotBD1("guich_blue")
-write.csv(fig_gab_BD1_df, file= "./output/Checking/fig_gab_BD1_df.csv")
 fig_gab_BD2_df <- df_plotBD2("guich_blue")
 #
 # Second step, create the plots
@@ -189,8 +190,10 @@ fig_gab <- plotting(sp = "guich", col = "blue", df_prob = fig_gab_AC_df, df_viol
 #
 # Third step, merge plots
 fig_guich <- plot_grid(fig_gar, fig_gab, ncol = 1) +
-  theme(plot.margin = margin(1, 1, 1.25, 1, "cm")) +
-  annotate("text", x = 0.5, y = 1.01, label = "Lampropholis guichenoti", size = 6, color = "black", fontface = "italic")
+  theme(plot.margin = margin(1, 1, 1.5, 1, "cm")) +
+  annotate("text", x = 0.5, y = 0.985, label = "Lampropholis guichenoti", size = 4.5, color = "black", fontface = "italic")
+ggsave("./output/figures/fig_guich.png", plot=fig_guich, width = 25, height = 18, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/fig_guich.png")
 ```
 
 Finally, we also did not find any significant differences when we compared the estimated slopes between species for 'Red' group(_L. delicata_ mean learning slope = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot), 0.975), 3)`]; _L. guichenoti_ mean learning slope = `r format_dec(mean(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot), 0.975), 3)`]; _L. delicata_ - _L. guichenoti_ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot)) - mean(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot))), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot) - c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`) or the 'Blue' one (_L. delicata_ mean learning slope = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.975), 3)`]; _L. guichenoti_ mean learning slope = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.975), 3)`]; _L. delicata_ - _L. guichenoti_ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)) - mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot))), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot) - c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`).  
