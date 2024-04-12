@@ -7,16 +7,13 @@ pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4,
 # Extract sample size per group
 #' @title sample
 #' @description Estract sample size per group
+#' @param df To select the df
 #' @param sp To select the species of interest ("deli"/"guich")
-#' @param bias To select group depending on the colour assigned as correct for each task ("blue"/"red")
 #' @param corti To select cort treatment ("CORT"/"Control")
 #' @param therm To select temp treatment ("Cold"/"Hot")
-sample <- function(sp, bias, corti, therm){
-  #Specify database
-  data <- data_clean
-  # Count sample
-  sample_size <- data %>%
-                filter(species == sp, group == bias, cort == corti, temp == therm, Trial == 1) %>%
+sample <- function(df, sp, corti, therm){
+  sample_size <- df %>%
+                filter(species == sp, cort == corti, temp == therm, trial_reversal == 1) %>%
                 group_by(lizard_id) %>%
                 summarise(n = n()) %>%
                 summarise(total_count = sum(n)) %>%
@@ -27,24 +24,25 @@ sample <- function(sp, bias, corti, therm){
 ####################
 # Fit models and extract posteriors both per each treatment:
 #' @title fit_m Function
-#' @description Fit brm models for the associative task
+#' @description Fit brm models for different the associative task
+#' @param df To select the df
 #' @param sp To select the species of interest ("deli"/"guich")
-#' @param bias To select group depending on the colour assigned as correct for each task ("blue"/"red")
-#' @param refir To choose whether to refit the models (TRUE, default) or use the ones already made (FALSE)
+#' @param com To select whether the analyses are done for the full dataset ("complete") or for only those lizards 
+# that met the learning criterion ("suppl")
+#' @param refit To choose whether to refit the models (TRUE, default) or use the ones already made (FALSE)
 #' @return Raw posteriors of fitted brm model for each treatment, species, and group (df)
-fit_m <- function(sp, bias, refit = TRUE) {
-  data <- data_clean
-  formula <- FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id)
+fit_m <- function(df, sp, com, refit = TRUE) {
+  formula <- (FC_reversal ~ trial_reversal*cort*temp + (1 + trial_reversal|lizard_id)) 
   #Specify species
     if (sp == "deli"){
-      sp_data <- data %>%
+      sp_data <- df %>%
             group_by(lizard_id) %>%
             filter(species == "delicata") %>%
             ungroup() %>%
       data.frame() 
     } else {
       if(sp == "guich"){
-        sp_data <- data %>%
+        sp_data <- df %>%
               group_by(lizard_id) %>%
               filter(species == "guichenoti") %>%
               ungroup() %>%
@@ -53,36 +51,18 @@ fit_m <- function(sp, bias, refit = TRUE) {
         stop("Species not valid")
       }
     }
-  #Specify bias/group
-    if (bias == "blue"){
-      sub_data <- sp_data %>%
-            group_by(lizard_id) %>%
-            filter(group == "Blue") %>%
-            ungroup() %>%
-      data.frame() 
-    } else {
-      if(bias == "red"){
-        sub_data <- sp_data %>%
-              group_by(lizard_id) %>%
-              filter(group == "Red") %>%
-              ungroup() %>%
-        data.frame()
-      } else {
-        stop("Group/colour not valid")
-      }
-    }
   #Fit the model only if it has not been fit yet (if refit=TRUE)
   if(refit){
     # Fit the model
     model <- brm(formula,
-                data = sub_data,
+                data = sp_data,
                 family = bernoulli(link = "logit"),
                 chains = 4, cores = 4, iter = 3000, warmup = 1000, control = list(adapt_delta = 0.99))
     # Write the model to a file
-    saveRDS(model, file = paste0(here("output/models/"), sp, "_", bias, ".rds"))
+    saveRDS(model, file = paste0(here("output/models/"), sp, com, ".rds"))
   } else {
       # Read the model from a file
-      model <- readRDS(file = paste0(here("output/models/"), sp, "_", bias, ".rds"))
+      model <- readRDS(file = paste0(here("output/models/"), sp, com, ".rds"))
   } 
   # Extract posteriors
   posteriors <- as_draws_df(model)
@@ -111,7 +91,7 @@ return(new_df)
 }
 ####################
 ####################
-# Estimate p-values using pmcm
+# Estimate pmcm
 #' @title pMCMC Function
 #' @param x The vector for the posterior distribution. Note that this will test the null hypothesis that the parameter of interest is significantly different from 0. 
 #' @param null A numeric value decsribing what the null hypothesis should be
@@ -134,7 +114,7 @@ pmcmc <- function(x, null = 0, twotail = TRUE, dir){
 }
 ####################
 ####################
-# Function to format numbers with 2 decimal places
+# Function to format numbers with n decimal places
 #' @title format_dec
 #' @param x The object
 #' @param n The number of decimals
@@ -144,7 +124,7 @@ format_dec <- function(x, n) {
 }
 ####################
 ####################
-# Function to format p_values
+# Function to format p_values with n decimal places
 #' @title format_p
 #' @param x The object
 #' @param n The number of decimals
@@ -154,82 +134,6 @@ format_p <- function(x, n) {
          ifelse(as.numeric(z) <= 0.05 & as.numeric(z) > 0.001, "< 0.05",
                 paste0("= ", as.character(z))))
   return(tmp)
-}
-####################
-####################
-# Function to create each df for the figure
-#' @title df_fig
-#' @param df to select the df
-#' @param specie to add data of the specie
-#' @param group to add data of group
-df_fig <- function(data_fig, specie, group){
-  # Select the original df
-  df <- data_fig
-  # Create a vector with treatments
-  treatments <- c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")
-  # Create new matrix and new dfs
-  treat_matrix <- matrix(NA, nrow = 8000, ncol = 35)
-  fig_df <- data.frame()
-  # Loop through treatments
-  for(t in treatments){
-    if(t == "CORT-Cold"){
-      m <- df$b_Trial
-      u <- df$b_Intercept
-    } else if(t == "Control-Cold"){
-        m <- (df$'b_Trial:cortControl' + df$b_Trial)
-        u <- (df$b_cortControl + df$b_Intercept)
-    } else if(t == "CORT-Hot"){
-        m <- (df$'b_Trial:tempHot' + df$b_Trial)
-        u <- (df$b_tempHot + df$b_Intercept)
-    } else if(t == "Control-Hot"){
-        m <- (df$'b_Trial:cortControl:tempHot' + df$b_Trial+ df$'b_Trial:cortControl' + df$'b_Trial:tempHot')
-        u <- (df$'b_cortControl:tempHot' + df$b_cortControl + df$b_tempHot + df$b_Intercept)
-    } else {
-    stop("loop wrong")
-    }
-    # Loop per treatment
-    for(x in 0:35){
-      for(j in 1:8000){
-        value <- exp(u[j] + m[j] * x) / (1 + exp(u[j] + m[j] * x))
-        treat_matrix[j, x] <- value
-      }
-    }
-    treat_df <- as.data.frame(treat_matrix)
-    colnames(treat_df) <- paste0("X", 1:35)  # Adjust column names
-    treat_df <- gather(treat_df, key = "Trial", value = "Value")  # Reshape data frame
-    treat_df$Treatment <- t
-    fig_df <- rbind(fig_df, treat_df)
-  }
-  # Add species and group information
-  fig_df$Species <- specie
-  fig_df$Group <- group
-  return(fig_df)
-}
-####################
-####################
-# Function to create the plot
-#' @title plotting
-#' @param df to select the df
-plotting <- function(df){
-  plot <- ggplot(df, aes(x = Trial, y = Mean_Predicted_prob, color = Treatment)) +
-  geom_line(linewidth = 1) +
-  scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="cyan", "CORT-Hot"="black", "Control-Hot"="#616161")) +
-  geom_ribbon(aes(ymin = Mean_Predicted_prob - SE_Predicted_prob, ymax = Mean_Predicted_prob + SE_Predicted_prob, fill = Treatment), color = NA, alpha = 0.075) + 
-  scale_fill_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="cyan", "CORT-Hot"="black", "Control-Hot"="#616161")) +
-  theme_classic() +
-  facet_grid2(Species ~ Group, scale = "free_x", space = "free_x", axes = "all") +
-  theme(strip.placement = "outside") +  
-  theme(strip.background = element_blank()) +
-  labs(y = "Predicted probability of correct choice", x = "Trial") +
-  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
-  theme(
-    axis.title = element_text(size = 15, family = "Times New Roman"),
-    axis.text = element_text(size = 10, family = "Times New Roman"),
-    legend.title = element_text(size = 12, family = "Times New Roman"),
-    legend.text = element_text(size = 10, family = "Times New Roman"),
-    strip.text = element_text(size = 13, family = "Times New Roman")
-  )  
-  return(plot)
 }
 ####################
 ####################
