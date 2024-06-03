@@ -34,7 +34,7 @@ sample <- function(sp, bias, corti, therm){
 #' @return Raw posteriors of fitted brm model for each treatment, species, and group (df)
 fit_m <- function(sp, bias, refit = TRUE) {
   data <- data_clean
-  formula <- FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id)
+  formula <- FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id) + (1|clutch)
   #Specify species
     if (sp == "deli"){
       sp_data <- data %>%

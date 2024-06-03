@@ -98,7 +98,7 @@ Originally, we started with 96 lizards, 48 per species and 12 per treatment per 
 #| label: models
 # Fitting the model and extraction of posteriors for both species using fit_m function (see func.r in R folder). The result everytime the function is used is a df with the posteriors of the model. The functions saves the model automatically in output/models; and when the parameter refit = FALSE then the posteriors are extracted from the model previously written instead of fitting the model again each time.
 source(here("R", "func.R"))
-# Model formula: FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id)
+# Model formula: FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id) + (1| clutch)
 ## A.1) L. delicata
 deli_red <- fit_m("deli", "red", refit = FALSE)
 write.csv(deli_red, file= "./output/Checking/deli_red.csv")
@@ -222,10 +222,12 @@ cat("\\newpage")
 To test if lizards were biased towards the assigned colour as our preliminary analyses suggested, we employed the intercepts  from our posterior distributions. We first estimated the predicted probability of choosing the correct feeder first in the first trial, by using the formula: 
 $$\text{Probability} = \frac{e^{Intercept}}{1 + e^{Intercept}}$$
 
-Second, we tested the hypothesis that the estimated probability was higher than 0.33 (the probability expected by chance of choosing the correct feeder) using pmcmc. If the estimated probability is above 0.33. we consider it as an indication that there was a preference towards that colour that could be affecting learning slopes. The results per treatment are summarized in @tbl-bias. 
+Second, we tested the hypothesis that the estimated probability was higher than 0.33 (the probability expected by chance of choosing the correct feeder) using pmcmc. If the estimated probability is above 0.33. we consider it as an indication that there was a preference towards that colour that could be affecting learning slopes. The results per treatment are summarized in Table 1.
+
+Table 1. Probability of choosing the correct feeder in the first trial when the correct feeder was blue (Prob Blue) or red (Prob Red) for each species and each treatment. p~mcmc~ tested the hypothesis that the probability is >0.33. In bold, those values that are significant (p~mcmc~ <0.05)
 ```{r, tbl-bias}
 #| label: tbl-bias
-#| tbl-cap: "Probability of choosing the correct feeder in the first trial when the correct feeder was blue (Prob Blue) or red (Prob Red) for each species and each treatment. p-values were obtained using pmcmc and test the hypothesis that the probability is >0.33. In bold, those values that are significant (p-value <0.05)"
+#| tbl-cap: "Probability of choosing the correct feeder in the first trial when the correct feeder was blue (Prob Blue) or red (Prob Red) for each species and each treatment. p~mcmc~ tested the hypothesis that the probability is >0.33. In bold, those values that are significant (p~mcmc~ <0.05)"
 source(here("R", "func.R"))
 # First we estimate the probability of choosing right in the first trial using the intercepts from the posteriors
 ## 1) L. delicata
@@ -452,6 +454,7 @@ Plots for the different models of the associative task:
 bayes_R2(mod_dar)
 plot(mod_dar)
 ```
+
 ```{r, results='asis', echo=FALSE}
 cat("\\newpage")
 ```
@@ -472,6 +475,7 @@ cat("\\newpage")
 bayes_R2(mod_gar)
 plot(mod_gar)
 ```
+
 ```{r, results='asis', echo=FALSE}
 cat("\\newpage")
 ```
@@ -486,4 +490,115 @@ plot(mod_gab)
 cat("\\newpage")
 ```
 
+#### Models with age included
+
+```{r, modelsage}
+#| label: modelsage
+# Fitting the models for L. delicata and L. guichenoti including age as a covariate
+#
+data_age <- data_clean %>%
+  mutate(age.start = as.numeric(age.start)-mean(as.numeric(age.start)))
+refit2 = FALSE
+formula <- FC_associative ~ age.start + trial_associative*cort*temp + (1 + trial_associative|lizard_id) + (1|clutch)
+species <- c("delicata", "guichenoti")
+group <- c("Red", "Blue")
+#
+models <- list() # Create an empty list to store the models
+for(s in species){
+    # Subset the data for the species
+    data_species <- data_age %>%
+    filter(species == s)
+  for(g in group){
+  # Subset the data for the group
+  data_group <- data_species %>%
+  filter(group == g)
+  # Define model file name
+  model_file <- paste0("output/models/model_age_", s, "_", g,".rds")
+# Fit the model only if it has not been fit yet (if refit2 = TRUE)
+  if(refit2 == TRUE){
+    # Fit the model
+    model <- brm(formula,
+                data = data_group,
+                family = bernoulli(link = "logit"),
+                chains = 4, cores = 4, iter = 3000, warmup = 1000, control = list(adapt_delta = 0.99))
+    # Write the model to a file
+    saveRDS(model, file = model_file)
+  } else {
+      # Read the model from a file
+      model <- readRDS(file = model_file)
+  }
+  # Save the model to the list
+  models[[paste0(s, "_", g)]] <- model
+  }
+}
+#
+model_age_deli_red <- models[["delicata_Red"]]
+model_age_deli_blue <- models[["delicata_Blue"]]
+model_age_guich_red <- models[["guichenoti_Red"]]
+model_age_guich_blue <- models[["guichenoti_Blue"]]
+```
+
+Table 3. Results for _L. delicata_ assigned to red feeders when the model included the age:
+```{r, tbl-agedeli_red, results='asis', out.widht = "26cm"}
+#| label: tbl-agedeli_red
+#| tbl-cap: "Summary model_age_deli_red"
+deli_age_red <- summary(model_age_deli_red)
+# Extract fixed effects names and their corresponding estimates, CIs, etc.
+fixed_effects <- deli_age_red$fixed %>%
+  mutate_all(~ format_dec(., 2))
+Predictors <- rownames(fixed_effects)
+deli_age_red_tbl_df <- cbind(Predictors, fixed_effects)
+# Convert the fixed effects data frame to a flextable
+flextable(deli_age_red_tbl_df) %>%
+  set_table_properties(., width = 1) %>%
+  fontsize(size = 10, part = "all")
+```
+
+Table 4. Results for _L. delicata_ assigned to blue feeders when the model included the age:
+```{r, tbl-agedeli_blue, results='asis', out.widht = "26cm"}
+#| label: tbl-agedeli_blue
+#| tbl-cap: "Summary model_age_deli_blue"
+deli_age_blue <- summary(model_age_deli_blue)
+# Extract fixed effects names and their corresponding estimates, CIs, etc.
+fixed_effects <- deli_age_blue$fixed %>%
+  mutate_all(~ format_dec(., 2))
+Predictors <- rownames(fixed_effects)
+deli_age_blue_tbl_df <- cbind(Predictors, fixed_effects)
+# Convert the fixed effects data frame to a flextable
+flextable(deli_age_blue_tbl_df) %>%
+  set_table_properties(., width = 1) %>%
+  fontsize(size = 10, part = "all")
+```
+
+Table 5. Results for _L. guichenoti_ assigned to red feeders when the model included the age:
+```{r, tbl-ageguich_red, results='asis', out.widht = "26cm"}
+#| label: tbl-ageguich_red
+#| tbl-cap: "Summary model_age_guich_red"
+guich_age_red <- summary(model_age_guich_red)
+# Extract fixed effects names and their corresponding estimates, CIs, etc.
+fixed_effects <- guich_age_red$fixed %>%
+  mutate_all(~ format_dec(., 2))
+Predictors <- rownames(fixed_effects)
+guich_age_red_tbl_df <- cbind(Predictors, fixed_effects)
+# Convert the fixed effects data frame to a flextable
+flextable(guich_age_red_tbl_df) %>%
+  set_table_properties(., width = 1) %>%
+  fontsize(size = 10, part = "all")
+```
+
+Table 6. Results for _L. guichenoti_ assigned to blue feeders when the model included the age:
+```{r, tbl-ageguich_blue, results='asis', out.widht = "26cm"}
+#| label: tbl-ageguich_blue
+#| tbl-cap: "Summary model_age_guich_blue"
+guich_age_blue <- summary(model_age_guich_blue)
+# Extract fixed effects names and their corresponding estimates, CIs, etc.
+fixed_effects <- guich_age_blue$fixed %>%
+  mutate_all(~ format_dec(., 2))
+Predictors <- rownames(fixed_effects)
+guich_age_blue_tbl_df <- cbind(Predictors, fixed_effects)
+# Convert the fixed effects data frame to a flextable
+flextable(guich_age_blue_tbl_df) %>%
+  set_table_properties(., width = 1) %>%
+  fontsize(size = 10, part = "all")
+```
 
