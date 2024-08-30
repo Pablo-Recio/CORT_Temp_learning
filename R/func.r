@@ -152,7 +152,7 @@ format_p <- function(x, n) {
   z <- sprintf(paste0("%.",n,"f"), x)
   tmp <- ifelse(as.numeric(z) <= 0.001, "< 0.001",
          ifelse(as.numeric(z) <= 0.05 & as.numeric(z) > 0.001, "< 0.05",
-                paste0("= ", as.character(z))))
+                format_dec(as.numeric(z), 2)))
   return(tmp)
 }
 ####################
@@ -341,13 +341,13 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   if(sp == "deli"){
     if (col == "red"){
       lab <- c("A", "B")
-      df_violin$Treatment <- factor(df_violin$Treatment,
-        levels = c("Control-Hot (n =  5 )", "CORT-Hot (n =  5 )", "Control-Cold (n = 6 )", "CORT-Cold (n = 5 )"))
+      Treatment <- factor(df_violin$Treatment,
+        levels = c("Control-Hot (n =  5)", "CORT-Hot (n =  5)", "Control-Cold (n = 6)", "CORT-Cold (n = 5)"))
       img <- readPNG("./Others/Red.png")
     } else if (col == "blue"){
       lab <- c("C", "D")
-      df_violin$Treatment <- factor(df_violin$Treatment,
-        levels = c("Control-Hot (n =  5 )", "CORT-Hot (n =  6 )", "Control-Cold (n = 6 )", "CORT-Cold (n = 6 )"))
+      Treatment <- factor(df_violin$Treatment,
+        levels = c("Control-Hot (n =  5)", "CORT-Hot (n =  6)", "Control-Cold (n = 6)", "CORT-Cold (n = 6)"))
       img <- readPNG("./Others/Blue.png")
     } else {
       stop("Colour not valid")
@@ -355,13 +355,13 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   } else if (sp == "guich"){
       if (col == "red"){
       lab <- c("A", "B")
-      df_violin$Treatment <- factor(df_violin$Treatment,
-        levels = c("Control-Hot (n =  5 )", "CORT-Hot (n =  5 )", "Control-Cold (n = 4 )", "CORT-Cold (n = 5 )"))
+      Treatment <- factor(df_violin$Treatment,
+        levels = c("Control-Hot (n =  5)", "CORT-Hot (n =  5)", "Control-Cold (n = 4)", "CORT-Cold (n = 5)"))
       img <- readPNG("./Others/Red.png")
     } else if (col == "blue"){
       lab <- c("C", "D")
-      df_violin$Treatment <- factor(df_violin$Treatment,
-        levels = c("Control-Hot (n =  5 )", "CORT-Hot (n =  5 )", "Control-Cold (n = 3 )", "CORT-Cold (n = 5 )"))
+      Treatment <- factor(df_violin$Treatment,
+        levels = c("Control-Hot (n =  5)", "CORT-Hot (n =  5)", "Control-Cold (n = 3)", "CORT-Cold (n = 5)"))
       img <- readPNG("./Others/Blue.png")
     } else {
       stop("Colour not valid")
@@ -378,7 +378,7 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   theme_classic() +
   labs(y = "Probability of correct choice", x = "Trial") +
   theme(
-    plot.margin = margin(6.5, 5.5, 5.5, 7, unit = "mm"),
+    plot.margin = margin(7, 5.5, 5.5, 7, unit = "mm"),
     axis.title = element_text(size = 11, family = "Times"),
     axis.text = element_text(size = 9, family = "Times"),
     legend.position = "none"
@@ -396,7 +396,7 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   theme_classic() +
   labs(y = "Slope estimates", x = "Treatments") +
   theme(
-    plot.margin = margin(6.5, 5.5, 5.5, 7, unit = "mm"),
+    plot.margin = margin(7, 5.5, 5.5, 7, unit = "mm"),
     axis.text.y = element_blank(),   # Remove y-axis labels
     axis.title = element_text(size = 11, family = "Times"),
     axis.text = element_text(size = 9, family = "Times"),
