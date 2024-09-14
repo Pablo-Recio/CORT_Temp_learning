@@ -87,11 +87,21 @@ cat("\\newpage")
 #
 #
 #
+#
+#
+#
+#
+#
+#
+#
+#
 #| label: fig-Methods
-#| fig.cap: "Experimental design of the experiment. Panel **A** shows the early environment manipulation. In panel **B**, the measurements of the 3D-printed ramps employed in the habituation and learning tasks. Panel **C** shows the habituation process with the three different stages. And in panel **D**, the associative task. White lids in **D** show the ramps where the food reward was not attainable."
+#| fig.cap: "Experimental design of the experiment. Panel A shows the early environment manipulation. In panel B, the measurements of the 3D-printed ramps employed in the habituation and learning tasks. Panel C shows the habituation process with the three different stages. And in panel D, the associative task with the three different 3D printed ramps. White lids in D show the ramps where the food reward was not attainable."
 
 knitr::include_graphics("./Others/LEARN_FIG1.png")
 
+#
+#
 #
 #
 #
@@ -153,7 +163,7 @@ write.csv(guich_blue, file= "./output/Checking/guich_blue.csv")
 #
 #
 #| label: results
-# Rename some of the posteriors and obtain estimates for the "learning rate" for each group and treatment. This "learning rate" consists on the slope of the posterior of the Trial parameter. The slope is the rate at which the probability of choosing the correct feeder increases with each trial. The slope is obtained by adding the posterior of the Trial parameter to the posterior of the interaction between Trial and the treatment (cort and temp). 
+# Rename some of the posteriors and obtain estimates for the "learning rate" for each group and treatment. This "learning rate" consists on the slope of the posterior of the Trial parameter. The slope is the rate at which the probability of choosing the correct ramp increases with each trial. The slope is obtained by adding the posterior of the Trial parameter to the posterior of the interaction between Trial and the treatment (cort and temp). 
 ## 1) L. delicata
 ### Group = red
 dar_CORTCold <- deli_red$b_Trial #Slope for treatment CORT-Cold for L. delicata, red as the right choice
@@ -184,7 +194,7 @@ gab_ControlHot <- (guich_blue$'b_Trial:cortControl:tempHot' + guich_blue$b_Trial
 #
 #
 #| label: fig-deli
-#| fig.cap: "Results for Lampropholis delicata for both colour groups 'Red' (A,B) and 'Blue' (C, D). Panels A and C show the predicted probability of choosing the correct feeder first over trials. The lines represent the mean predicted probability of choosing the correct feeder first on each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments. Panels B and D show the distribution of the estimates of slopes per each treatment. The x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively."
+#| fig.cap: "Results for Lampropholis delicata for both colour groups red (A,B) and blue (C, D). Panels A and C show the predicted probability of choosing the correct ramp first over trials. The lines represent the mean predicted probability of choosing the correct ramp first on each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments. Panels B and D show the distribution of the estimates of slopes per each treatment. The x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively."
 source(here("R", "func.R"))
 # First step, create the dfs for all models
 ## Red
@@ -212,7 +222,7 @@ knitr::include_graphics("./output/figures/fig_deli.png")
 #
 #
 #| label: fig-guich
-#| fig.cap: "Results for Lampropholis guichenoti for both colour groups 'Red' (A,B) and 'Blue' (C, D). Panels A and C show the predicted probability of choosing the correct feeder first over trials. The lines represent the mean predicted probability of choosing the correct feeder first on each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments. Panels B and D show the distribution of the estimates of slopes per each treatment. The x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively."
+#| fig.cap: "Results for Lampropholis guichenoti for both colour groups Red (A,B) and Blue (C, D). Panels A and C show the predicted probability of choosing the correct ramp first over trials. The lines represent the mean predicted probability of choosing the correct ramp first on each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments. Panels B and D show the distribution of the estimates of slopes per each treatment. The x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively."
 source(here("R", "func.R"))
 # First step, create the dfs for all models
 ## Red
@@ -374,10 +384,6 @@ cat("\\newpage")
 #
 #
 #
-cat("\\newpage")
-#
-#
-#
 #
 #
 #
@@ -386,7 +392,7 @@ cat("\\newpage")
 #
 #
 #| label: tbl-bias
-#| tbl-cap: "Probability of choosing the correct feeder in the first trial when the correct feeder was blue (Prob Blue) or red (Prob Red) for each species and each treatment. p~mcmc~ tested the hypothesis that the probability is >0.33. In bold, those values that are significant (p~mcmc~ <0.05)"
+#| tbl-cap: "Probability of choosing the correct ramp in the first trial when the correct ramp was blue (Prob Blue) or red (Prob Red) for each species and each treatment. p~mcmc~ tested the hypothesis that the probability is >0.33. In bold, those values that are significant (p~mcmc~ <0.05)"
 source(here("R", "func.R"))
 # First we estimate the probability of choosing right in the first trial using the intercepts from the posteriors
 ## 1) L. delicata
@@ -470,7 +476,7 @@ table_df <- merge(prob_df, comp_pval, by ="column") %>%
   mutate(Group = recode(Group, "dr" = "Red", "db" = "Blue", "gr" = "Red", "gb" = "Blue")) %>%
   select(-column) %>%
   pivot_wider(names_from = Group, values_from = c(prob_choice, p_value)) %>% #To split the df in Red and Blue
-  select(Specie, Treatment, prob_choice_Blue, p_value_Blue, prob_choice_Red, p_value_Red) %>%
+  select(Specie, Treatment, prob_choice_Red, p_value_Red, prob_choice_Blue, p_value_Blue) %>%
   arrange(Specie, Treatment) %>% # To arrange the rows the way I wantdata.frame()
 data.frame()
 write.csv(table_df, file= "./output/Checking/table_df.csv")
@@ -508,7 +514,7 @@ cat("\\newpage")
 pacman::p_load(pavo,plotrix,plyr,MCMCglmm,Hmisc,DIZutils)
 #
 # For importing the files, change the extension of the .jaz files to .txt files!  
-# Import spec data for pablos feeders - CHNAGE TO WHERE YOUR FILES ARE LOCATED
+# Import spec data for pablos ramps - CHNAGE TO WHERE YOUR FILES ARE LOCATED
 specs <- getspec("./Others/Feeders", lim = c(300,700), ext = 'txt') %>%
   procspec(specs, opt = "smooth" , span = 0.2, fixneg = "addmin") 
 # Plot smoothed raw data as reflectance curve with approximate rgb colours
@@ -517,18 +523,18 @@ plot(specs, type = "o", col = spec2rgb(specs))
 #
 #
 #| label: fig-perceived1
-#| fig.cap: "Perceived chromatic contrasts between feeders."
+#| fig.cap: "Perceived chromatic contrasts between ramps."
 #
 ## Processing the data with the lizard visual model 
 # Processing using lizard vision model provided for Dan and Martin's Phyrnocephalus mystaceus paper
 liz_vis <- sensmodel(c(360, 440, 493, 571)) 
 #
-# Apply this over the feeder data visual as the visual system, achromatic is the receptor sensitivity, illum is the illuminate (here using an ideal white illuminate preset), bkg is the background against which we are measuring (here using an ideal background with no influence). Other conditions are applied as used in the P mystaceus paper.
+# Apply this over the ramp data visual as the visual system, achromatic is the receptor sensitivity, illum is the illuminate (here using an ideal white illuminate preset), bkg is the background against which we are measuring (here using an ideal background with no influence). Other conditions are applied as used in the P mystaceus paper.
 # Does produce an error about luminance but this is noted on the original P mystaceus paper code and should be okay
-# summary(feeders_lizardview) can be used to check what conditions were applied in the visual model
+# summary(ramps_lizardview) can be used to check what conditions were applied in the visual model
 feeders_lizardview <- vismodel(specs, visual = liz_vis, achromatic = "l", illum = "ideal", bkg = "ideal", vonkries = TRUE,   relative = FALSE, qcatch = "fi")
 #                             
-# Calculate colour distances between all feeder measurements
+# Calculate colour distances between all ramp measurements
 coldistance_feeders <- coldist(feeders_lizardview,achro = TRUE, noise = "neural", n = c(1, 1, 3.5, 6),  weber = 0.1)
 #
 # Name all contrasts e.g white/green to categorise them
@@ -539,14 +545,14 @@ annotated_coldistance_feeders <- coldistance_feeders %>%
   mutate(color_comparison = paste0(pmin(color1, color2), "/", pmax(color1, color2))) %>% # Remove duplicate categories(e.g white/green is the same as green/white and all are called green/white)
   subset(!(color_comparison %in% c("B/B", "G/G", "R/R", "W/W")))
 #
-# Plot the colour differences between the feeders: 
+# Plot the colour differences between the ramps: 
 # Note - above 1 is expected to be visually different under the selected visual system (here, lizard view)
 # dS, or chromatic contrast
 dScomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison, y = dS, fill = color_comparison)) + 
   geom_boxplot() + 
   theme_classic() +
   ylab("Chromatic Contrast (dS)") +
-  xlab("Feeder Colours Comparison") +
+  xlab("ramp Colours Comparison") +
  scale_fill_manual(values =c("B/G" = 'steelblue',  "B/R" = 'purple', "B/W" = 'lightblue', "G/R" = 'brown', "G/W" = 'lightgreen', "R/W" = 'red')) +
  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
   theme(
@@ -567,7 +573,7 @@ dLcomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison,
   geom_boxplot() + 
   theme_classic() +
   ylab("Achromatic Contrast (dL") +
-  xlab("Feeder Colours Comparison") +
+  xlab("ramp Colours Comparison") +
  scale_fill_manual(values =c("B/G" = 'steelblue',  "B/R" = 'purple', "B/W" = 'lightblue', "G/R" = 'brown', "G/W" = 'lightgreen', "R/W" = 'red')) +
  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
   theme(
