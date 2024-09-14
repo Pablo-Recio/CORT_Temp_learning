@@ -54,7 +54,7 @@ cat("\\newpage")
 ```
 
 ## Abstract
-Acquiring new information through learning is essential for animals to adjust their behaviour adaptively. However, animals' abilities to learn can be constrained by the conditions experienced during early stages of development, when the brain is especially susceptible to environmental inputs. Temperature is a pervasive mechanism of phenotypic plasticity in ectotherms, exerting direct effects on growth, metabolism, or learning. In vertebrates, abrupt thermal changes can trigger an allostatic response, which is mediated by glucocorticoids - stress-related hormones - that can be transmitted to the offspring, potentially impacting their learning abilities. Thus, glucocorticoids and the thermal environment are predicted to have interactive effects on the development of learning functions in animals. Here, we investigated the combined consequences of corticosterone (CORT) and temperature elevations on learning in two species of lizards, _Lampropholis delicata_ and _L. guichenoti_. We manipulated prenatal CORT levels and incubation temperature in a 2x2 factorial design, and then subjected juveniles to a colour-associative learning task. In the learning task lizards had to associate the attainability of a food item with the colour of the feeder. We perfomed 35 trials per individual and recorded whether lizards made the correct choice or not. In our analyses, we compared the rate of behavioural change over time (learning slopes) between treatments. We anticipated that elevated CORT and low temperatures would impair lizards' performance. However, our results show that associative learning skills in these two species is robust to prenatal temperature and CORT. We also found a significant effect of the colour employed as the correct choice in our tests for _L. delicata_, underscoring the need to carefully select the color used in cognitive tests involving visual stimuli.  
+Animals must acquire new information through learning to adjust their behaviour adaptively. However, animals' abilities to learn can be constrained by the conditions experienced during early stages of development, when the brain is especially susceptible to environmental inputs. Temperature is a pervasive mechanism of phenotypic plasticity in ectotherms, exerting direct effects on growth, metabolism, or learning. In vertebrates, abrupt thermal changes can trigger an allostatic response, which is mediated by glucocorticoids - stress-related hormones - that can be transmitted to the offspring, potentially impacting their learning abilities. Thus, glucocorticoids and the thermal environment are predicted to have interactive effects on the development of learning functions in animals. Here, we investigated the combined effects of corticosterone (CORT) and elevated temperature during development on learning in juveniles of two species of lizards, _Lampropholis delicata_ and _L. guichenoti_. We manipulated prenatal CORT levels and incubation temperature in a 2x2 factorial design, and then subjected juveniles to a colour-associative learning task. We predicted that elevated CORT and low temperatures would impair associative learning. However, both species learned the task at the same rate independently of treatment. This suggests that associative learning skills in these two species is robust to prenatal temperature and CORT. We also found that lizards learned slower if food rewards were associated with blue coloured feeders compared to red and green feeders, underscoring the need to carefully select the color used in cognitive tests involving visual stimuli.  
 
 ## Introduction
 Cognition is defined as the processes by which animals gather, preserve, and use information from their environment through perception, learning, memory, and decision making [@shettleworth]. These cognitive processes are fundamental to foraging, mate selection, antipredatory strategies, and social behaviours, all of which are crucial for survival and reproduction [@dukas_evolutionary_2004]. Particularly, learning - the acquisition of new information [@dukas_evolutionary_2004] - is essential for coping with environmental changes by enabling individuals to create new associations between events [@dukas_evolutionary_2004; @leal_behavioural_2012; @buchanan_condition_2013]. Allowing animals to adequate their behavior to their conditions implies that learning can have cascading effects on population dynamics by influencing survival rates or reproductive success. However, the capacity to acquire information varies among individuals, shaped by factors such as age, sex, gut microbiota, and the developmental environment [@szuran_water_1994; @lemaire_prenatal_2000; @zhu_prenatal_2004; @amiel_hotter_2012; @amiel_egg_2014; @carazo_sex_2014; @noble_age-dependent_2014; @alemohammad_2022_microbiota_learning]. These variations can further affect population dynamics, as differences in learning ability may lead to unequal responses to environmental pressures. Therefore, understanding the factors that shape learning is crucial to predict how populations will respond to novel circumstances.  
@@ -133,7 +133,7 @@ for(i in 1:length(specie)){
 }
 ```
 
-Originally, we started with 96 lizards, 48 per species and 12 per treatment per species. However, due to natural mortality (n = 11), no completion of the training stage (n = 1), or no motivation during the learning tasks (n = 3), we ended up with a total of 81 lizards. Final sample sizes per treatment and species are listed in @fig-deli and @fig-guich (figures for both species with the raw data are included in the Supplementary Material). Mean slopes per treatment for both species are provided in Table 1 in Supplementary Material.  
+Originally, we started with 96 lizards, 48 per species and 12 per treatment per species. However, due to natural mortality (n = 11), incompletion of the training stage (n = 1), or no motivation during the learning tasks (n = 3), we had a final total of 81 lizards. Final sample sizes per treatment and species are listed in @fig-deli and @fig-guich (figures for both species with the raw data are included in the Supplementary Material). Mean slopes per treatment for both species are provided in Table 1 in the Supplementary Material.  
 ```{r, models}
 #| label: models
 # Fitting the model and extraction of posteriors for both species using fit_m function (see func.r in R folder). The result everytime the function is used is a df with the posteriors of the model. The functions saves the model automatically in output/models; and when the parameter refit = FALSE then the posteriors are extracted from the model previously written instead of fitting the model again each time.
@@ -178,9 +178,9 @@ gab_CORTHot <- (guich_blue$'b_Trial:tempHot' + guich_blue$b_Trial)
 gab_ControlHot <- (guich_blue$'b_Trial:cortControl:tempHot' + guich_blue$b_Trial + guich_blue$'b_Trial:cortControl' + guich_blue$'b_Trial:tempHot')
 ```
 
-We found that the estimated learning slopes were lower when the blue feeders were the correct choice compared to slopes of individuals assigned to the group 'Red' for _L. delicata_ ('Blue' mean learning slope = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)), 3)`, 95 CI = [`r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.975), 3)`]; 'Red' mean learning slope = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.975), 3)`]; slope contrast: 'Blue' learning slope - 'Red'learning slope = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)) - mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, p~mcmc `r format_p(pmcmc(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot) - c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`), but not for _L. guichenoti_ ('Blue' mean learning slope = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.975), 3)`]; 'Red' mean learning slope = `r format_dec(mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, 95 CI = [`r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.975), 3)`]; 'Blue' learning slope - 'Red'learning slope = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)) - mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, p~mcmc `r format_p(pmcmc(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot) - c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`). However, further analyses using the first trial indicated a potential bias towards blue in the initial choice (see Supplementary Material) that could be affecting the estimated slopes. As such, we analysed the between treatments differences for each group separately.  
+We found that the estimated learning slopes were lower when the blue feeders were the correct choice compared to slopes of individuals assigned to the group 'Red' for _L. delicata_ ('Blue' mean learning slope = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)), 3)`, 95 CI = [`r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.975), 3)`]; 'Red' mean learning slope = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.975), 3)`]; slope contrast: 'Blue' learning slope - 'Red'learning slope = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)) - mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, p~mcmc `r format_p(pmcmc(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot) - c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, see @fig-deli), but not for _L. guichenoti_ ('Blue' mean learning slope = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.975), 3)`]; 'Red' mean learning slope = `r format_dec(mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, 95 CI = [`r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.975), 3)`]; 'Blue' learning slope - 'Red'learning slope = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)) - mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, p~mcmc `r format_p(pmcmc(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot) - c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, see @fig-guich). However, further analyses using the first trial indicated a potential bias towards blue in the initial choice (see Supplementary Material) that could be affecting the estimated slopes. As such, we analysed the between treatments differences for each group separately.  
 
-For those _L. delicata_ assigned to group 'Red', we did not find any significant differences between hormones (Control - CORT = `r format_dec(mean(c(dar_ControlCold - dar_ControlHot)) - mean(c(dar_CORTCold, dar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_ControlCold - dar_ControlHot) - c(dar_CORTCold, dar_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(dar_ControlHot, dar_CORTHot)) - mean(c(dar_ControlCold, dar_CORTCold)), 3)`, p~mcmc~ `format_p(pmcmc(c(dar_ControlHot, dar_CORTHot) - c(dar_ControlCold, dar_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(dar_ControlHot - dar_CORTHot) - mean(dar_ControlCold - dar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dar_ControlHot - dar_CORTHot) - (dar_ControlCold - dar_CORTCold)), 3)`) (@fig-deli A, B). Similarly, those assigned to 'Blue' were not afected by CORT (Control - CORT = `r format_dec(mean(c(dab_ControlCold - dab_ControlHot)) - mean(c(dab_CORTCold, dab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_ControlCold - dab_ControlHot) - c(dab_CORTCold, dab_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(dab_ControlHot, dab_CORTHot)) - mean(c(dab_ControlCold, dab_CORTCold)), 3)`, p~mcmc~ `format_p(pmcmc(c(dab_ControlHot, dab_CORTHot) - c(dab_ControlCold, dab_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(dab_ControlHot - dab_CORTHot) - mean(dab_ControlCold - dab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dab_ControlHot - dab_CORTHot) - (dab_ControlCold - dab_CORTCold)), 3)`) (@fig-deli C, D).  
+For those _L. delicata_ assigned to group 'Red', we did not find any significant differences between hormones (Control - CORT = `r format_dec(mean(c(dar_ControlCold - dar_ControlHot)) - mean(c(dar_CORTCold, dar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_ControlCold - dar_ControlHot) - c(dar_CORTCold, dar_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(dar_ControlHot, dar_CORTHot)) - mean(c(dar_ControlCold, dar_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_ControlHot, dar_CORTHot) - c(dar_ControlCold, dar_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(dar_ControlHot - dar_CORTHot) - mean(dar_ControlCold - dar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dar_ControlHot - dar_CORTHot) - (dar_ControlCold - dar_CORTCold)), 3)`) (@fig-deli A, B). Similarly, those assigned to 'Blue' were not afected by CORT (Control - CORT = `r format_dec(mean(c(dab_ControlCold - dab_ControlHot)) - mean(c(dab_CORTCold, dab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_ControlCold - dab_ControlHot) - c(dab_CORTCold, dab_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(dab_ControlHot, dab_CORTHot)) - mean(c(dab_ControlCold, dab_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_ControlHot, dab_CORTHot) - c(dab_ControlCold, dab_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(dab_ControlHot - dab_CORTHot) - mean(dab_ControlCold - dab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dab_ControlHot - dab_CORTHot) - (dab_ControlCold - dab_CORTCold)), 3)`) (@fig-deli C, D).  
 
 ```{r, fig-deli}
 #| label: fig-deli
@@ -208,7 +208,7 @@ ggsave("./output/figures/fig_deli.png", plot=fig_deli, width = 25, height = 18, 
 knitr::include_graphics("./output/figures/fig_deli.png")
 ```
 
-In _L. guichenoti_, we did not find any significant differences between hormones (Control - CORT = `r format_dec(mean(c(gar_ControlCold - gar_ControlHot)) - mean(c(gar_CORTCold, gar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlCold - gar_ControlHot) - c(gar_CORTCold, gar_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(gar_ControlHot, gar_CORTHot)) - mean(c(gar_ControlCold, gar_CORTCold)), 3)`, p~mcmc~ `format_p(pmcmc(c(gar_ControlHot, gar_CORTHot) - c(gar_ControlCold, gar_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(gar_ControlHot - gar_CORTHot) - mean(gar_ControlCold - gar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gar_ControlHot - gar_CORTHot) - (gar_ControlCold - gar_CORTCold)), 3)`) for those assigned to the 'Red' group (@fig-guich A, B); and we did not find any significant effect of hormone (Control - CORT = `r format_dec(mean(c(gab_ControlCold - gab_ControlHot)) - mean(c(gab_CORTCold, gab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlCold - gab_ControlHot) - c(gab_CORTCold, gab_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(gab_ControlHot, gab_CORTHot)) - mean(c(gab_ControlCold, gab_CORTCold)), 3)`, p~mcmc~ `format_p(pmcmc(c(gab_ControlHot, gab_CORTHot) - c(gab_ControlCold, gab_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(gab_ControlHot - gab_CORTHot) - mean(gab_ControlCold - gab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gab_ControlHot - gab_CORTHot) - (gab_ControlCold - gab_CORTCold)), 3)`) for those assigned to 'Blue' (@fig-guich C, D).  
+In _L. guichenoti_, we did not find any significant differences between hormones (Control - CORT = `r format_dec(mean(c(gar_ControlCold - gar_ControlHot)) - mean(c(gar_CORTCold, gar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlCold - gar_ControlHot) - c(gar_CORTCold, gar_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(gar_ControlHot, gar_CORTHot)) - mean(c(gar_ControlCold, gar_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlHot, gar_CORTHot) - c(gar_ControlCold, gar_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(gar_ControlHot - gar_CORTHot) - mean(gar_ControlCold - gar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gar_ControlHot - gar_CORTHot) - (gar_ControlCold - gar_CORTCold)), 3)`) for those assigned to the 'Red' group (@fig-guich A, B); and we did not find any significant effect of hormone (Control - CORT = `r format_dec(mean(c(gab_ControlCold - gab_ControlHot)) - mean(c(gab_CORTCold, gab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlCold - gab_ControlHot) - c(gab_CORTCold, gab_CORTHot)), 3)`), temperature (Hot - Cold = `r format_dec(mean(c(gab_ControlHot, gab_CORTHot)) - mean(c(gab_ControlCold, gab_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlHot, gab_CORTHot) - c(gab_ControlCold, gab_CORTCold)), 3)`), or the interaction ([(Control-Hot - CORT-Hot) - (Control-Cold - CORT-Cold)] = `r format_dec(mean(gab_ControlHot - gab_CORTHot) - mean(gab_ControlCold - gab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gab_ControlHot - gab_CORTHot) - (gab_ControlCold - gab_CORTCold)), 3)`) for those assigned to 'Blue' (@fig-guich C, D).  
 
 ```{r, fig-guich}
 #| label: fig-guich
@@ -269,13 +269,13 @@ Future research should continue exploring the potential effects of prenatal cort
 ## Data accessibility
 All data, data description, and R code are available in public repository [https://github.com/Pablo-Recio/CORT_Temp_learning](https://github.com/Pablo-Recio/CORT_Temp_learning).
 
-## Satements and declarations 
-#### Competing Interests
-We declare we have no competing interests
-#### Conflict of Interest
-We declare we have no conflict of interest
-#### Ethical Approval
-All experimental procedures and laboratory housing complied with Australian law and were approved by the Australian National University Animal Experimentation Ethics Committee (A2022_33).
+## Satements and declarations  
+#### Competing Interests  
+We declare we have no competing interests  
+#### Conflict of Interest  
+We declare we have no conflict of interest   
+#### Ethical Approval  
+All experimental procedures and laboratory housing complied with Australian law and were approved by the Australian National University Animal Experimentation Ethics Committee (A2022_33).  
 
 
 ## Authors’ contributions
@@ -367,10 +367,6 @@ real_table <- flextable(table_df) %>%
     vline(j = c(2,5), part = "all") %>% # To make some vertical lines
     autofit() 
 real_table
-```
-
-```{r, results='asis', echo=FALSE}
-cat("\\newpage")
 ```
 
 ```{r, results='asis', echo=FALSE}
@@ -550,7 +546,7 @@ dScomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison,
  scale_fill_manual(values =c("B/G" = 'steelblue',  "B/R" = 'purple', "B/W" = 'lightblue', "G/R" = 'brown', "G/W" = 'lightgreen', "R/W" = 'red')) +
  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
   theme(
-    axis.title = element_text(size = 15, family = "Times New Roman"),
+    axis.title = element_text(size = 13, family = "Times New Roman"),
     axis.text = element_text(size = 10, family = "Times New Roman"),
     legend.title = element_text(size = 12, family = "Times New Roman"),
     legend.text = element_text(size = 10, family = "Times New Roman"),
@@ -571,7 +567,7 @@ dLcomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison,
  scale_fill_manual(values =c("B/G" = 'steelblue',  "B/R" = 'purple', "B/W" = 'lightblue', "G/R" = 'brown', "G/W" = 'lightgreen', "R/W" = 'red')) +
  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
   theme(
-    axis.title = element_text(size = 15, family = "Times New Roman"),
+    axis.title = element_text(size = 13, family = "Times New Roman"),
     axis.text = element_text(size = 10, family = "Times New Roman"),
     legend.title = element_text(size = 12, family = "Times New Roman"),
     legend.text = element_text(size = 10, family = "Times New Roman"),
@@ -772,3 +768,62 @@ flextable(guich_age_blue_tbl_df) %>%
   fontsize(size = 10, part = "all")
 ```
 
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+```{r, fig-age} 
+#| label: fig-age
+#| fig.cap: "Distribution of the age of the lizards by treatment and species"
+# Plotting the distribution of the age of the lizards by treatment and species
+# Load the data
+data_age <- data_clean
+# Plot the distribution of the age of the lizards by treatment and species
+img_deli <- readPNG("./Others/Deli.png")
+plot_age_deli <- data_age %>%
+  filter(species == "delicata") %>%
+  mutate(trt = factor(trt, 
+          levels = c("A_23", "B_23", "A_28", "B_28"), 
+          labels = c("Control-Cold", "CORT-Cold", "Control-Hot", "CORT-Hot"))) %>%
+  ggplot(aes(x = age.start, color = trt)) +
+  geom_density(linewidth = 1.5) +
+  scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="#68bde1", "CORT-Hot"="#b50101", "Control-Hot"="#fa927d")) +  
+  labs(title = "L. delicata", x = "Age (days)", color = "Treatments") +
+  theme_classic() +
+  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm"),
+    plot.title = element_text(size = 14, family = "Times", face = "italic"),
+    axis.text.y = element_blank(),   # Remove y-axis labels
+    axis.title = element_text(size = 12, family = "Times"),
+    axis.text = element_text(size = 10, family = "Times"),
+    legend.position = "right",
+    legend.title = element_text(size = 12, family = "Times"),
+    legend.text = element_text(size = 11, family = "Times")
+    ) +
+  annotation_custom(rasterGrob(img_deli), xmin = 0.73, xmax = 0.98, ymin = 0.73, ymax = 0.98)
+#
+img_guich <- readPNG("./Others/Guich.png")
+plot_age_guich <- data_age %>%
+  filter(species == "guichenoti") %>%
+  mutate(trt = factor(trt, 
+          levels = c("A_23", "B_23", "A_28", "B_28"), 
+          labels = c("Control-Cold", "CORT-Cold", "Control-Hot", "CORT-Hot"))) %>%
+  ggplot(aes(x = age.start, color = trt)) +
+  geom_density(linewidth = 1.5) +
+  scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="#68bde1", "CORT-Hot"="#b50101", "Control-Hot"="#fa927d")) +  
+  labs(title = "L. guichenoti", x = "Age (days)", color = "Treatments") +
+  theme_classic() +
+  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm"),
+    plot.title = element_text(size = 14, family = "Times", face = "italic"),
+    axis.text.y = element_blank(),   # Remove y-axis labels
+    axis.title = element_text(size = 12, family = "Times"),
+    axis.text = element_text(size = 10, family = "Times"),
+    legend.position = "right",
+    legend.title = element_text(size = 12, family = "Times"),
+    legend.text = element_text(size = 11, family = "Times")
+    ) +
+  annotation_custom(rasterGrob(img_guich), xmin = 0.73, xmax = 0.98, ymin = 0.73, ymax = 0.98)
+#
+plot_age <- plot_grid(plot_age_deli, plot_age_guich, ncol = 1)
+ggsave("./output/figures/plot_age.png", plot=plot_age, width = 25, height = 18, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/plot_age.png")
+```

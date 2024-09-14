@@ -239,10 +239,10 @@ df_plotBD1 <- function(data){
         Treatment = factor(rep(names(lst), each = length(dar_CORTCold)))) %>%
         mutate(Treatment = factor(Treatment, 
           levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot"),
-          labels = c("CORT-Cold" = paste("CORT-Cold (n =", n_list$delicata_Red_CORT_Cold , ")"),
-                    "Control-Cold" = paste("Control-Cold (n =", n_list$delicata_Red_Control_Cold , ")"),
-                    "CORT-Hot" = paste("CORT-Hot (n = ", n_list$delicata_Red_CORT_Hot , ")"),
-                    "Control-Hot" = paste("Control-Hot (n = ", n_list$delicata_Red_Control_Hot , ")"))
+          labels = c("CORT-Cold" = paste0("CORT-Cold (n = ", n_list$delicata_Red_CORT_Cold, ")"),
+                    "Control-Cold" = paste0("Control-Cold (n = ", n_list$delicata_Red_Control_Cold, ")"),
+                    "CORT-Hot" = paste0("CORT-Hot (n = ", n_list$delicata_Red_CORT_Hot, ")"),
+                    "Control-Hot" = paste0("Control-Hot (n = ", n_list$delicata_Red_Control_Hot, ")"))
           )
         ) %>%
       data.frame()
@@ -255,10 +255,10 @@ df_plotBD1 <- function(data){
         Treatment = factor(rep(names(lst), each = length(dab_CORTCold)))) %>%
         mutate(Treatment = factor(Treatment, 
           levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot"),
-          labels = c("CORT-Cold" = paste("CORT-Cold (n =", n_list$delicata_Blue_CORT_Cold , ")"),
-                    "Control-Cold" = paste("Control-Cold (n =", n_list$delicata_Blue_Control_Cold , ")"),
-                    "CORT-Hot" = paste("CORT-Hot (n = ", n_list$delicata_Blue_CORT_Hot , ")"),
-                    "Control-Hot" = paste("Control-Hot (n = ", n_list$delicata_Blue_Control_Hot , ")"))
+          labels = c("CORT-Cold" = paste0("CORT-Cold (n = ", n_list$delicata_Blue_CORT_Cold, ")"),
+                    "Control-Cold" = paste0("Control-Cold (n = ", n_list$delicata_Blue_Control_Cold, ")"),
+                    "CORT-Hot" = paste0("CORT-Hot (n = ", n_list$delicata_Blue_CORT_Hot, ")"),
+                    "Control-Hot" = paste0("Control-Hot (n = ", n_list$delicata_Blue_Control_Hot, ")"))
           )
         ) %>%
       data.frame()    
@@ -271,10 +271,10 @@ df_plotBD1 <- function(data){
           Treatment = factor(rep(names(lst), each = length(gar_CORTCold)))) %>%
           mutate(Treatment = factor(Treatment, 
             levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot"),
-            labels = c("CORT-Cold" = paste("CORT-Cold (n =", n_list$guichenoti_Red_CORT_Cold , ")"),
-                      "Control-Cold" = paste("Control-Cold (n =", n_list$guichenoti_Red_Control_Cold , ")"),
-                      "CORT-Hot" = paste("CORT-Hot (n = ", n_list$guichenoti_Red_CORT_Hot , ")"),
-                      "Control-Hot" = paste("Control-Hot (n = ", n_list$guichenoti_Red_Control_Hot , ")"))
+            labels = c("CORT-Cold" = paste0("CORT-Cold (n = ", n_list$guichenoti_Red_CORT_Cold, ")"),
+                      "Control-Cold" = paste0("Control-Cold (n = ", n_list$guichenoti_Red_Control_Cold, ")"),
+                      "CORT-Hot" = paste0("CORT-Hot (n = ", n_list$guichenoti_Red_CORT_Hot, ")"),
+                      "Control-Hot" = paste0("Control-Hot (n = ", n_list$guichenoti_Red_Control_Hot, ")"))
             )
           ) %>%
       data.frame()
@@ -287,10 +287,10 @@ df_plotBD1 <- function(data){
           Treatment = factor(rep(names(lst), each = length(gab_CORTCold)))) %>%
           mutate(Treatment = factor(Treatment, 
             levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot"),
-            labels = c("CORT-Cold" = paste("CORT-Cold (n =", n_list$guichenoti_Blue_CORT_Cold , ")"),
-                      "Control-Cold" = paste("Control-Cold (n =", n_list$guichenoti_Blue_Control_Cold , ")"),
-                      "CORT-Hot" = paste("CORT-Hot (n = ", n_list$guichenoti_Blue_CORT_Hot , ")"),
-                      "Control-Hot" = paste("Control-Hot (n = ", n_list$guichenoti_Blue_Control_Hot , ")"))
+            labels = c("CORT-Cold" = paste0("CORT-Cold (n = ", n_list$guichenoti_Blue_CORT_Cold, ")"),
+                      "Control-Cold" = paste0("Control-Cold (n = ", n_list$guichenoti_Blue_Control_Cold, ")"),
+                      "CORT-Hot" = paste0("CORT-Hot (n = ", n_list$guichenoti_Blue_CORT_Hot, ")"),
+                      "Control-Hot" = paste0("Control-Hot (n = ", n_list$guichenoti_Blue_Control_Hot, ")"))
             )
           ) %>%
       data.frame()
@@ -341,13 +341,28 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   if(sp == "deli"){
     if (col == "red"){
       lab <- c("A", "B")
-      Treatment <- factor(df_violin$Treatment,
-        levels = c("Control-Hot (n =  5)", "CORT-Hot (n =  5)", "Control-Cold (n = 6)", "CORT-Cold (n = 5)"))
+      custom_values <- c("CORT-Cold (n = 5)" = "#00008B",
+                        "Control-Cold (n = 6)" = "#68bde1", 
+                        "CORT-Hot (n = 5)" = "#b50101", 
+                        "Control-Hot (n = 5)" = "#fa927d")
+      custom_breaks <- c("Control-Hot (n = 5)",
+                        "CORT-Hot (n = 5)",
+                        "Control-Cold (n = 6)",
+                        "CORT-Cold (n = 5)"
+      )
       img <- readPNG("./Others/Red.png")
+      
     } else if (col == "blue"){
       lab <- c("C", "D")
-      Treatment <- factor(df_violin$Treatment,
-        levels = c("Control-Hot (n =  5)", "CORT-Hot (n =  6)", "Control-Cold (n = 6)", "CORT-Cold (n = 6)"))
+            custom_values <- c("CORT-Cold (n = 6)" = "#00008B",
+                        "Control-Cold (n = 6)" = "#68bde1", 
+                        "CORT-Hot (n = 6)" = "#b50101", 
+                        "Control-Hot (n = 5)" = "#fa927d")
+      custom_breaks <- c("Control-Hot (n = 5)",
+                        "CORT-Hot (n = 6)",
+                        "Control-Cold (n = 6)",
+                        "CORT-Cold (n = 6)"
+      )
       img <- readPNG("./Others/Blue.png")
     } else {
       stop("Colour not valid")
@@ -355,13 +370,27 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   } else if (sp == "guich"){
       if (col == "red"){
       lab <- c("A", "B")
-      Treatment <- factor(df_violin$Treatment,
-        levels = c("Control-Hot (n =  5)", "CORT-Hot (n =  5)", "Control-Cold (n = 4)", "CORT-Cold (n = 5)"))
+      custom_values <- c("CORT-Cold (n = 5)" = "#00008B",
+                        "Control-Cold (n = 4)" = "#68bde1", 
+                        "CORT-Hot (n = 5)" = "#b50101", 
+                        "Control-Hot (n = 5)" = "#fa927d")
+      custom_breaks <- c("Control-Hot (n = 5)",
+                        "CORT-Hot (n = 5)",
+                        "Control-Cold (n = 4)",
+                        "CORT-Cold (n = 5)"
+      )
       img <- readPNG("./Others/Red.png")
     } else if (col == "blue"){
       lab <- c("C", "D")
-      Treatment <- factor(df_violin$Treatment,
-        levels = c("Control-Hot (n =  5)", "CORT-Hot (n =  5)", "Control-Cold (n = 3)", "CORT-Cold (n = 5)"))
+      custom_values <- c("CORT-Cold (n = 5)" = "#00008B",
+                        "Control-Cold (n = 3)" = "#68bde1", 
+                        "CORT-Hot (n = 5)" = "#b50101", 
+                        "Control-Hot (n = 5)" = "#fa927d")
+      custom_breaks <- c("Control-Hot (n = 5)",
+                        "CORT-Hot (n = 5)",
+                        "Control-Cold (n = 3)",
+                        "CORT-Cold (n = 5)"
+      )
       img <- readPNG("./Others/Blue.png")
     } else {
       stop("Colour not valid")
@@ -387,7 +416,8 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   # Second part of the plot (B, D), the slope estimates of each treatment
   plot2 <- ggplot(df_violin, aes(x = Treatment, y = Value, fill = Treatment)) +
   geom_flat_violin(alpha = 0.5) +
-  scale_fill_manual(values = c("#fa927d", "#b50101", "#68bde1", "darkblue")) +
+  scale_fill_manual(values = custom_values,
+                    breaks = custom_breaks) +
   geom_point(data = df_points, aes(y = Mean, x = Treatment), position = position_dodge(width = 0.75), color = "black", fill = "black", size = 3) +
   geom_segment(data = df_points, aes(y = Mean - SD, yend = Mean + SD, x = Treatment, xend = Treatment), size = 1.5, color = "black") +
   geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
@@ -403,7 +433,8 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
     legend.position = "right",
     legend.title = element_text(size = 10, family = "Times"),
     legend.text = element_text(size = 9, family = "Times")
-    )
+    ) +
+  guides(fill = guide_legend(order = 1))
   #
   # Combine them
   plot <- plot_grid(plot1, plot2, labels = lab, nrow = 1, rel_widths = c(0.45, 0.45), label_x = 0, label_y = 0.95) +
