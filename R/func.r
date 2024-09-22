@@ -149,10 +149,15 @@ format_dec <- function(x, n) {
 #' @param x The object
 #' @param n The number of decimals
 format_p <- function(x, n) {
+  if(equal == TRUE){
+    e <- "="
+  } else if(equal == FALSE){
+    e <- ""  
+  }
   z <- sprintf(paste0("%.",n,"f"), x)
   tmp <- ifelse(as.numeric(z) <= 0.001, "< 0.001",
          ifelse(as.numeric(z) <= 0.05 & as.numeric(z) > 0.001, "< 0.05",
-                format_dec(as.numeric(z), 2)))
+                paste0(e, format_dec(as.numeric(z), 2))))
   return(tmp)
 }
 ####################
