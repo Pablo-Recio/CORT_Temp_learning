@@ -1,0 +1,919 @@
+---
+title: "Early environmental conditions do not impact associative learning in two lizard species"
+format:
+  docx: 
+    number_sections: true
+    linestretch: 2
+    fontsize: 12pt
+    mainfont: Times New Roman
+    bibliography: "./bib/refs.bib"
+    csl: "./bib/animal-cognition.csl"
+execute:
+  echo: false
+  error: false
+  cache: false
+  warning: false
+link-citations: true
+crossref:  
+  fig-title: Fig    # (default is "Figure")
+  title-delim: —     # (default is ":")
+  fig-prefix: Fig.   # (default is "Figure")
+  tbl-prefix: Table  # (default is "Table")
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+pacman::p_load(tidyverse, flextable, emmeans, DHARMa, brms, here, ggplot2, lme4, zoo, lmerTest, broom, tidybayes, ggh4x, PupillometryR, cowplot, png, grid)
+```
+
+Pablo Recio^1^,$\ddagger$ , Dalton C. Leibold^1^, Ondi L. Crino ^1,2^, Kristoffer H. Wild^1,3^, Chris Friesen^4^, Basile Mauclaire^1,5^, Amelia Y. Peardon ^1^, Daniel W.A. Noble^1^
+
+^1^ Division of Ecology and Evolution, Research School of Biology, The Australian National University, Canberra, ACT 2601, Australia  
+^2^ Flinder's University, College of Science and Engineering, Bedford Park, SA 5042, Australia  
+^3^ Melbourne University, Melbourne, VIC 3000, Australia  
+^4^ University of Wollongong, Wollongong, NSW 2500, Australia  
+^5^ Université de Lille, Lille 59000, France  
+$\ddagger$ Corresponding author: pablo.reciosantiago@anu.edu.au  
+
+ORCID:
+
+Pablo Recio ORCID: 0000-0002-5890-0218  
+Dalton C. Leibold ORCID: 0000-0001-9645-2033  
+Ondi L. Crino ORCID: 0000-0001-5700-1387  
+Kristoffer H. Wild ORCID: 0000-0001-6714-3311  
+Chris Friesen ORCID: 0000-0001-5338-7454  
+Basile Mauclaire ORCID:  
+Amelia Y. Peardon ORCID: 0009-0005-6227-8379  
+Daniel W.A. Noble ORCID: 0000-0001-9460-8743  
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+## Abstract
+Animals must acquire new information through learning to adjust their behaviour adaptively. However, learning ability can be constrained by the conditions experienced during early stages of development, when the brain is especially susceptible to environmental inputs. Temperature is a pervasive mechanism of phenotypic plasticity in ectotherms, exerting direct effects on growth, metabolism, or learning. In vertebrates, abrupt thermal changes can trigger a chronic stress, which is mediated by glucocorticoids that can be transmitted to the offspring, potentially impacting their learning abilities. Glucocorticoids and the thermal environments are therefore predicted to have interactive effects on the development of learning functions in animals. Here, we investigated the combined effects of corticosterone (CORT) - the main GC in reptiles - and elevated temperature during development on learning in juveniles of two species of lizards, _Lampropholis delicata_ and _L. guichenoti_. We manipulated prenatal CORT levels and incubation temperature in a 2x2 factorial design, and then subjected juveniles to a colour-associative learning task. We predicted that elevated CORT and low temperatures would impair associative learning. **However, both species learned the task at the same rate independently of treatment. This suggests these two species may have evolved mechanisms to maintain learning abilities despite prenatal challegnes. We also found that lizards did not learn when food rewards were associated with blue-coloured ramps, underscoring the need to carefully select the color used in cognitive tests involving visual stimuli.**  
+
+## Introduction
+Cognition is a set of processes by which animals gather, preserve, and use information from their environment through perception, learning, memory, and decision making [@shettleworth]. These processes are fundamental to foraging, mate selection, antipredatory strategies, and social behaviours, all of which are crucial for survival and reproduction [@dukas_evolutionary_2004]. Particularly, learning - the acquisition of new information [@dukas_evolutionary_2004] - is essential for coping with environmental changes by enabling individuals to create new associations between events [@dukas_evolutionary_2004; @leal_behavioural_2012; @buchanan_condition_2013]. However, the capacity to acquire information varies among individuals, shaped by factors such as age, sex, and the developmental environment [@szuran_water_1994; @lemaire_prenatal_2000; @zhu_prenatal_2004; @amiel_hotter_2012; @amiel_egg_2014; @carazo_sex_2014; @noble_age-dependent_2014]. These variations can further affect population dynamics, as differences in learning ability may lead to unequal responses to environmental pressures [@ward2016ecological; @welklin2024spatial]. For example, fast learners may better exploit novel resources or avoid new dangerous stimuli, while those with lower learning capabilities might struggle to adapt to environmental changes. This could affect their survival and reproductive output, ultimately influencing population growth rates and stability [@ward2016ecological; @welklin2024spatial]. Therefore, understanding the factors that shape learning is crucial to predict how populations will respond to novel circumstances.  
+ 
+Developmental conditions are especially relevant in shaping learning abilities because the brain is highly susceptible to environmental inputs during early stages of life [@zhu_prenatal_2004]. Impacts on brain development can have long-lasting effects on cognition, potentially influencing an individual's ability to learn and adapt to new environments [@lemaire_prenatal_2000; @zhu_prenatal_2004; @amiel_hotter_2012; @abayarathna_effects_2020]. For example, the state of the mother can influence offspring phenotype beyond genetic transmission through nest-site selection, provisioning, or the transmission of hormones or nutrients [i.e., 'maternal effects' @moore_mothers_2019]; and the developing brain is not exempt of these effects.  
+
+Glucocorticoids (GCs) are a class of steroid hormone that are particularly relevant in this context. In vertebrates, GCs regulate metabolism and maintain homeostasis in response to disturbances [i.e., ‘the stress response’ @sapolsky_how_2000]. Under stressful situations, animals react by instigating adaptive physiological and behavioural adjustments mediated by GCs. These GCs can be transmitted directly from the parents to their offspring with different effects on offspring phenotype [@Crino_2023]. Elevations in GCs during early stages of development typically result in altered neurogenesis, brain structure, and metabolic activity that in most cases are related to decreased learning abilities [@lemaire_prenatal_2000; @zhu_prenatal_2004; @du_dynamic_2009; @eaton2015mild; @farrell_developmental_2015-learn; @farrell_developmental_2016]. For instance, prenatal stress in rats (_Rattus norvegicus_) induced reduction of neurogenesis in the dentate gyrus associated to impairments in hippocampal-related spatial tasks [@lemaire_prenatal_2000]. However, factors like sex or the nature of the learning task can affect the direction and magnitude of the effects of prenatal exposure to elevated GCs [@szuran_water_1994; @crino_corticosterone_2014-learn; @farrell_developmental_2015-learn; @bebus_associative_2016; @farrell_developmental_2016]. Because the effects of prenatal GCs on learning can be context-dependent, it is crutial to conduct studies across diverse taxa and experimental conditions to fully understand these effects.  
+
+In addition to the environments experienced by parents, offspring also experience potentially stressful environmental conditions that can interact with or amplify parental effects. In ectotherms, early thermal environment is a pervasive mechanism of phenotypic plasticity, influencing a broad spectrum of traits including growth, metabolism, or learning abilities [@amiel_hotter_2012; @amiel_egg_2014; @dayananda_incubation_2017; @noble_developmental_2018; @abayarathna_effects_2020]. For instance, Port Jackson sharks (_Heterodontus portusjacksoni_) incubated at 23.6ºC took fewer days to reach a learning criterion in a numerical learning task than those incubated at 20.6ºC [@vila_pouca_quantity_2019]. In skinks, high incubation temperatures are generally associated with faster learning rates [@amiel_hotter_2012; @amiel_egg_2014; @clark_colour_2014]; but velvet geckos (_Amalosia lesueurii_) incubated at temperatures beyond their natural thermal range are worse learners than those incubated at colder temperatures [@dayananda_incubation_2017; @abayarathna_effects_2020]. The effects of incubation temperature in reptiles are likely mediated by changes in neural structure and function, as high temperatures increase neural density and metabolic activity in the brain [@coomber_independent_1997; @sakata_neural_2000; @amiel_effects_2017; @beltran_are_2021].  
+
+GCs can play a pivotal role in determining vertebrate responses to elevated temperatures [@Crino_2023] potentially fostering natural interactions between temperature and GCs. Additionally, GCs and temperatures can act upon similar physiological mechanisms [@coomber_independent_1997; @lemaire_prenatal_2000; @sakata_neural_2000; @zhu_prenatal_2004; @du_dynamic_2009; @amiel_effects_2017; @beltran_are_2021]. This implies that the effects of GCs and temperature could be interdependent, with the impact of one factor being modulated by the other. However, the interactive effects of GCs and temperature on learning abilities remain unexplored.  
+
+Here, we investigated the combined effects of prenatal corticosterone (CORT) - the main GC in reptiles [@Crino_2023] - and incubation temperature on learning in two species of skinks, the delicate skink (_Lampropholis delicata_) and the common garden skink (_L. guichenoti_). We manipulated CORT levels in the eggs and then incubated them at two different temperatures in a 2X2 factorial design. Post-incubation, juveniles were subjected to a colour-associative task to assess their learning abilities. We hypothesized that prenatal CORT levels and thermal environment will induce sustained effects on brain's physiology, ultimately impacting learning of the association task. We predicted that individuals exposed to high levels of CORT or low temperatures will learn slower than control individuals or those incubated at higher temperatures [@zhu_prenatal_2004; @amiel_hotter_2012; @eaton2015mild; @amiel_effects_2017]. Additionally, we predicted that incubation at high temperatures will mitigate the impact of CORT on skinks' performance, while cold incubation temperatures were expected to enhance the effects of CORT. This may occur for two reasons that are not mutually exclusive: first, an increase in temperature leads to an overall rise in neural density [@amiel_effects_2017], thereby counteracting the impact of CORT [see @lemaire_prenatal_2000; @zhu_prenatal_2004; @eaton2015mild]; and second, the elevated metabolic rate associated with higher temperatures can accelerate CORT metabolism, resulting in embryos being exposed to CORT for a shorter time.    
+
+## Methods  
+
+#### Subjects  
+_Lampropholis delicata and _L. guichenoti_ are small [∼35-55 mm snout-vent length (SVL)], oviparous, and generalist skinks that usually share the same habitat in suburban areas throughout south-eastern Australia [@chapple_know_2011]. Both species have similar breeding periods, but with some differences in reproductive output: while *L. delicata* lays 1-6 eggs in only one clutch per season, *L. guichenoti* clutches are smaller (1-5 eggs per clutch) and they usually lay two clutches per season [@joss1985reproductive; @chapple_know_2011; @chapple_biology_2014]. Previous studies exploring behavioral differences between the two species have found _L. delicata_ to be more exploratory than _L. guichenoti_ [@chapple_know_2011]. However, no differences in learning were observed between the skinks in an associative learning task [@bezzina2014does].   
+
+#### Husbandry  
+*Breeding colony* -- We tested juveniles from a 2019-established lab breeding colony. A a total of 270 and 180 adults of *L. delicata* and *L. guichenoti* respectively, were housed in plastic containers (41.5 L x 30.5 W x 21 H cm) with six lizards (2 males and 4 females) per enclosure. Enclosures were lined with non-stick matting, shelter, and several small water dishes. Water is given daily, and they were fed approximately 40 mid-size crickets (*Acheta domestica*) per enclosure three days a week. Crickets were dusted with calcium weekly and multivitamin and calcium biweekly. To ensure a temperature gradient, we used a heat chord and a heat lamp following a 12 h light:12 h dark cycle. Room temperatures were set to 22-24 ºC, and the warm side of enclosures was usually at 32-34 ºC.  
+
+*Eggs collection and incubation* -- Between mid-October 2022 to the end of February 2023, we provided females with a place to lay eggs by means of small boxes (12.5 L x 8.3 W x 5 H cm) containing moist vermiculite. These boxes were placed in one side of the communal enclosures (see above). We checked for the presence of eggs in the boxes three days a week (Monday, Wednesday, and Friday). After collection, we measured length and width of eggs with a digital caliper to the nearest 0.1 mm, and mass using a digital scale (OHAUS, Model spx123; ± 0.001g error). Then we assigned individual IDs to the clutch and each egg. Eggs were treated with CORT or vehicle (see CORT and Temperature Manipulation below) and were placed in individual cups (80 mL) with moist vermiculite (12 parts water to 4 parts vermiculite). The cups were covered with cling wrap to retain moisture and left in LATWIT 2X5D-R1160 incubators at two different temperatures (see CORT and Temperature manipulation below) until hatching. Eggs were then checked three times a week for hatchlings.  
+
+*Hatchlings* -- After hatching, we measured juveniles' SVL and Tail Length (TL) with a ruler to the nearest mm, and mass using a digital scale (OHAUS, Model spx123; ± 0.001g error). Hatchlings were then housed individually in small enclosures (18.7L x 13.2W x 6.3H cm) provided with non-stick matting, shelter, and a water dish. All care otherwise follows similar protocols to adults (see above).  
+
+Two weeks prior to the training phase (see details below), lizards were moved to the experimental arena for acclimatisation. The arenas were individual medium size (41 L x 29.7 W x 22 H cm) plastic containers with a shelter (9 L x 6 W x 1.5 H cm) on one of the sides and a water dish on the other. These arenas were placed in two rooms in 7 different racks that were monitored by 7 different CCTV systems (device model DVR-HP210475) that allowed us to record their behaviour during the experiment (see details below). Although the conditions in the experimental rooms were identical to the colony room, the number of lizards per species and treatment in each rack was counterbalanced to control for any potential effect of the room or the position of the lizard in the rack. During acclimatisation and throughout the experiment, lizards were fed with only one cricket per day dusted with calcium and multivitamin, and water was supplied *ad libitum*. We provided a temperature gradient by means of a heat cord and heat lamps in a 12 h light: 12 h dark cycle.  
+
+#### CORT and Temperature Manipulation  
+To empirically test the effect of early environment we manipulated CORT concentration in eggs and incubated them under one of two temperature regimes (‘Cold’ - 23ºC ± 3ºC or ‘Hot’ - 28ºC ± 3ºC) in a 2x2 factorial design (@fig-Methods A). We topically dosed eggs with a CORT solution (10pg/mL) or a control treatment (100% ethanol). Corticosterone treatments were made by dissolving crystalline corticosterone (Sigma, Cat. No. C2505) in 100% ethanol. To dose eggs, we applied 5µl of solutions to eggshells using a micropipette. We selected these doses based on previous studies publishing yolk CORT concentrations in other oviparous reptiles [@lovern2008effects; @hanover2019corticosterone], while also validating that it fell within the range of CORT concentrations in eggs within our population [@crino2024eggs]. CORT treatment increased mean yolk CORT levels ~3.7x higher than control eggs [@crino2024eggs]. After the treatment, the eggs were incubated in one of the two previously mentioned temperature regimes (‘Cold’ or ‘Hot’) until hatching. The number of eggs per clutch assigned to each hormone and temperature treatment were counterbalanced in both species.  
+  
+#### Learning  
+To estimate learning skills, we tested each lizard's ability to locate a food reward in a colour-associative learning task (@fig-Methods C, D). First, we performed a training phase where lizards had to learn to eat from white 3D-printed PLA ramps (9 L x 4 W x 5 H cm) identical in size and shape to the ones used during the associative task. We divided the training phase into three stages: the first stage where lizards had to eat a small, frozen cricket (*A. domestica*) from an opaque petri dish (3D x 1.6H cm) placed in the middle of their enclosure (@fig-Methods C, Stage 1); the second stage where the petri dish with the cricket was placed on top of the white 3D printed ramps (@fig-Methods C, Stage 2); and the third where the cricket was left inside a well (3D x 1.75H cm) on the top of the ramp (@fig-Methods C, Stage 3). Every trial began when we left the feeding block (petri dish, ramp, or both) inside the enclosure and finished one hour later, when we took it away. At the end of each trial, we recorded whether the cricket had been consumed or not. A trial was considered successful if the lizard could locate and consume the reward, while completion of each stage required the lizards to eat the crickets in at least 5 out of 6 trials to ensure lizards were feeding consistently. This phase lasted 38 days until all the lizards learned to eat from the ramp; only in one case did we decide not to use the lizard because its behaviour was not consistent over the course of the training phase.  
+
+During the associative learning phase, we trained lizards to associate colour with a food reward (@fig-Methods D). This test was like the third stage of the training phase, but here lizards were presented with three 3D printed ramps that differed in colour. Ramps were green, red, and blue, as previous studies demonstrate that squamates can discriminate between these colours [@Baden_Osorio_2019_Vert_vision]. The food reward (small, frozen, *A. domestica* crickets) was placed inside the wells of the three ramps, covering two of the crickets with 3D-printed lids (3D x 0.5H cm) so prey was only accessible in "the correct" ramp. This way, we controlled for the use of prey chemical cues, as the lids had a series of small holes on the top to allow the release of those chemicals. To control for potential colour preference that could bias our results, we split the subjects into two groups counterbalanced by treatment and species: in one group the correct choice (i.e., the ramp with the non-covered frozen cricket) was blue, while the other group was assigned the red ramp as correct. In all trials, the position of the ramps was changed randomly to ensure subjects were using colour rather than spatial cues for the association. Lizards were tested in this task once a day for 35 days.  
+
+```{r, fig-Methods}
+#| label: fig-Methods
+#| fig.cap: "Experimental design of the experiment. Panel A shows the early environment manipulation (see methods for ). In panel B, the measurements of the 3D-printed ramps employed in the habituation and learning tasks. Panel C shows the habituation process with the three different stages. And in panel D, the associative task with the three different 3D printed ramps. White lids in D show the ramps where the food reward was not attainable."
+
+knitr::include_graphics("./Others/LEARN_FIG1.png")
+
+```
+
+The experiment took place between the 6^th^ of March to the 17^th^ of May 2023, and tests were performed between 11 AM to 12 PM when the lizards were active. Trials in the learning phase were recorded with CCTV systems always using the same camera per individual. We recorded whether the animal chose the correct ramp first or not. We considered that a choice was made if the head of the lizard was inside the well of one of the ramps. We considered a trial to have failed if there was no choice after one hour of recording. These trials were scored as NA. We excluded from our analyses those individuals that did not perform consistently as defined as not choosing in less than 20 out of 35 trials (~57%). For each lizard, we considered their first trial to be the first one where a choice was made.   
+
+#### Statistical analyses  
+We performed analyses for species separately. Preliminary analyses showed a significant effect of the colour. As such, we decided to split the data by colour (blue or red). Therefore, we ran a total of four different Bayesian multilevel models using the _brm_ function from the brms package [@burkner2017brms] in R (version 2.8.2) [@R]. We ran four parallel MCMC chains of 3000 iterations for each model, with a warmup period of 1000 iterations. We checked that all MCMC chains converged (R~hat~ < 1.2) and were mixing effectively to ensure we had >1000 effective samples from the posterior distribution. 
+
+We modelled correct choice [correct (1) or not (0)] as the response variable, and trial, incubation temperature (Cold versus Hot), hormone (CORT versus Control), and the three-way interaction as fixed factors. The error structure was modeled using a Bernoulli distribution with a logit link function [family = Bernoulli(link = 'logit')]. We included a random intercept and slope (trial) for each lizard in our models. We also incorporated the clutch identity as a random factor. _L. delicata_ lays one clutch per breeding season while _L. guichenoti_ lays up to two [@joss1985reproductive; @chapple_know_2011; @chapple_biology_2014]. Since egg collection was done during half of the breeding season, each clutch likely came from a unique mother, and so, clutch identity captures potential maternal effects. In addition, previous studies indicate that clutches are typically fertilized by a single male, although sperm storage can occur [@kar2024heritability]. Considering our partial split-clutch design and the expectation that maternal effects are likely to be more pronounced than paternal effects in these species, incorporating clutch as a random factor should effectively account for parental condition. 
+
+Learning in lizards can be age-dependent [@noble_age-dependent_2014], and given that incubation temperature will affect hatching time [@zhang2023developmental], we explored the effects of age on learning by including it as a predictor. Lizard ages at the beginning of the experiment ranged from 41 to 148 days old in _L. delicata_ and 48 to 132 in _L. guichenoti_. However, when this variable was included in the models, we did not find any significant effect of age (see _Supplementary Material_). As such, we present models without age as a fixed effect. 
+
+We used the posterior distributions of parameters to test for differences in learning rate between treatments and species. Slopes were obtained using the ‘trial’ estimates and its interaction with hormone and temperature treatments. Slope estimates greater than zero were considered as evidence of learning, while those less or equal to zero were not. p~mcmc~ test the hypothesis that slopes and slopes contrasts are different from zero. We considered statistical significant if p~mcmc~ < 0.05.  
+  
+
+## Results
+```{r, cleaning}
+#| label: cleaning
+source(here("R", "1_data_process.R"))
+# Once we run this code, the result will be the main data base used (data_clean).
+write.csv(data_clean, file= "./output/databases_clean/data_clean.csv")
+```
+
+```{r, sampleSize}
+#| label: sampleSize
+# List with the sample sizes from the database (here("output/databases_clean/data_clean.csv") as the sample size per species and group is the same on each task. We used function sample (see func.R) to estimate the sample size per treatment and species.
+source(here("R", "func.R"))
+#
+specie <- c("delicata", "guichenoti")
+groups <- c("Red", "Blue")
+hormone <- c("CORT", "Control")
+temperature <- c("Cold", "Hot")
+#
+n_list <- list()
+#
+for(i in 1:length(specie)){
+  for(j in 1:length(groups)){
+    for(k in 1:length(hormone)){
+      for(l in 1:length(temperature)){
+        n_list[[paste(specie[i], groups[j], hormone[k], temperature[l], sep = "_")]] <- sample(specie[i], groups[j], hormone[k], temperature[l])
+      }
+    }
+  }
+}
+```
+
+Originally, we started with 96 lizards, 48 per species and 12 per treatment per species. However, due to natural mortality (n = 11), incompletion of the training stage (n = 1), or no motivation during the learning tasks (n = 3), we had a final sample size of 81 lizards. Final sample sizes per treatment and species are listed in @fig-deli and @fig-guich (figures for both species with the raw data are included in the _Supplementary Material_). Mean slopes (denoted as β throughout) per treatment for both species are provided in Table 1 in the _Supplementary Material_.    
+```{r, models}
+#| label: models
+# Fitting the model and extraction of posteriors for both species using fit_m function (see func.r in R folder). The result everytime the function is used is a df with the posteriors of the model. The functions saves the model automatically in output/models; and when the parameter refit = FALSE then the posteriors are extracted from the model previously written instead of fitting the model again each time.
+source(here("R", "func.R"))
+# Model formula: FC_associative ~ Trial*cort*temp + (1 + Trial|lizard_id) + (1| clutch)
+## A.1) L. delicata
+deli_red <- fit_m("deli", "red", refit = FALSE)
+write.csv(deli_red, file= "./output/Checking/deli_red.csv")
+deli_blue <- fit_m("deli", "blue", refit = FALSE)
+write.csv(deli_blue, file= "./output/Checking/deli_blue.csv")
+## A.2) L. guichenoti
+guich_red <- fit_m("guich", "red", refit = FALSE)
+write.csv(guich_red, file= "./output/Checking/guich_red.csv")
+guich_blue <- fit_m("guich", "blue", refit = FALSE)
+write.csv(guich_blue, file= "./output/Checking/guich_blue.csv")
+```
+
+```{r, results}
+#| label: results
+# Rename some of the posteriors and obtain estimates for the "decision making" for each group and treatment. This "decision making" consists of the probability of choosing right using the Intercept for each treatment. 
+## 1) L. delicata
+## 1) L. delicata
+### Group = red
+probright_drCORTCold <- exp(deli_red$b_Intercept)/(1+exp(deli_red$b_Intercept))
+probright_drControlCold <- exp(deli_red$b_cortControl + deli_red$b_Intercept)/(1+exp(deli_red$b_cortControl + deli_red$b_Intercept))
+probright_drCORTHot <- exp(deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$b_tempHot + deli_red$b_Intercept))
+probright_drControlHot <- exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept))
+### Group = blue
+probright_dbCORTCold <- exp(deli_blue$b_Intercept)/(1+exp(deli_blue$b_Intercept))
+probright_dbControlCold <- exp(deli_blue$b_cortControl + deli_blue$b_Intercept)/(1+exp(deli_blue$b_cortControl + deli_blue$b_Intercept))
+probright_dbCORTHot <- exp(deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$b_tempHot + deli_blue$b_Intercept))
+probright_dbControlHot <- exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept))
+## 2) L. guichenoti
+### Group = red
+probright_grCORTCold <- exp(guich_red$b_Intercept)/(1+exp(guich_red$b_Intercept))
+probright_grControlCold <- exp(guich_red$b_cortControl + guich_red$b_Intercept)/(1+exp(guich_red$b_cortControl + guich_red$b_Intercept))
+probright_grCORTHot <- exp(guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$b_tempHot + guich_red$b_Intercept))
+probright_grControlHot <- exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept))
+### Group = blue
+probright_gbCORTCold <- exp(guich_blue$b_Intercept)/(1+exp(guich_blue$b_Intercept))
+probright_gbControlCold <- exp(guich_blue$b_cortControl + guich_blue$b_Intercept)/(1+exp(guich_blue$b_cortControl + guich_blue$b_Intercept))
+probright_gbCORTHot <- exp(guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$b_tempHot + guich_blue$b_Intercept))
+probright_gbControlHot <- exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept))
+#
+# Rename some of the posteriors and obtain estimates for the "learning rate" for each group and treatment. This "learning rate" consists on the slope of the posterior of the Trial parameter. The slope is the rate at which the probability of choosing the correct ramp increases with each trial. The slope is obtained by adding the posterior of the Trial parameter to the posterior of the interaction between Trial and the treatment (cort and temp). 
+## 1) L. delicata
+### Group = red
+dar_CORTCold <- deli_red$b_Trial #Slope for treatment CORT-Cold for L. delicata, red as the right choice
+dar_ControlCold <- (deli_red$'b_Trial:cortControl' + deli_red$b_Trial)
+dar_CORTHot <- (deli_red$'b_Trial:tempHot' + deli_red$b_Trial)
+dar_ControlHot <- (deli_red$'b_Trial:cortControl:tempHot' + deli_red$b_Trial+ deli_red$'b_Trial:cortControl' + deli_red$'b_Trial:tempHot')
+### Group = blue
+dab_CORTCold <- deli_blue$b_Trial
+dab_ControlCold <- (deli_blue$'b_Trial:cortControl' + deli_blue$b_Trial)
+dab_CORTHot <- (deli_blue$'b_Trial:tempHot' + deli_blue$b_Trial)
+dab_ControlHot <- (deli_blue$'b_Trial:cortControl:tempHot' + deli_blue$b_Trial + deli_blue$'b_Trial:cortControl' + deli_blue$'b_Trial:tempHot')
+## 2) L. guichenoti
+### Group = red
+gar_CORTCold <- guich_red$b_Trial
+gar_ControlCold <- (guich_red$'b_Trial:cortControl' + guich_red$b_Trial)
+gar_CORTHot <- (guich_red$'b_Trial:tempHot' + guich_red$b_Trial)
+gar_ControlHot <- (guich_red$'b_Trial:cortControl:tempHot' + guich_red$b_Trial + guich_red$'b_Trial:cortControl' + guich_red$'b_Trial:tempHot')
+### Group = blue
+gab_CORTCold <- guich_blue$b_Trial
+gab_ControlCold <- (guich_blue$'b_Trial:cortControl' + guich_blue$b_Trial)
+gab_CORTHot <- (guich_blue$'b_Trial:tempHot' + guich_blue$b_Trial)
+gab_ControlHot <- (guich_blue$'b_Trial:cortControl:tempHot' + guich_blue$b_Trial + guich_blue$'b_Trial:cortControl' + guich_blue$'b_Trial:tempHot')
+#
+# Modyfying a parameter for the results later (see p_format function in func.R)
+equal <- TRUE
+```
+
+Decision making in the associative task was affected by the colour of the ramps in _L. delicata_. The probability of choosing correctly when the correct ramp was blue was higher than when the correct ramp was red (mean P~Blue~ = `r format_dec(mean(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot)), 3)`, 95% CI P~Blue~ = [`r format_dec(quantile(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot), 0.975), 3)`]; mean P~Red~ = `r format_dec(mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, 95% CI P~Red~ = [`r format_dec(quantile(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), 0.975), 3)`]; Contrast between probabilities: P~Blue~ - P~Red~ = `r format_dec(mean(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot)) - mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, p~mcmc = `r format_p(pmcmc(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot) - c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, see @fig-deli). For _L. guichenoti_, the probability of choosing correctly was similar between blue or red ramps (mean P~Blue~ = `r format_dec(mean(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)), 3)`, 95% CI P~Blue~ = [`r format_dec(quantile(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot), 0.975), 3)`]; mean P~Red~ = `r format_dec(mean(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, 95% CI P~Red~ = [`r format_dec(quantile(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot), 0.975), 3)`]; Contrast between probabilities: P~Blue~ - P~Red~ = `r format_dec(mean(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)) - mean(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, p~mcmc = `r format_p(pmcmc(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot) - c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, see @fig-guich). 
+
+The learning rate, overall, did not differ between colours in _L. delicata_ (mean β~Blue~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)), 3)`, 95% CI β~Blue~ = [`r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.975), 3)`]; mean β~Red~ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, 95% CI β~Red~ = [`r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.975), 3)`]; Contrast between slopes: β~Blue~ - β~Red~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)) - mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, p~mcmc = `r format_p(pmcmc(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot) - c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, see @fig-deli), nor in _L. guichenoti_ (mean β~Blue~ = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, 95% CI β~Blue~ = [`r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.975), 3)`]; mean β~Red~ = `r format_dec(mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, 95 CI β~Red~ = [`r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.975), 3)`]; β~Blue~ - β~Red~ = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)) - mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, p~mcmc `r format_p(pmcmc(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot) - c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, see @fig-guich). However, because of the potential bias towards blue in the initial choice that could be affecting the estimated slopes we analyzed the differences between treatments for each ramp colour separately.  
+
+Decision making in _L. delicata_ was not impacted by the hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(probright_drControlCold, probright_drControlHot)) - mean(c(probright_drCORTCold, probright_drCORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_drControlCold, probright_drControlHot) - c(probright_drCORTCold, probright_drCORTHot)), 3)`), incubation temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(probright_drControlHot, probright_drCORTHot)) - mean(c(probright_drControlCold, probright_drCORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_drControlHot, probright_drCORTHot) - c(probright_drControlCold, probright_drCORTCold)), 3)`) or their interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(probright_drControlHot - probright_drCORTHot) - mean(probright_drControlCold - probright_drCORTCold), 3)`, p~mcmc~ `r format_p(pmcmc(probright_drControlHot - probright_drCORTHot - (probright_drControlCold - probright_drCORTCold)), 3)`) when red ramps were the correct choice (see @fig-deli **A, B**). There was no significant effect of hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(probright_dbControlCold, probright_dbControlHot)) - mean(c(probright_dbCORTCold, probright_dbCORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_dbControlCold, probright_dbControlHot) - c(probright_dbCORTCold, probright_dbCORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(probright_dbControlHot, probright_dbCORTHot)) - mean(c(probright_dbControlCold, probright_dbCORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_dbControlHot, probright_dbCORTHot) - c(probright_dbControlCold, probright_dbCORTCold)), 3)`) or their interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(probright_dbControlHot - probright_dbCORTHot) - mean(probright_dbControlCold - probright_dbCORTCold), 3)`, p~mcmc~ `r format_p(pmcmc(probright_dbControlHot - probright_dbCORTHot - (probright_dbControlCold - probright_dbCORTCold)), 3)`) when blue ramps were the correct choice (see @fig-deli **C, D**).   
+
+Learning slopes in _L. delicata_ assigned to red ramps did not show significant effects of the hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(dar_ControlCold - dar_ControlHot)) - mean(c(dar_CORTCold, dar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_ControlCold - dar_ControlHot) - c(dar_CORTCold, dar_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(dar_ControlHot, dar_CORTHot)) - mean(c(dar_ControlCold, dar_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_ControlHot, dar_CORTHot) - c(dar_ControlCold, dar_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(dar_ControlHot - dar_CORTHot) - mean(dar_ControlCold - dar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dar_ControlHot - dar_CORTHot) - (dar_ControlCold - dar_CORTCold)), 3)`) (@fig-deli **A, B**). Similarly, those assigned to blue were not afected by CORT (β~Control~ - β~CORT~ = `r format_dec(mean(c(dab_ControlCold - dab_ControlHot)) - mean(c(dab_CORTCold, dab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_ControlCold - dab_ControlHot) - c(dab_CORTCold, dab_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(dab_ControlHot, dab_CORTHot)) - mean(c(dab_ControlCold, dab_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_ControlHot, dab_CORTHot) - c(dab_ControlCold, dab_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(dab_ControlHot - dab_CORTHot) - mean(dab_ControlCold - dab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dab_ControlHot - dab_CORTHot) - (dab_ControlCold - dab_CORTCold)), 3)`) (@fig-deli **C, D**).  
+
+```{r, fig-deli}
+#| label: fig-deli
+#| fig.cap: "Results for Lampropholis delicata for both colour groups red (A, B, C) and blue (D, E , F). Panels A and D show the predicted probability of choosing the correct ramp in the first trial (Decision first trial). In panels B and E, the distribution of the estimates of slopes per each treatment. In all A, B, D, and E the x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively. Dashed lines indicate value 0.33 (the probability of choosing correctly by chance) in panesl A, D, and 0 in panels B, E. Panels C and F show the predicted probability of choosing the correct ramp first over trials. The lines represent the mean predicted probability of choosing the correct ramp for each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments."
+source(here("R", "func.R"))
+# First step, create the dfs for all models
+## Red
+fig_dar_choiceviol_df <- df_plotviol("deli_red", "choice")
+fig_dar_choicepoints_df <- df_plotpoints("deli_red", "choice")
+fig_dar_sloviol_df <- df_plotviol("deli_red", "slope")
+fig_dar_slopoints_df <- df_plotpoints("deli_red", "slope")
+fig_dar_prob_df <- df_plotprob("deli_red")
+## Blue
+fig_dab_choiceviol_df <- df_plotviol("deli_blue", "choice")
+fig_dab_choicepoints_df <- df_plotpoints("deli_blue", "choice")
+fig_dab_sloviol_df <- df_plotviol("deli_blue", "slope")
+fig_dab_slopoints_df <- df_plotpoints("deli_blue", "slope")
+fig_dab_prob_df <- df_plotprob("deli_blue")
+#
+# Second step, create the plots
+fig_dar <- plotting(sp = "deli", col = "red", 
+                    df_violin_1 = fig_dar_choiceviol_df, df_points_1 = fig_dar_choicepoints_df, 
+                    df_violin_2 = fig_dar_sloviol_df, df_points_2 = fig_dar_slopoints_df,
+                    df_prob = fig_dar_prob_df)
+fig_dab <- plotting(sp = "deli", col = "blue",
+                    df_violin_1 = fig_dab_choiceviol_df, df_points_1 = fig_dab_choicepoints_df,
+                    df_violin_2 = fig_dab_sloviol_df, df_points_2 = fig_dab_slopoints_df,
+                    df_prob = fig_dab_prob_df)
+#
+# Third step, merge plots
+fig_deli <- plot_grid(fig_dar, fig_dab, ncol = 1) +
+  theme(plot.margin = margin(1, 1, 1.5, 1, "cm")) +
+  annotate("text", x = 0.5, y = 0.985, label = "Lampropholis delicata", size = 4.5, color = "black", fontface = "italic")
+ggsave("./output/figures/fig_deli.png", plot=fig_deli, width = 30, height = 20, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/fig_deli.png")
+```
+
+Decision making in _L. guichenoti_ when the red ramps are the correct choice, was not affected by the hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(probright_grControlCold, probright_grControlHot)) - mean(c(probright_grCORTCold, probright_grCORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_grControlCold, probright_grControlHot) - c(probright_grCORTCold, probright_grCORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(probright_grControlHot, probright_grCORTHot)) - mean(c(probright_grControlCold, probright_grCORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_grControlHot, probright_grCORTHot) - c(probright_grControlCold, probright_grCORTCold)), 3)`) or their interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(probright_grControlHot - probright_grCORTHot) - mean(probright_grControlCold - probright_grCORTCold), 3)`, p~mcmc~ `r format_p(pmcmc(probright_grControlHot - probright_grCORTHot - (probright_grControlCold - probright_grCORTCold)), 3)`) (@fig-guich **A, B**). The same was observed when blue ramps were the correct choice (β~Hot~ - β~Cold~ = `r format_dec(mean(c(probright_gbControlHot, probright_gbCORTHot)) - mean(c(probright_gbControlCold, probright_gbCORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_gbControlHot, probright_gbCORTHot) - c(probright_gbControlCold, probright_gbCORTCold)), 3)`; β~Control~ - β~CORT~ = `r format_dec(mean(c(probright_gbControlCold, probright_gbControlHot)) - mean(c(probright_gbCORTCold, probright_gbCORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_gbControlCold, probright_gbControlHot) - c(probright_gbCORTCold, probright_gbCORTHot)), 3)`) (@fig-guich **C, D**).   
+
+Learning slopes in _L. guichenoti_ was not influenced by hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(gar_ControlCold - gar_ControlHot)) - mean(c(gar_CORTCold, gar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlCold - gar_ControlHot) - c(gar_CORTCold, gar_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(gar_ControlHot, gar_CORTHot)) - mean(c(gar_ControlCold, gar_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlHot, gar_CORTHot) - c(gar_ControlCold, gar_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(gar_ControlHot - gar_CORTHot) - mean(gar_ControlCold - gar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gar_ControlHot - gar_CORTHot) - (gar_ControlCold - gar_CORTCold)), 3)`) when red ramps was the correct choice (@fig-guich **A, B**). Temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(gab_ControlHot, gab_CORTHot)) - mean(c(gab_ControlCold, gab_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlHot, gab_CORTHot) - c(gab_ControlCold, gab_CORTCold)), 3)`), or the hormone-temperature interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(gab_ControlHot - gab_CORTHot) - mean(gab_ControlCold - gab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gab_ControlHot - gab_CORTHot) - (gab_ControlCold - gab_CORTCold)), 3)`) were not significant for _L. guichenoti_ assigned to blue ramps. However, CORT-treated lizards showed lower learning slopes than controls (β~Control~ - β~CORT~ = `r format_dec(mean(c(gab_ControlCold - gab_ControlHot)) - mean(c(gab_CORTCold, gab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlCold - gab_ControlHot) - c(gab_CORTCold, gab_CORTHot)), 3)`) when the blue ramps were the correct choice (see @fig-guich **C, D**).  
+
+```{r, fig-guich}
+#| label: fig-guich
+#| fig.cap: "Results for Lampropholis guichenoti for both colour groups red (A, B, C) and blue (D, E , F). Panels A and D show the predicted probability of choosing the correct ramp in the first trial (Decision first trial). In panels B and E, the distribution of the estimates of slopes per each treatment. In all A, B, D, and E the x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively. Dashed lines indicate value 0.33 (the probability of choosing correctly by chance) in panesl A, D, and 0 in panels B, E. Panels C and F show the predicted probability of choosing the correct ramp first over trials. The lines represent the mean predicted probability of choosing the correct ramp for each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments."
+source(here("R", "func.R"))
+# First step, create the dfs for all models
+## Red
+fig_gar_choiceviol_df <- df_plotviol("guich_red", "choice")
+fig_gar_choicepoints_df <- df_plotpoints("guich_red", "choice")
+fig_gar_sloviol_df <- df_plotviol("guich_red", "slope")
+fig_gar_slopoints_df <- df_plotpoints("guich_red", "slope")
+fig_gar_prob_df <- df_plotprob("guich_red")
+## Blue
+fig_gab_choiceviol_df <- df_plotviol("guich_blue", "choice")
+fig_gab_choicepoints_df <- df_plotpoints("guich_blue", "choice")
+fig_gab_sloviol_df <- df_plotviol("guich_blue", "slope")
+fig_gab_slopoints_df <- df_plotpoints("guich_blue", "slope")
+fig_gab_prob_df <- df_plotprob("guich_blue")
+#
+# Second step, create the plots
+fig_gar <- plotting(sp = "guich", col = "red", 
+                    df_violin_1 = fig_gar_choiceviol_df, df_points_1 = fig_gar_choicepoints_df, 
+                    df_violin_2 = fig_gar_sloviol_df, df_points_2 = fig_gar_slopoints_df,
+                    df_prob = fig_gar_prob_df)
+fig_gab <- plotting(sp = "guich", col = "blue",
+                    df_violin_1 = fig_gab_choiceviol_df, df_points_1 = fig_gab_choicepoints_df,
+                    df_violin_2 = fig_gab_sloviol_df, df_points_2 = fig_gab_slopoints_df,
+                    df_prob = fig_gab_prob_df)
+#
+# Third step, merge plots
+fig_guich <- plot_grid(fig_gar, fig_gab, ncol = 1) +
+  theme(plot.margin = margin(1, 1, 1.5, 1, "cm")) +
+  annotate("text", x = 0.5, y = 0.985, label = "Lampropholis guichenoti", size = 4.5, color = "black", fontface = "italic")
+ggsave("./output/figures/fig_guich.png", plot=fig_guich, width = 30, height = 20, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/fig_guich.png")
+```
+
+Overall, decision making did not differ between species when the red ramps were the correct choice (mean β~_L. delicata_~ = `r format_dec(mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, 95% CI β~_L. delicata_~ = [`r format_dec(quantile(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)) - mean(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot) - c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`) or when the blue ramps were the correct choice (mean β~_L. delicata_~ = `r format_dec(mean(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot)) - mean(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot) - c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)), 3)`).  
+
+When we average learning rates across treatments, we did not find any significant differences when we compared between species when the red ramp was the correct choice (mean β~_L. delicata_~ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot)), 3)`, 95% CI β~_L. delicata_~ = [`r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot)) - mean(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot) - c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`) neither when the blue ramps were the correct choice (mean β~_L. delicata_~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)), 3)`, 95% CI β~_L. delicata_~ = [`r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)) - mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot) - c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`).   
+
+
+## Discussion
+
+Associative learning in _L. delicata_ and _L. guichenoti_ is robust to elevations in prenatal CORT and incubation temperature. We predicted that elevating CORT levels in eggs or incubating them at colder temperatures would decrease learning slopes, and that warmer incubation temperatures would relax the effects of CORT elevations. In contrast to our predictions, both species learned to associate a colour with a food reward at the same rate regardless of the experimental treatments. This suggests that these species may have evolved mechanisms to buffer against early environmental stressors and maintain learning performance despite prenatal challenges. 
+
+In addition, we found that the learning rates varied depending on the colour assigned to the correct choice, at least for _L. delicata_, with lizards assigned to blue ramps showing lower learning slopes than in the red group. This outcome manifests the need to consider the potential effects of colour biases in the design of cognitive tasks.       
+    
+#### Effect of prenatal CORT on learning
+Prenatal CORT was predicted to have a negative effect on learning [@lemaire_prenatal_2000; @zhu_prenatal_2004; @eaton2015mild; @farrell_developmental_2015-learn; @bebus_associative_2016]. However, we did not find any significant difference between hormone treatments in either of the two species. Our results are consistent with other experiments that showed no influence of prenatal GCs on learning abilities [@szuran_water_1994; @bebus_associative_2016; @farrell_developmental_2016] and suggest that _L. delicata_ and _L. guichenoti_ may have evolved some strategies to buffer the impacts of prenatal stress.  
+
+Alternatively, our observations could be obscured by other variables that are known to influence the extent and direction of these outcomes. [@szuran_water_1994; @crino_corticosterone_2014-learn; @farrell_developmental_2015-learn; @bebus_associative_2016; @farrell_developmental_2016]. GCs are known to have hormetic effects. Generally, low elevations or short exposure to GCs improve the rate at which animals learn while high concentrations or exposure to GCs during long periods have the opposite effects [@du_dynamic_2009; @mcewen_brain_2012]. When using the same dose and application methods in eggs of _L. delicata_, @crino2024eggs found CORT treatment had sustained effects on mass and mitochondrial activity, but not baseline CORT. In contrast, lower CORT concentration did not affect mass or mitochondrial activity, but increased CORT baseline levels [@crino2024eggs]. This suggests that high elevations in CORT could affect learning through permanent changes in brain function (programmatic effects) while lower doses can result in lifelong elevation of baseline CORT, affecting learning through activational effects. Our findings indicate that associative learning in _L. delicata_ and _L. guichenoti_ is robust to the programmatic effects of high CORT elevations, but we cannot exclude the possibility that lower concentrations may affect learning abilities.  
+
+Conversely, the absence of significant effects of prenatal CORT on learning could be due to the cognitive task employed, as some studies show that the impact of GCs can vary between brain regions [@lemaire_prenatal_2000]. GCs action involve genomic and nongenomic mechanisms that implicate different types of receptors that can be distributed unevenly in the various regions of the brain [@mcewen_brain_2012], and may be related to the learning performance in distinct tasks. For instance, in european starlings (_Sturnus vulgaris_), males stressed during early stages of development performed worse in a visual associative learning task, but show no differences with control birds when the stimuli tested was acoustic [@farrell_developmental_2015-learn]. Similarly, scrub-jays (_Aphelocoma coerulescens_) that have lower CORT levels as nestlings performed better on an associative learning test as adults but not on a reversal-learning task [@bebus_associative_2016]. We must acknowledge the possibility that prenatal CORT does not affect the brain regions involved in coding associative learning in _L. delicata_ and _L. guichenoti_, and future studies should focus on examining the effect of early-life stress on different cognitive domains.  
+
+#### Effect of incubation temperature on learning
+We also predicted hot-incubated lizards to perform better in the associative learning task, since most of the studies demonstrate enhanced learning abilities when eggs are incubated at higher temperatures [@amiel_hotter_2012; @amiel_egg_2014; @clark_colour_2014]. Furthermore, the opposite pattern was found only in studies that employed temperatures far above the natural thermal range of the species in their hot treatments [@dayananda_incubation_2017; @abayarathna_effects_2020], and it is unclear how such conditions relate to wild environments. In _L. delicata_ and _L. guichenoti_, associative learning appears to be robust to incubation temperature. Our results, therefore, do not align with the outcome observed in previous experiments. However, the effect of prenatal temperature on cognition, and brain physiology and structure has been investigated only in a small number of species [see @coomber_independent_1997; @sakata_neural_2000; @amiel_hotter_2012; @amiel_egg_2014; @clark_colour_2014; @amiel_effects_2017; @dayananda_incubation_2017; @abayarathna_effects_2020], limiting our understanding on how thermal early environment can affect cognitive abilities. According to our observations, the impact of incubation temperature on learning may not be as widespread across reptiles as we may think.   
+
+Alternatively, other factors, such as sex-dependent effects, could be affecting our findings. We did not include sex as a predictor for several reasons: first, lizards were tested before sexual maturation [@joss1985reproductive]; and second, previous studies have found weak evidence for sex-dependent learning in reptiles [@szabo_sex_meta]. In fact, in the eastern three-lined skink (_Bassiana dupeyerri_) the effect of incubation temperature on learning is not sex-dependent [@amiel_hotter_2012; @clark_colour_2014]. However, there is previous evidence for interactive effects of incubation temperature and sex on brain physiology in other species of reptiles [@coomber_independent_1997; @sakata_neural_2000]. Notably, in _B. dupeyerri_ exposure to cold temperatures during incubation can induce sex-reversal, where individuals under cold incubation temperatures develop male phenotypes while retaining female genotypes [@quinn2009isolation]. As a result, even when examining the interactive effects of sex and temperature in this species, the results could be confounded by the mismatch between genotype and phenotype [@amiel_hotter_2012; @amiel_egg_2014; @clark_colour_2014]. Although sex-reversal does not occur in _L. delicata_ or _L. guichenoti_, not accounting for sex in our analyses could be masking potential interactions between temperature and sex in shaping learning abilities [see @coomber_independent_1997; @sakata_neural_2000]. Future research should investigate the potential interactive impacts of sex and incubation temperature on cognitive abilities. Nevertheless, conducting such studies poses challenges due to the substantial sample sizes necessary.  
+
+#### Effect of colour on learning
+The colour of the ramp associated with the attainable cricket (i.e. the correct choice) influences learning slopes in _L. delicata_, but not _L. guichenoti_. _L. delicata_ learned the task when the reward was associated to the red ramp but not when the ramp was blue. In contrast, _L. guichenoti_ showed similar results despite the colour of the correct ramp. This indicates that _L. delicata_ were not able to associate the blue ramp with the reward. However, our results could be a consequence of an initial bias in lizards' choice. The analyses presented in the Supplemenatry Material show that, overall, the estimated probability of choosing the correct ramp in the first trial was higher than expected by chance for those animals assigned to the blue ramp. These lizards show learning slopes not different from zero, but high probabilities of choosing the correct ramp also in the first trials (see @fig-deli). 
+
+Because there was a possibility that this bias towards blue ramps was a byproduct of the habituation process, we compared the light spectrum and the perceived chromatic differences between the ramps used in the associative task and the ones used during habituation (see _Supplementary Material_). We found no similarities between the white and blue ramps, so we consider that preference towards blue ramps did not arise as a derivate from trining the lizards with the white ramps. Rather, it seems likely that lizards innately prefer the blue ramps. Some animals bias their attention towards colours they are familiar with [@putman2017fear - the 'species confidence hypothesis']. For instance, dark and light blue T-shirts were associated with lower flight initiation distances and higher capture rates in Western fence lizards where blue is used in intraspecific communication [@putman2017fear]. Nevertheless, to the best of our knowledge, there has been no reported colour bias in _L. delicata_ or _L. guichenoti_ before; and blue colouration is not considered to be involved in intraspecific communication in these species [@torr1996patterns; @chapple_biology_2014]. Regardless, our results demonstrate that _L. delicata_ has a bias toward blue colours and highlights the need to consider the colours used in associative learning paradigms. 
+
+#### Learning rates between species
+We did not see any significant difference in learning rates when both species were compared. This result supports previous studies that found similar learning abilities in _L. delicata_ and _L. guichenoti_ [@bezzina2014does]. In the experiment conducted by @bezzina2014does, both species failed to complete the associative learning task under the authors' criterion, while in our experiment both species completed the task, exhibiting similar learning rates. Complexity, experimental design, or the criterion employed to define learning could be the major cause of the discrepancies between ours and @bezzina2014does. Developing common strategies and approaches to assess learning in animals could help understand how learning abilities are shaped in different taxa or under different environments.  
+ 
+#### Conclusion
+Our results revealed that associative learning abilities in _L. delicata_ and _L. guichenoti_ are resilient to prenatal CORT and temperature. This outcome contrasts with our initial predictions, indicating that the learning skills of these lizards may be more robust than anticipated under varying early life conditions. We also found significant effects of the colour employed in the task on learning rates in _L. delicata_, but not in _L. guichenoti_. These results seem to be a consequence of an innate colour bias and highlights the importance of carefully selecting the colour employed when testing cognition using visual stimuli. 
+
+Future research should continue exploring the potential effects of prenatal corticosterone (CORT) and temperature on cognitive function, but with a focus on interactions between early environmental factors and sex, as well as the type of cognitive tasks employed. Furthermore, it is crucial to explore how these treatments influence brain function at a neurological level. Investigating these aspects will help us understand these species' cognitive and physiological mechanisms underpinning adaptability and offer insights into how early developmental factors shape long-term cognitive outcomes.  
+
+## Data accessibility
+All data, data description, and R code are available in public repository [https://github.com/Pablo-Recio/CORT_Temp_learning](https://github.com/Pablo-Recio/CORT_Temp_learning).
+
+## Satements and declarations  
+#### Competing Interests  
+We declare we have no competing interests  
+
+#### Conflict of Interest  
+We declare we have no conflict of interest   
+
+#### Ethical Approval  
+All experimental procedures and laboratory housing complied with Australian law and were approved by the Australian National University Animal Experimentation Ethics Committee (A2022_33).  
+
+
+## Authors’ contributions
+P.R.: conceptualization, methodology, data collection, data curation, formal analysis, writing—original draft, writing—review and editing; D.C.L.: data collection, writing—review and editing; O.C.: conceptualization, methodology, writing—review and editing; K.H.W.: conceptualization, writing—review and editing; C.F.: conceptualization, methodology, funding acquisition, writing—review and editing; B.M: data collection, writing—review and editing; A.Y.P.: data collection, writing—review and editing; D.N.: conceptualization, methodology, funding acquisition, project administration, resources, supervision, writing—review and editing.
+All authors gave final approval for publication and agreed to be held accountable for the work performed therein.
+
+## Funding
+This work was supported by a National Australian University fellowship (P.R.), the Australian Research Council (grant no. DP210101152) to D.N. and C.F., and the ACT Herpetological Association grant to P.R.
+
+## Acknowledgements
+We thank the help and assistance of our lab technicians Benjamin Durant and Michelle Stephens for taking care of the lizards. We are also grateful to ACTHA for the grant for the 3D printed ramps, and we also thank ANU MakerSpace, where we designed and built the prototypes of the 3D printed ramps. Finally, we wish to acknowledge the anonymous reviewers for their valuable feedback on the manuscript.
+
+
+## References
+<div id="refs"></div>
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+# Suplementary Material
+
+#### Estimates of reversal learning slopes for all the different treatments per each task, specie, and group.
+Table 1. Estimates of learning slopes for all the different treatments per each task, specie, and group. Mean shows the arithmetic means of the estimates obtained from the posteriors of the model, and 95% CI indicates the 95% confidence interval of the mean. All p~mcmc~ tested the hypothesis that the mean equals zero. In bold, those values that are significant (p~mcmc~ <0.05).
+```{r, tbl-data, results='asis'}
+#| label: tbl-data
+#| tbl-cap: "Estimates of Reversal learning slope for all the different treatments per each task, species, and group. Mean shows the arithmetic means of the estimates obtained from the posteriors of the model, and 95% CI indicates the 95% confidence interval of the mean. All pmcmc tested the hypothesis that the mean equals zero. In bold, those values that are significant (pmcmc <0.05)"
+source(here("R", "func.R"))
+#
+# Modyfying a parameter for later (see p_format function in func.R)
+equal <- FALSE
+#
+############################## CREATING BIG DF FOR TABLE ##############################
+# Building the vectors for titles of rows and columns
+specie <- c("L. delicata", "L. guichenoti")
+group <- c("Red", "Blue")
+treatments <- c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")
+values <- c("Mean", "95% CI", "pmcmc")
+# Building the vectors for estimated means, co.intervals(95%), and pmcmc for the slopes obtained from posteriors, assuming a two-tailed test that testes the hypothesis that the value (slopes in this case) is 0.
+#First get estimates for both tasks
+estimates <- list(
+  dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot,
+  dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot,
+  gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot,
+  gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot
+)
+#
+# Then get the mean, co.intervals(95%), and pmcmc
+mean <- format_dec(sapply(estimates, mean), 3)
+interval_025 <- format_dec(sapply(estimates, function(x) quantile(x,0.025)), 3)
+interval_975 <- format_dec(sapply(estimates, function(x) quantile(x,0.975)), 3)
+intervals <- paste0("[", interval_025, " , ", interval_975, "]")
+Pmcmc <- format_p(sapply(estimates, pmcmc), 4)
+#
+# Building the df
+table_df <- data.frame(
+  Specie = rep(specie, each = length(group) * length(treatments)),
+  Group = rep(rep(group, each = length(treatments)), times = length(specie)),
+  Treatment = rep(treatments, times = length(specie) * length(group)),
+  Mean = mean,          # 'mean' vector directly
+  CI = intervals,       # 'intervals' vector directly
+  pmcmc = Pmcmc         # 'Pmcmc' vector directly
+) %>%
+  pivot_wider(names_from = Group, values_from = c(Mean, CI, pmcmc)) %>% #To divide by colour
+  select(Specie, Treatment, Mean_Red, CI_Red, pmcmc_Red, Mean_Blue, CI_Blue, pmcmc_Blue) %>% #To order the columns in the way I want for the table
+data.frame()
+#
+############################## MAKING THE TABLE ##############################
+## Table format
+set_flextable_defaults(
+ font.family = "Times New Roman",
+ font.size = 10)
+# Create some objects to use in the table
+bold_red <- table_df$pmcmc_Red == "< 0.05" | table_df$pmcmc_Red == "< 0.001"
+bold_blue <- table_df$pmcmc_Blue == "< 0.05" | table_df$pmcmc_Blue == "< 0.001" 
+# Make table
+real_table <- flextable(table_df) %>%
+    bold(i = which(bold_red), j = c("pmcmc_Red", "Mean_Red", "CI_Red"), part = "body") %>%
+    bold(i = which(bold_blue), j = c("pmcmc_Blue", "Mean_Blue", "CI_Blue"), part = "body") %>%
+    set_table_properties(width = 1) %>%
+    align(align="center", part="all") %>% 
+    add_header_row(values = c("", "Red", "Blue"), colwidths = c(2, 3, 3)) %>%
+    set_header_labels(Mean_Red = "Mean",
+                      CI_Red = "95% CI",
+                      pmcmc_Red = "pmcmc",
+                      Mean_Blue = "Mean",
+                      CI_Blue = "95% CI",
+                      pmcmc_Blue = "pmcmc") %>%
+    italic(i= c(1, 5), j = 1, italic = TRUE, part = "body") %>% # To have names of species in italics
+    flextable::compose(i = c(2:4,6:8), j = 1, value = as_paragraph(""), part = "body") %>% # To remove some of the values in the first column
+    hline(i = 4, j = c(1:8), part = "body") %>% # To make some horizontal lines
+    vline(j = c(2,5), part = "all") %>% # To make some vertical lines
+    autofit() 
+real_table
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+#### Colour preference
+To test if lizards were biased towards the assigned colour as our preliminary analyses suggested, we employed the intercepts  from our posterior distributions. We first estimated the predicted probability of choosing the correct ramp first in the first trial, by using the formula: 
+$$\text{Probability} = \frac{e^{Intercept}}{1 + e^{Intercept}}$$
+
+Second, we tested the hypothesis that the estimated probability was higher than 0.33 (the probability expected by chance of choosing the correct ramp) using pmcmc. If the estimated probability is above 0.33 we consider it as an indication that there was a preference towards that colour that could be affecting learning slopes. The results per treatment are summarized in Table 2.
+
+Table 2. Probability of choosing the correct ramp in the first trial when the correct ramp was blue (Prob Blue) or red (Prob Red) for each species and each treatment. p~mcmc~ tested the hypothesis that the probability is >0.33. In bold, those values that are significant (p~mcmc~ <0.05)
+```{r, tbl-bias}
+#| label: tbl-bias
+#| tbl-cap: "Probability of choosing the correct ramp in the first trial when the correct ramp was blue (Prob Blue) or red (Prob Red) for each species and each treatment. p~mcmc~ tested the hypothesis that the probability is >0.33. In bold, those values that are significant (p~mcmc~ <0.05)"
+source(here("R", "func.R"))
+# First we build a df with all the mean probabilities of choosing right in the first trial for each treatment and species (see results chunk)
+prob_df <- data.frame(
+  probright_drCORTCold_t = format_dec(mean(probright_drCORTCold), 3),
+  probright_drControlCold_t = format_dec(mean(probright_drControlCold), 3),
+  probright_drCORTHot_t = format_dec(mean(probright_drCORTHot), 3),
+  probright_drControlHot_t = format_dec(mean(probright_drControlHot), 3),
+  probright_dbCORTCold_t = format_dec(mean(probright_dbCORTCold), 3),
+  probright_dbControlCold_t = format_dec(mean(probright_dbControlCold), 3),
+  probright_dbCORTHot_t = format_dec(mean(probright_dbCORTHot), 3),
+  probright_dbControlHot_t = format_dec(mean(probright_dbControlHot), 3),
+  probright_grCORTCold_t = format_dec(mean(probright_grCORTCold), 3),
+  probright_grControlCold_t = format_dec(mean(probright_grControlCold), 3),
+  probright_grCORTHot_t = format_dec(mean(probright_grCORTHot), 3),
+  probright_grControlHot_t = format_dec(mean(probright_grControlHot), 3),
+  probright_gbCORTCold_t = format_dec(mean(probright_gbCORTCold), 3),
+  probright_gbControlCold_t = format_dec(mean(probright_gbControlCold), 3),
+  probright_gbCORTHot_t = format_dec(mean(probright_gbCORTHot), 3),
+  probright_gbControlHot_t = format_dec(mean(probright_gbControlHot), 3)) %>%
+gather(key = "column", value = "value", .) %>%
+rename("prob_choice" = "value") %>%
+data.frame()
+write.csv(prob_df, file= "./output/Checking/prob_df.csv")
+# Then we build a df with the statistical test (one-tailed pmcmc) that the probability is >0.33 (the probability of choosing right by chance)
+comp_pval <- data.frame(
+  probright_drCORTCold_t = format_p(pmcmc(probright_drCORTCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_drControlCold_t = format_p(pmcmc(probright_drControlCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_drCORTHot_t = format_p(pmcmc(probright_drCORTHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_drControlHot_t = format_p(pmcmc(probright_drControlHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_dbCORTCold_t = format_p(pmcmc(probright_dbCORTCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_dbControlCold_t = format_p(pmcmc(probright_dbControlCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_dbCORTHot_t = format_p(pmcmc(probright_dbCORTHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_dbControlHot_t = format_p(pmcmc(probright_dbControlHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_grCORTCold_t = format_p(pmcmc(probright_grCORTCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_grControlCold_t = format_p(pmcmc(probright_grControlCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_grCORTHot_t = format_p(pmcmc(probright_grCORTHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_grControlHot_t = format_p(pmcmc(probright_grControlHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_gbCORTCold_t = format_p(pmcmc(probright_gbCORTCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_gbControlCold_t = format_p(pmcmc(probright_gbControlCold, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_gbCORTHot_t = format_p(pmcmc(probright_gbCORTHot, null = 0.33, twotail = FALSE, dir=">"), 3),
+  probright_gbControlHot_t = format_p(pmcmc(probright_gbControlHot, null = 0.33, twotail = FALSE, dir=">"), 3)) %>%
+gather(key = "column", value = "value", .) %>%
+rename("p_value" = "value") %>%
+data.frame()
+write.csv(comp_pval, file= "./output/Checking/comp_pval.csv")
+# Now we merge them and organise them to have the final dt for the table
+table_df <- merge(prob_df, comp_pval, by ="column") %>%
+  mutate(Specie = gsub(".*_(d|g).*", "\\1",column)) %>%
+  mutate(Group = gsub(".*_(dr|db|gr|gb).*", "\\1",column)) %>%
+  mutate(Treatment = gsub(".*(CORTCold|ControlCold|CORTHot|ControlHot).*", "\\1",column)) %>% #Last three commands used to get the species, group and treatment from the column names
+  mutate(Treatment = factor(Treatment, 
+                    levels = c("CORTCold", "ControlCold", "CORTHot", "ControlHot"),
+                    labels = c("CORTCold" = "CORT-Cold", "ControlCold" = "Control-Cold", "CORTHot" = "CORT-Hot", "ControlHot" = "Control-Hot"))) %>%
+  mutate(Specie = factor(Specie,
+                levels = c("d", "g"),
+                labels = c("d" = "L. delicata", "g" = "L. guichenoti"))) %>%
+  mutate(Group = recode(Group, "dr" = "Red", "db" = "Blue", "gr" = "Red", "gb" = "Blue")) %>%
+  select(-column) %>%
+  pivot_wider(names_from = Group, values_from = c(prob_choice, p_value)) %>% #To split the df in Red and Blue
+  select(Specie, Treatment, prob_choice_Red, p_value_Red, prob_choice_Blue, p_value_Blue) %>%
+  arrange(Specie, Treatment) %>% # To arrange the rows the way I wantdata.frame()
+data.frame()
+write.csv(table_df, file= "./output/Checking/table_df.csv")
+#################
+colour_table <- flextable(table_df) %>%
+  bold(~ `p_value_Blue` < 0.05, ~ `p_value_Blue` + prob_choice_Blue) %>%
+  bold(~ `p_value_Red` < 0.05, ~ `p_value_Red` + prob_choice_Red) %>%
+  set_table_properties(width = 1) %>%
+  align(align="center", part="all") %>% 
+  set_header_labels(prob_choice_Blue = "Prob Blue", 
+                    p_value_Blue = "pmcmc Blue", 
+                    prob_choice_Red = "Prob Red", 
+                    p_value_Red = "pmcmc Red") %>%
+  italic(j = 1, italic = TRUE, part = "body") %>% # To have names of species in italics
+  flextable::compose(i = c(2:4,6:8), j = 1, value = as_paragraph(""), part = "body") %>% # To remove some of the values in the first column
+  hline(i = c(4), j = c(1:6), part = "body") %>% # To make some horizontal lines
+  vline(j = c(2,4), part = "all") %>% # To make some vertical lines on body
+autofit()
+colour_table
+```
+
+On average, we found that, for both species, the proportion of correct choices in the first trial was significantly above chance when the correct ramp was blue for _L. delicata_ (mean Prob choice = `r format_dec(mean(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot), null = 0.33, twotail = FALSE, dir=">"), 3)`) but not for _L. guichenoti_ (mean Prob choice = `r format_dec(mean(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot), null = 0.33, twotail = FALSE, dir=">"), 3)`). When the correct choice was red, it was not significant for neither species (_L. delicata_: mean Prob choice = `r format_dec(mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), null = 0.33, twotail = FALSE, dir=">"), 3)`; _L. guichenoti_: mean Prob choice = `r format_dec(mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), null = 0.33, twotail = FALSE, dir=">"), 3)`).  
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+#### Light spectrum
+To test if the bias towards blue was something acquired during training, we compared the light spectrum of the ramps used in the associative task and the white ones used during habituation. We took three measurements of ten ramps per colour with a spectophotometer, and then analysed the spectrum and the perceived differences in colour using the package pavo. The spetrum of each type of ramp are shown in @fig-spectrum; the perceived chromatic constrasts between ramps are shown in @fig-perceived1 and @fig-perceived2.  
+```{r, fig-spectrum}
+#| label: fig-spectrum
+#| fig.cap: "Light spectrum of the ramps used in the associative task and the white ones used during habituation. The different colours represent the different ramps."
+#
+# Load required packages
+pacman::p_load(pavo,plotrix,plyr,MCMCglmm,Hmisc,DIZutils)
+#
+# For importing the files, change the extension of the .jaz files to .txt files!  
+# Import spec data for pablos ramps - CHNAGE TO WHERE YOUR FILES ARE LOCATED
+specs <- getspec("./Others/Feeders", lim = c(300,700), ext = 'txt') %>%
+  procspec(specs, opt = "smooth" , span = 0.2, fixneg = "addmin") 
+# Plot smoothed raw data as reflectance curve with approximate rgb colours
+plot(specs, type = "o", col = spec2rgb(specs))
+```
+
+```{r, fig-perceived1}
+#| label: fig-perceived1
+#| fig.cap: "Perceived chromatic contrasts between ramps."
+#
+## Processing the data with the lizard visual model 
+# Processing using lizard vision model provided for Dan and Martin's Phyrnocephalus mystaceus paper
+liz_vis <- sensmodel(c(360, 440, 493, 571)) 
+#
+# Apply this over the ramp data visual as the visual system, achromatic is the receptor sensitivity, illum is the illuminate (here using an ideal white illuminate preset), bkg is the background against which we are measuring (here using an ideal background with no influence). Other conditions are applied as used in the P mystaceus paper.
+# Does produce an error about luminance but this is noted on the original P mystaceus paper code and should be okay
+# summary(ramps_lizardview) can be used to check what conditions were applied in the visual model
+feeders_lizardview <- vismodel(specs, visual = liz_vis, achromatic = "l", illum = "ideal", bkg = "ideal", vonkries = TRUE,   relative = FALSE, qcatch = "fi")
+#                             
+# Calculate colour distances between all ramp measurements
+coldistance_feeders <- coldist(feeders_lizardview,achro = TRUE, noise = "neural", n = c(1, 1, 3.5, 6),  weber = 0.1)
+#
+# Name all contrasts e.g white/green to categorise them
+annotated_coldistance_feeders <- coldistance_feeders %>%
+  separate(patch1, into = c("color1", "number1"), sep = "_") %>%
+  separate(patch2, into = c("color2", "number2"), sep = "_") %>%
+  mutate(color_comparison = paste0(color1, "/", color2)) %>%
+  mutate(color_comparison = paste0(pmin(color1, color2), "/", pmax(color1, color2))) %>% # Remove duplicate categories(e.g white/green is the same as green/white and all are called green/white)
+  subset(!(color_comparison %in% c("B/B", "G/G", "R/R", "W/W")))
+#
+# Plot the colour differences between the ramps: 
+# Note - above 1 is expected to be visually different under the selected visual system (here, lizard view)
+# dS, or chromatic contrast
+dScomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison, y = dS, fill = color_comparison)) + 
+  geom_boxplot() + 
+  theme_classic() +
+  ylab("Chromatic Contrast (dS)") +
+  xlab("ramp Colours Comparison") +
+ scale_fill_manual(values =c("B/G" = 'steelblue',  "B/R" = 'purple', "B/W" = 'lightblue', "G/R" = 'brown', "G/W" = 'lightgreen', "R/W" = 'red')) +
+ theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
+  theme(
+    axis.title = element_text(size = 13, family = "Times New Roman"),
+    axis.text = element_text(size = 10, family = "Times New Roman"),
+    legend.title = element_text(size = 12, family = "Times New Roman"),
+    legend.text = element_text(size = 10, family = "Times New Roman"),
+    strip.text = element_text(size = 13, family = "Times New Roman")
+  ) 
+print(dScomparisons)
+```
+
+```{r, fig-perceived2}
+#| label: fig-perceived2
+#| fig.cap: "Perceived achromatic contrasts between feeders."
+#dL, or achromatic contrast
+dLcomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison, y = dL, fill = color_comparison)) + 
+  geom_boxplot() + 
+  theme_classic() +
+  ylab("Achromatic Contrast (dL") +
+  xlab("ramp Colours Comparison") +
+ scale_fill_manual(values =c("B/G" = 'steelblue',  "B/R" = 'purple', "B/W" = 'lightblue', "G/R" = 'brown', "G/W" = 'lightgreen', "R/W" = 'red')) +
+ theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm")) + 
+  theme(
+    axis.title = element_text(size = 13, family = "Times New Roman"),
+    axis.text = element_text(size = 10, family = "Times New Roman"),
+    legend.title = element_text(size = 12, family = "Times New Roman"),
+    legend.text = element_text(size = 10, family = "Times New Roman"),
+    strip.text = element_text(size = 13, family = "Times New Roman")
+  )
+print(dLcomparisons)
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+#### Checking the models plots  
+```{r, residuals}
+# Chunk for calling all the models and making the residuals
+## L. delicata
+### Red
+mod_dar <- readRDS("./output/models/deli_red.rds")
+resid_dar <- residuals(mod_dar)
+### Blue
+mod_dab <- readRDS("./output/models/deli_blue.rds")
+resid_dab <- residuals(mod_dab)
+## L. guichenoti
+### Red
+mod_gar <- readRDS("./output/models/guich_red.rds")
+resid_gar <- residuals(mod_gar)
+### Blue
+mod_gab <- readRDS("./output/models/guich_blue.rds")
+resid_gab <- residuals(mod_gab)
+```
+
+Model formula for task is:  
+Choice  ~ Trial*cort*temp + (1 + Trial|lizard_id)  
+Plots for the different models of the associative task:  
+1.- _L. delicata_  
+  1.a.- Red  
+```{r , plotmod_dar, out.width="70%", fig.align="center"}
+bayes_R2(mod_dar)
+plot(mod_dar)
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+  1.b.- Blue  
+```{r , plotmod_dab, out.width="70%", fig.align="center"}
+bayes_R2(mod_dab)
+plot(mod_dab)
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+2.- _L. guichenoti_  
+  2.a.- Red  
+```{r , plotmod_gar, out.width="70%", fig.align="center"}
+bayes_R2(mod_gar)
+plot(mod_gar)
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+  2.b.- Blue  
+```{r , plotmod_gab, out.width="70%", fig.align="center"}
+bayes_R2(mod_gab)
+plot(mod_gab)
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+#### Preliminary analyses
+```{r, modelsprel}
+#| label: modelprel
+# Fitting the models for L. delicata and L. guichenoti including age as a covariate
+#
+data_prel <- data_clean %>%
+  mutate(age.start = as.numeric(age.start)-mean(as.numeric(age.start)))
+#
+refit2 = FALSE
+formula <- FC_associative ~ age.start + group*trial_associative + trial_associative*cort*temp + 
+                            (1 + trial_associative|lizard_id) + (1|clutch)
+species <- c("delicata", "guichenoti")
+# + (-1+group|obs)
+#
+models <- list() # Create an empty list to store the models
+for(s in species){
+    # Subset the data for the species
+    data_species <- data_prel %>%
+    filter(species == s)
+    model_file <- paste0("output/models/model_prel_", s, ".rds")
+# Fit the model only if it has not been fit yet (if refit2 = TRUE)
+  if(refit2 == TRUE){
+    # Fit the model
+    model <- brm(formula,
+                data = data_species,
+                family = bernoulli(link = "logit"),
+                chains = 4, cores = 4, iter = 3000, warmup = 1000, control = list(adapt_delta = 0.99))
+    # Write the model to a file
+    saveRDS(model, file = model_file)
+  } else {
+      # Read the model from a file
+      model <- readRDS(file = model_file)
+  }
+  # Save the model to the list
+  models[[paste0(s)]] <- model
+}
+#
+model_prel_deli <- models[["delicata"]]
+model_prel_guich <- models[["guichenoti"]]
+```
+
+#### Models with age included
+
+```{r, modelsage}
+#| label: modelsage
+# Fitting the models for L. delicata and L. guichenoti including age as a covariate
+#
+data_age <- data_clean %>%
+  mutate(age.start = as.numeric(age.start)-mean(as.numeric(age.start)))
+refit2 = FALSE
+formula <- FC_associative ~ age.start + trial_associative*cort*temp + (1 + trial_associative|lizard_id) + (1|clutch)
+species <- c("delicata", "guichenoti")
+group <- c("Red", "Blue")
+#
+models <- list() # Create an empty list to store the models
+for(s in species){
+    # Subset the data for the species
+    data_species <- data_age %>%
+    filter(species == s)
+  for(g in group){
+  # Subset the data for the group
+  data_group <- data_species %>%
+  filter(group == g)
+  # Define model file name
+  model_file <- paste0("output/models/model_age_", s, "_", g,".rds")
+# Fit the model only if it has not been fit yet (if refit2 = TRUE)
+  if(refit2 == TRUE){
+    # Fit the model
+    model <- brm(formula,
+                data = data_group,
+                family = bernoulli(link = "logit"),
+                chains = 4, cores = 4, iter = 3000, warmup = 1000, control = list(adapt_delta = 0.99))
+    # Write the model to a file
+    saveRDS(model, file = model_file)
+  } else {
+      # Read the model from a file
+      model <- readRDS(file = model_file)
+  }
+  # Save the model to the list
+  models[[paste0(s, "_", g)]] <- model
+  }
+}
+#
+model_age_deli_red <- models[["delicata_Red"]]
+model_age_deli_blue <- models[["delicata_Blue"]]
+model_age_guich_red <- models[["guichenoti_Red"]]
+model_age_guich_blue <- models[["guichenoti_Blue"]]
+```
+
+Table 3. Results for _L. delicata_ assigned to red ramps when the model included the age:
+```{r, tbl-agedeli_red, results='asis', out.widht = "26cm"}
+#| label: tbl-agedeli_red
+#| tbl-cap: "Summary model_age_deli_red"
+deli_age_red <- summary(model_age_deli_red)
+# Extract fixed effects names and their corresponding estimates, CIs, etc.
+fixed_effects <- deli_age_red$fixed %>%
+  mutate_all(~ format_dec(., 2))
+Predictors <- rownames(fixed_effects)
+deli_age_red_tbl_df <- cbind(Predictors, fixed_effects)
+# Convert the fixed effects data frame to a flextable
+flextable(deli_age_red_tbl_df) %>%
+  set_table_properties(., width = 1) %>%
+  fontsize(size = 10, part = "all")
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+Table 4. Results for _L. delicata_ assigned to blue ramps when the model included the age:
+```{r, tbl-agedeli_blue, results='asis', out.widht = "26cm"}
+#| label: tbl-agedeli_blue
+#| tbl-cap: "Summary model_age_deli_blue"
+deli_age_blue <- summary(model_age_deli_blue)
+# Extract fixed effects names and their corresponding estimates, CIs, etc.
+fixed_effects <- deli_age_blue$fixed %>%
+  mutate_all(~ format_dec(., 2))
+Predictors <- rownames(fixed_effects)
+deli_age_blue_tbl_df <- cbind(Predictors, fixed_effects)
+# Convert the fixed effects data frame to a flextable
+flextable(deli_age_blue_tbl_df) %>%
+  set_table_properties(., width = 1) %>%
+  fontsize(size = 10, part = "all")
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+Table 5. Results for _L. guichenoti_ assigned to red ramps when the model included the age:
+```{r, tbl-ageguich_red, results='asis', out.widht = "26cm"}
+#| label: tbl-ageguich_red
+#| tbl-cap: "Summary model_age_guich_red"
+guich_age_red <- summary(model_age_guich_red)
+# Extract fixed effects names and their corresponding estimates, CIs, etc.
+fixed_effects <- guich_age_red$fixed %>%
+  mutate_all(~ format_dec(., 2))
+Predictors <- rownames(fixed_effects)
+guich_age_red_tbl_df <- cbind(Predictors, fixed_effects)
+# Convert the fixed effects data frame to a flextable
+flextable(guich_age_red_tbl_df) %>%
+  set_table_properties(., width = 1) %>%
+  fontsize(size = 10, part = "all")
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+Table 6. Results for _L. guichenoti_ assigned to blue ramps when the model included the age:
+```{r, tbl-ageguich_blue, results='asis', out.widht = "26cm"}
+#| label: tbl-ageguich_blue
+#| tbl-cap: "Summary model_age_guich_blue"
+guich_age_blue <- summary(model_age_guich_blue)
+# Extract fixed effects names and their corresponding estimates, CIs, etc.
+fixed_effects <- guich_age_blue$fixed %>%
+  mutate_all(~ format_dec(., 2))
+Predictors <- rownames(fixed_effects)
+guich_age_blue_tbl_df <- cbind(Predictors, fixed_effects)
+# Convert the fixed effects data frame to a flextable
+flextable(guich_age_blue_tbl_df) %>%
+  set_table_properties(., width = 1) %>%
+  fontsize(size = 10, part = "all")
+```
+
+```{r, results='asis', echo=FALSE}
+cat("\\newpage")
+```
+
+```{r, fig-age} 
+#| label: fig-age
+#| fig.cap: "Distribution of the age of the lizards by treatment and species"
+# Plotting the distribution of the age of the lizards by treatment and species
+# Load the data
+data_age <- data_clean
+# Plot the distribution of the age of the lizards by treatment and species
+img_deli <- readPNG("./Others/Deli.png")
+plot_age_deli <- data_age %>%
+  filter(species == "delicata") %>%
+  mutate(trt = factor(trt, 
+          levels = c("A_23", "B_23", "A_28", "B_28"), 
+          labels = c("Control-Cold", "CORT-Cold", "Control-Hot", "CORT-Hot"))) %>%
+  ggplot(aes(x = age.start, color = trt)) +
+  geom_density(linewidth = 1.5) +
+  scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="#68bde1", "CORT-Hot"="#b50101", "Control-Hot"="#fa927d")) +  
+  labs(title = "L. delicata", x = "Age (days)", color = "Treatments") +
+  theme_classic() +
+  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm"),
+    plot.title = element_text(size = 14, family = "Times", face = "italic"),
+    axis.text.y = element_blank(),   # Remove y-axis labels
+    axis.title = element_text(size = 12, family = "Times"),
+    axis.text = element_text(size = 10, family = "Times"),
+    legend.position = "right",
+    legend.title = element_text(size = 12, family = "Times"),
+    legend.text = element_text(size = 11, family = "Times")
+    ) +
+  annotation_custom(rasterGrob(img_deli), xmin = 0.73, xmax = 0.98, ymin = 0.73, ymax = 0.98)
+#
+img_guich <- readPNG("./Others/Guich.png")
+plot_age_guich <- data_age %>%
+  filter(species == "guichenoti") %>%
+  mutate(trt = factor(trt, 
+          levels = c("A_23", "B_23", "A_28", "B_28"), 
+          labels = c("Control-Cold", "CORT-Cold", "Control-Hot", "CORT-Hot"))) %>%
+  ggplot(aes(x = age.start, color = trt)) +
+  geom_density(linewidth = 1.5) +
+  scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="#68bde1", "CORT-Hot"="#b50101", "Control-Hot"="#fa927d")) +  
+  labs(title = "L. guichenoti", x = "Age (days)", color = "Treatments") +
+  theme_classic() +
+  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm"),
+    plot.title = element_text(size = 14, family = "Times", face = "italic"),
+    axis.text.y = element_blank(),   # Remove y-axis labels
+    axis.title = element_text(size = 12, family = "Times"),
+    axis.text = element_text(size = 10, family = "Times"),
+    legend.position = "right",
+    legend.title = element_text(size = 12, family = "Times"),
+    legend.text = element_text(size = 11, family = "Times")
+    ) +
+  annotation_custom(rasterGrob(img_guich), xmin = 0.73, xmax = 0.98, ymin = 0.73, ymax = 0.98)
+#
+plot_age <- plot_grid(plot_age_deli, plot_age_guich, ncol = 1)
+ggsave("./output/figures/plot_age.png", plot=plot_age, width = 25, height = 18, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/plot_age.png")
+```

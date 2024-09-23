@@ -161,6 +161,31 @@ write.csv(guich_blue, file= "./output/Checking/guich_blue.csv")
 
 ```{r, results}
 #| label: results
+# Rename some of the posteriors and obtain estimates for the "decision making" for each group and treatment. This "decision making" consists of the probability of choosing right using the Intercept for each treatment. 
+## 1) L. delicata
+## 1) L. delicata
+### Group = red
+probright_drCORTCold <- exp(deli_red$b_Intercept)/(1+exp(deli_red$b_Intercept))
+probright_drControlCold <- exp(deli_red$b_cortControl + deli_red$b_Intercept)/(1+exp(deli_red$b_cortControl + deli_red$b_Intercept))
+probright_drCORTHot <- exp(deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$b_tempHot + deli_red$b_Intercept))
+probright_drControlHot <- exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept))
+### Group = blue
+probright_dbCORTCold <- exp(deli_blue$b_Intercept)/(1+exp(deli_blue$b_Intercept))
+probright_dbControlCold <- exp(deli_blue$b_cortControl + deli_blue$b_Intercept)/(1+exp(deli_blue$b_cortControl + deli_blue$b_Intercept))
+probright_dbCORTHot <- exp(deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$b_tempHot + deli_blue$b_Intercept))
+probright_dbControlHot <- exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept))
+## 2) L. guichenoti
+### Group = red
+probright_grCORTCold <- exp(guich_red$b_Intercept)/(1+exp(guich_red$b_Intercept))
+probright_grControlCold <- exp(guich_red$b_cortControl + guich_red$b_Intercept)/(1+exp(guich_red$b_cortControl + guich_red$b_Intercept))
+probright_grCORTHot <- exp(guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$b_tempHot + guich_red$b_Intercept))
+probright_grControlHot <- exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept))
+### Group = blue
+probright_gbCORTCold <- exp(guich_blue$b_Intercept)/(1+exp(guich_blue$b_Intercept))
+probright_gbControlCold <- exp(guich_blue$b_cortControl + guich_blue$b_Intercept)/(1+exp(guich_blue$b_cortControl + guich_blue$b_Intercept))
+probright_gbCORTHot <- exp(guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$b_tempHot + guich_blue$b_Intercept))
+probright_gbControlHot <- exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept))
+#
 # Rename some of the posteriors and obtain estimates for the "learning rate" for each group and treatment. This "learning rate" consists on the slope of the posterior of the Trial parameter. The slope is the rate at which the probability of choosing the correct ramp increases with each trial. The slope is obtained by adding the posterior of the Trial parameter to the posterior of the interaction between Trial and the treatment (cort and temp). 
 ## 1) L. delicata
 ### Group = red
@@ -184,67 +209,98 @@ gab_CORTCold <- guich_blue$b_Trial
 gab_ControlCold <- (guich_blue$'b_Trial:cortControl' + guich_blue$b_Trial)
 gab_CORTHot <- (guich_blue$'b_Trial:tempHot' + guich_blue$b_Trial)
 gab_ControlHot <- (guich_blue$'b_Trial:cortControl:tempHot' + guich_blue$b_Trial + guich_blue$'b_Trial:cortControl' + guich_blue$'b_Trial:tempHot')
+#
+# Modyfying a parameter for the results later (see p_format function in func.R)
+equal <- TRUE
 ```
 
-We found that the rate of learning was lower when the blue ramps were the correct choice compared to the red ramps, for _L. delicata_ (mean β~Blue~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)), 3)`, 95% CI β~Blue~ = [`r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.975), 3)`]; mean β~Red~ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, 95% CI β~Red~ = [`r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.975), 3)`]; Contrast between slopes: β~Blue~ - β~Red~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)) - mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, p~mcmc = `r format_p(pmcmc(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot) - c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, see @fig-deli), but not for _L. guichenoti_ (mean β~Blue~ = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, 95% CI β~Blue~ = [`r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.975), 3)`]; mean β~Red~ = `r format_dec(mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, 95 CI β~Red~ = [`r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.975), 3)`]; β~Blue~ - β~Red~ = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)) - mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, p~mcmc `r format_p(pmcmc(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot) - c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, see @fig-guich). However, further analyses using the first trial indicated a potential bias towards blue in the initial choice (see _Supplementary Material_) that could be affecting the estimated slopes. As such, we analyzed the differences between treatments for each group separately.  
+The probability of choosing correctly in the first trial when the correct ramp was blue not different to the probability of choosing correctly when the correct ramp was red for _L. delicata_ (mean P~Blue~ = `r format_dec(mean(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot)), 3)`, 95% CI P~Blue~ = [`r format_dec(quantile(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot), 0.975), 3)`]; mean P~Red~ = `r format_dec(mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, 95% CI P~Red~ = [`r format_dec(quantile(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), 0.975), 3)`]; Contrast between probabilities: P~Blue~ - P~Red~ = `r format_dec(mean(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot)) - mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot) - c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, see @fig-deli); neither for _L. guichenoti_, the probability of choosing correctly was similar between blue or red ramps (mean P~Blue~ = `r format_dec(mean(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)), 3)`, 95% CI P~Blue~ = [`r format_dec(quantile(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot), 0.975), 3)`]; mean P~Red~ = `r format_dec(mean(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, 95% CI P~Red~ = [`r format_dec(quantile(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot), 0.975), 3)`]; Contrast between probabilities: P~Blue~ - P~Red~ = `r format_dec(mean(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)) - mean(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot) - c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, see @fig-guich). **However, the P>0.33 in which cases: Table Suppl Mat**
 
-For those _L. delicata_ assigned to group red, we did not find any significant differences between hormones (β~Control~ - β~CORT~ = `r format_dec(mean(c(dar_ControlCold - dar_ControlHot)) - mean(c(dar_CORTCold, dar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_ControlCold - dar_ControlHot) - c(dar_CORTCold, dar_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(dar_ControlHot, dar_CORTHot)) - mean(c(dar_ControlCold, dar_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_ControlHot, dar_CORTHot) - c(dar_ControlCold, dar_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(dar_ControlHot - dar_CORTHot) - mean(dar_ControlCold - dar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dar_ControlHot - dar_CORTHot) - (dar_ControlCold - dar_CORTCold)), 3)`) (@fig-deli A, B). Similarly, those assigned to blue were not afected by CORT (β~Control~ - β~CORT~ = `r format_dec(mean(c(dab_ControlCold - dab_ControlHot)) - mean(c(dab_CORTCold, dab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_ControlCold - dab_ControlHot) - c(dab_CORTCold, dab_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(dab_ControlHot, dab_CORTHot)) - mean(c(dab_ControlCold, dab_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_ControlHot, dab_CORTHot) - c(dab_ControlCold, dab_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(dab_ControlHot - dab_CORTHot) - mean(dab_ControlCold - dab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dab_ControlHot - dab_CORTHot) - (dab_ControlCold - dab_CORTCold)), 3)`) (@fig-deli C, D).  
+There was no significant effect of the colour of the correct ramp in _L. delicata_ (mean β~Blue~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)), 3)`, 95% CI β~Blue~ = [`r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.975), 3)`]; mean β~Red~ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, 95% CI β~Red~ = [`r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot), 0.975), 3)`]; Contrast between slopes: β~Blue~ - β~Red~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)) - mean(c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot) - c(dar_CORTCold, dar_ControlCold, dar_CORTCold, dar_ControlHot)), 3)`, see @fig-deli), nor in _L. guichenoti_ (mean β~Blue~ = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, 95% CI β~Blue~ = [`r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.975), 3)`]; mean β~Red~ = `r format_dec(mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, 95 CI β~Red~ = [`r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot), 0.975), 3)`]; β~Blue~ - β~Red~ = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)) - mean(c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot) - c(gar_CORTCold, gar_ControlCold, gar_CORTCold, gar_ControlHot)), 3)`, see @fig-guich). **However, because of the potential bias towards blue in the initial choice that could be affecting the estimated slopes we analyzed the differences between treatments for each ramp colour separately.**  
+
+Decision making in _L. delicata_ was not impacted by the hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(probright_drControlCold, probright_drControlHot)) - mean(c(probright_drCORTCold, probright_drCORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_drControlCold, probright_drControlHot) - c(probright_drCORTCold, probright_drCORTHot)), 3)`), incubation temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(probright_drControlHot, probright_drCORTHot)) - mean(c(probright_drControlCold, probright_drCORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_drControlHot, probright_drCORTHot) - c(probright_drControlCold, probright_drCORTCold)), 3)`) or their interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(probright_drControlHot - probright_drCORTHot) - mean(probright_drControlCold - probright_drCORTCold), 3)`, p~mcmc~ `r format_p(pmcmc(probright_drControlHot - probright_drCORTHot - (probright_drControlCold - probright_drCORTCold)), 3)`) when red ramps were the correct choice (see @fig-deli A). There was no significant effect of hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(probright_dbControlCold, probright_dbControlHot)) - mean(c(probright_dbCORTCold, probright_dbCORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_dbControlCold, probright_dbControlHot) - c(probright_dbCORTCold, probright_dbCORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(probright_dbControlHot, probright_dbCORTHot)) - mean(c(probright_dbControlCold, probright_dbCORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_dbControlHot, probright_dbCORTHot) - c(probright_dbControlCold, probright_dbCORTCold)), 3)`) or their interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(probright_dbControlHot - probright_dbCORTHot) - mean(probright_dbControlCold - probright_dbCORTCold), 3)`, p~mcmc~ `r format_p(pmcmc(probright_dbControlHot - probright_dbCORTHot - (probright_dbControlCold - probright_dbCORTCold)), 3)`) when blue ramps were the correct choice (see @fig-deli D).   
+
+Learning slopes in _L. delicata_ assigned to red ramps did not show significant effects of the hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(dar_ControlCold, dar_ControlHot)) - mean(c(dar_CORTCold, dar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_ControlCold, dar_ControlHot) - c(dar_CORTCold, dar_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(dar_ControlHot, dar_CORTHot)) - mean(c(dar_ControlCold, dar_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_ControlHot, dar_CORTHot) - c(dar_ControlCold, dar_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(dar_ControlHot - dar_CORTHot) - mean(dar_ControlCold - dar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dar_ControlHot - dar_CORTHot) - (dar_ControlCold - dar_CORTCold)), 3)`) (@fig-deli B, C). Similarly, those assigned to blue were not afected by CORT (β~Control~ - β~CORT~ = `r format_dec(mean(c(dab_ControlCold, dab_ControlHot)) - mean(c(dab_CORTCold, dab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_ControlCold, dab_ControlHot) - c(dab_CORTCold, dab_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(dab_ControlHot, dab_CORTHot)) - mean(c(dab_ControlCold, dab_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_ControlHot, dab_CORTHot) - c(dab_ControlCold, dab_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(dab_ControlHot - dab_CORTHot) - mean(dab_ControlCold - dab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((dab_ControlHot - dab_CORTHot) - (dab_ControlCold - dab_CORTCold)), 3)`) (@fig-deli E, F).  
 
 ```{r, fig-deli}
 #| label: fig-deli
-#| fig.cap: "Results for Lampropholis delicata for both colour groups red (A,B) and blue (C, D). Panels A and C show the predicted probability of choosing the correct ramp first over trials. The lines represent the mean predicted probability of choosing the correct ramp first on each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments. Panels B and D show the distribution of the estimates of slopes per each treatment. The x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively."
+#| fig.cap: "Results for Lampropholis delicata for both colour groups red (A, B, C) and blue (D, E , F). Panels A and D show the predicted probability of choosing the correct ramp in the first trial (Decision first trial). In panels B and E, the distribution of the estimates of slopes per each treatment. In all A, B, D, and E the x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively. Dashed lines indicate value 0.33 (the probability of choosing correctly by chance) in panesl A, D, and 0 in panels B, E. Panels C and F show the predicted probability of choosing the correct ramp first over trials. The lines represent the mean predicted probability of choosing the correct ramp for each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments."
 source(here("R", "func.R"))
 # First step, create the dfs for all models
 ## Red
-fig_dar_AC_df <- df_plotAC("deli_red")
-fig_dar_BD1_df <- df_plotBD1("deli_red")
-fig_dar_BD2_df <- df_plotBD2("deli_red")
+fig_dar_choiceviol_df <- df_plotviol("deli_red", "choice")
+fig_dar_choicepoints_df <- df_plotpoints("deli_red", "choice")
+fig_dar_sloviol_df <- df_plotviol("deli_red", "slope")
+fig_dar_slopoints_df <- df_plotpoints("deli_red", "slope")
+fig_dar_prob_df <- df_plotprob("deli_red")
 ## Blue
-fig_dab_AC_df <- df_plotAC("deli_blue")
-fig_dab_BD1_df <- df_plotBD1("deli_blue")
-fig_dab_BD2_df <- df_plotBD2("deli_blue")
+fig_dab_choiceviol_df <- df_plotviol("deli_blue", "choice")
+fig_dab_choicepoints_df <- df_plotpoints("deli_blue", "choice")
+fig_dab_sloviol_df <- df_plotviol("deli_blue", "slope")
+fig_dab_slopoints_df <- df_plotpoints("deli_blue", "slope")
+fig_dab_prob_df <- df_plotprob("deli_blue")
 #
 # Second step, create the plots
-fig_dar <- plotting(sp = "deli", col = "red", df_prob = fig_dar_AC_df, df_violin = fig_dar_BD1_df, df_points = fig_dar_BD2_df)
-fig_dab <- plotting(sp = "deli", col = "blue", df_prob = fig_dab_AC_df, df_violin = fig_dab_BD1_df, df_points = fig_dab_BD2_df)
+fig_dar <- plotting(sp = "deli", col = "red", 
+                    df_violin_1 = fig_dar_choiceviol_df, df_points_1 = fig_dar_choicepoints_df, 
+                    df_violin_2 = fig_dar_sloviol_df, df_points_2 = fig_dar_slopoints_df,
+                    df_prob = fig_dar_prob_df)
+fig_dab <- plotting(sp = "deli", col = "blue",
+                    df_violin_1 = fig_dab_choiceviol_df, df_points_1 = fig_dab_choicepoints_df,
+                    df_violin_2 = fig_dab_sloviol_df, df_points_2 = fig_dab_slopoints_df,
+                    df_prob = fig_dab_prob_df)
 #
 # Third step, merge plots
 fig_deli <- plot_grid(fig_dar, fig_dab, ncol = 1) +
   theme(plot.margin = margin(1, 1, 1.5, 1, "cm")) +
   annotate("text", x = 0.5, y = 0.985, label = "Lampropholis delicata", size = 4.5, color = "black", fontface = "italic")
-ggsave("./output/figures/fig_deli.png", plot=fig_deli, width = 25, height = 18, units = "cm", dpi = 600)
+ggsave("./output/figures/fig_deli.png", plot=fig_deli, width = 28, height = 15, units = "cm", dpi = 600)
 knitr::include_graphics("./output/figures/fig_deli.png")
 ```
 
-In _L. guichenoti_, we did not find any significant differences between hormone treatments (β~Control~ - β~CORT~ = `r format_dec(mean(c(gar_ControlCold - gar_ControlHot)) - mean(c(gar_CORTCold, gar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlCold - gar_ControlHot) - c(gar_CORTCold, gar_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(gar_ControlHot, gar_CORTHot)) - mean(c(gar_ControlCold, gar_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlHot, gar_CORTHot) - c(gar_ControlCold, gar_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(gar_ControlHot - gar_CORTHot) - mean(gar_ControlCold - gar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gar_ControlHot - gar_CORTHot) - (gar_ControlCold - gar_CORTCold)), 3)`) for those assigned to the red group (@fig-guich A, B); and we did not find any significant effect of hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(gab_ControlCold - gab_ControlHot)) - mean(c(gab_CORTCold, gab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlCold - gab_ControlHot) - c(gab_CORTCold, gab_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(gab_ControlHot, gab_CORTHot)) - mean(c(gab_ControlCold, gab_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlHot, gab_CORTHot) - c(gab_ControlCold, gab_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(gab_ControlHot - gab_CORTHot) - mean(gab_ControlCold - gab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gab_ControlHot - gab_CORTHot) - (gab_ControlCold - gab_CORTCold)), 3)`) for those assigned to blue either (@fig-guich C, D).  
+Decision making in _L. guichenoti_ when the red ramps are the correct choice, was not affected by the hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(probright_grControlCold, probright_grControlHot)) - mean(c(probright_grCORTCold, probright_grCORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_grControlCold, probright_grControlHot) - c(probright_grCORTCold, probright_grCORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(probright_grControlHot, probright_grCORTHot)) - mean(c(probright_grControlCold, probright_grCORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_grControlHot, probright_grCORTHot) - c(probright_grControlCold, probright_grCORTCold)), 3)`) or their interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(probright_grControlHot - probright_grCORTHot) - mean(probright_grControlCold - probright_grCORTCold), 3)`, p~mcmc~ `r format_p(pmcmc(probright_grControlHot - probright_grCORTHot - (probright_grControlCold - probright_grCORTCold)), 3)`) (@fig-guich A). The same was observed when blue ramps were the correct choice (β~Hot~ - β~Cold~ = `r format_dec(mean(c(probright_gbControlHot, probright_gbCORTHot)) - mean(c(probright_gbControlCold, probright_gbCORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_gbControlHot, probright_gbCORTHot) - c(probright_gbControlCold, probright_gbCORTCold)), 3)`; β~Control~ - β~CORT~ = `r format_dec(mean(c(probright_gbControlCold, probright_gbControlHot)) - mean(c(probright_gbCORTCold, probright_gbCORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_gbControlCold, probright_gbControlHot) - c(probright_gbCORTCold, probright_gbCORTHot)), 3)`) (@fig-guich D).   
+
+Learning slopes in _L. guichenoti_ was not influenced by hormone (β~Control~ - β~CORT~ = `r format_dec(mean(c(gar_ControlCold, gar_ControlHot)) - mean(c(gar_CORTCold, gar_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlCold, gar_ControlHot) - c(gar_CORTCold, gar_CORTHot)), 3)`), temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(gar_ControlHot, gar_CORTHot)) - mean(c(gar_ControlCold, gar_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gar_ControlHot, gar_CORTHot) - c(gar_ControlCold, gar_CORTCold)), 3)`), or the interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(gar_ControlHot - gar_CORTHot) - mean(gar_ControlCold - gar_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gar_ControlHot - gar_CORTHot) - (gar_ControlCold - gar_CORTCold)), 3)`) when red ramps was the correct choice (@fig-guich B, C). Temperature (β~Hot~ - β~Cold~ = `r format_dec(mean(c(gab_ControlHot, gab_CORTHot)) - mean(c(gab_ControlCold, gab_CORTCold)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlHot, gab_CORTHot) - c(gab_ControlCold, gab_CORTCold)), 3)`), or the hormone-temperature interaction ([(β~Control-Hot~ - β~CORT-Hot~) - (β~Control-Cold~ - β~CORT-Cold~)] = `r format_dec(mean(gab_ControlHot - gab_CORTHot) - mean(gab_ControlCold - gab_CORTCold), 3)`, p~mcmc~ `r format_p(pmcmc((gab_ControlHot - gab_CORTHot) - (gab_ControlCold - gab_CORTCold)), 3)`) were not significant for _L. guichenoti_ assigned to blue ramps. However, CORT-treated lizards showed lower learning slopes than controls (β~Control~ - β~CORT~ = `r format_dec(mean(c(gab_ControlCold, gab_ControlHot)) - mean(c(gab_CORTCold, gab_CORTHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(gab_ControlCold, gab_ControlHot) - c(gab_CORTCold, gab_CORTHot)), 3)`) when the blue ramps were the correct choice (see @fig-guich E, F).  
 
 ```{r, fig-guich}
 #| label: fig-guich
-#| fig.cap: "Results for Lampropholis guichenoti for both colour groups red (A,B) and blue (C, D). Panels A and C show the predicted probability of choosing the correct ramp first over trials. The lines represent the mean predicted probability of choosing the correct ramp first on each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments. Panels B and D show the distribution of the estimates of slopes per each treatment. The x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively."
+#| fig.cap: "Results for Lampropholis guichenoti for both colour groups red (A, B, C) and blue (D, E , F). Panels A and D show the predicted probability of choosing the correct ramp in the first trial (Decision first trial). In panels B and E, the distribution of the estimates of slopes per each treatment. In all A, B, D, and E the x-axis represents the slope estimate, and in the y-axis are the density of the estimates. The different colours indicate the different treatments. Points and bars represent the mean and standard deviation of the mean of the estimates, respectively. Dashed lines indicate value 0.33 (the probability of choosing correctly by chance) in panesl A, D, and 0 in panels B, E. Panels C and F show the predicted probability of choosing the correct ramp first over trials. The lines represent the mean predicted probability of choosing the correct ramp for each trial, and the shaded areas indicate the standard deviation of the mean; both were obtained by using the slope and intercept estimates from the posterior distributions. The different colours indicate the different treatments."
 source(here("R", "func.R"))
 # First step, create the dfs for all models
 ## Red
-fig_gar_AC_df <- df_plotAC("guich_red")
-fig_gar_BD1_df <- df_plotBD1("guich_red")
-fig_gar_BD2_df <- df_plotBD2("guich_red")
+fig_gar_choiceviol_df <- df_plotviol("guich_red", "choice")
+fig_gar_choicepoints_df <- df_plotpoints("guich_red", "choice")
+fig_gar_sloviol_df <- df_plotviol("guich_red", "slope")
+fig_gar_slopoints_df <- df_plotpoints("guich_red", "slope")
+fig_gar_prob_df <- df_plotprob("guich_red")
 ## Blue
-fig_gab_AC_df <- df_plotAC("guich_blue")
-fig_gab_BD1_df <- df_plotBD1("guich_blue")
-fig_gab_BD2_df <- df_plotBD2("guich_blue")
+fig_gab_choiceviol_df <- df_plotviol("guich_blue", "choice")
+fig_gab_choicepoints_df <- df_plotpoints("guich_blue", "choice")
+fig_gab_sloviol_df <- df_plotviol("guich_blue", "slope")
+fig_gab_slopoints_df <- df_plotpoints("guich_blue", "slope")
+fig_gab_prob_df <- df_plotprob("guich_blue")
 #
 # Second step, create the plots
-fig_gar <- plotting(sp = "guich", col = "red", df_prob = fig_gar_AC_df, df_violin = fig_gar_BD1_df, df_points = fig_gar_BD2_df)
-fig_gab <- plotting(sp = "guich", col = "blue", df_prob = fig_gab_AC_df, df_violin = fig_gab_BD1_df, df_points = fig_gab_BD2_df)
+fig_gar <- plotting(sp = "guich", col = "red", 
+                    df_violin_1 = fig_gar_choiceviol_df, df_points_1 = fig_gar_choicepoints_df, 
+                    df_violin_2 = fig_gar_sloviol_df, df_points_2 = fig_gar_slopoints_df,
+                    df_prob = fig_gar_prob_df)
+fig_gab <- plotting(sp = "guich", col = "blue",
+                    df_violin_1 = fig_gab_choiceviol_df, df_points_1 = fig_gab_choicepoints_df,
+                    df_violin_2 = fig_gab_sloviol_df, df_points_2 = fig_gab_slopoints_df,
+                    df_prob = fig_gab_prob_df)
 #
 # Third step, merge plots
 fig_guich <- plot_grid(fig_gar, fig_gab, ncol = 1) +
   theme(plot.margin = margin(1, 1, 1.5, 1, "cm")) +
   annotate("text", x = 0.5, y = 0.985, label = "Lampropholis guichenoti", size = 4.5, color = "black", fontface = "italic")
-ggsave("./output/figures/fig_guich.png", plot=fig_guich, width = 25, height = 18, units = "cm", dpi = 600)
+ggsave("./output/figures/fig_guich.png", plot=fig_guich, width = 28, height = 15, units = "cm", dpi = 600)
 knitr::include_graphics("./output/figures/fig_guich.png")
 ```
 
-Finally, we also did not find any significant differences when we compared the estimated slopes between species for red group (mean β~_L. delicata_~ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot)), 3)`, 95% CI β~_L. delicata_~ = [`r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot)) - mean(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot) - c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`) or the blue group (mean β~_L. delicata_~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)), 3)`, 95% CI β~_L. delicata_~ = [`r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)) - mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot) - c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`).   
+Overall, decision making did not differ between species when the red ramps were the correct choice (mean β~_L. delicata_~ = `r format_dec(mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)), 3)`, 95% CI β~_L. delicata_~ = [`r format_dec(quantile(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot)) - mean(c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_drCORTCold, probright_drControlCold, probright_drCORTHot, probright_drControlHot) - c(probright_grCORTCold, probright_grControlCold, probright_grCORTHot, probright_grControlHot)), 3)`) or when the blue ramps were the correct choice (mean β~_L. delicata_~ = `r format_dec(mean(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot)), 3)`, 95% CI = [`r format_dec(quantile(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot), 0.025), 3)` , `r format_dec(quantile(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot)) - mean(c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(probright_dbCORTCold, probright_dbControlCold, probright_dbCORTHot, probright_dbControlHot) - c(probright_gbCORTCold, probright_gbControlCold, probright_gbCORTHot, probright_gbControlHot)), 3)`).  
+
+When we average learning rates across treatments, we did not find any significant differences when we compared between species when the red ramp was the correct choice (mean β~_L. delicata_~ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot)), 3)`, 95% CI β~_L. delicata_~ = [`r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot)) - mean(c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dar_CORTCold, dar_ControlCold, dar_CORTHot, dar_ControlHot) - c(gar_CORTCold, gar_ControlCold, gar_CORTHot, gar_ControlHot)), 3)`) neither when the blue ramps were the correct choice (mean β~_L. delicata_~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)), 3)`, 95% CI β~_L. delicata_~ = [`r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot), 0.975), 3)`]; mean β~_L. guichenoti_~ = `r format_dec(mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, 95% CI β~_L. guichenoti_~ = [`r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.025), 3)` , `r format_dec(quantile(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot), 0.975), 3)`]; β~_L. delicata_~ - β~_L. guichenoti_~ = `r format_dec(mean(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot)) - mean(c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`, p~mcmc~ `r format_p(pmcmc(c(dab_CORTCold, dab_ControlCold, dab_CORTHot, dab_ControlHot) - c(gab_CORTCold, gab_ControlCold, gab_CORTHot, gab_ControlHot)), 3)`).   
 
 
 ## Discussion
@@ -318,6 +374,9 @@ Table 1. Estimates of learning slopes for all the different treatments per each 
 #| label: tbl-data
 #| tbl-cap: "Estimates of Reversal learning slope for all the different treatments per each task, species, and group. Mean shows the arithmetic means of the estimates obtained from the posteriors of the model, and 95% CI indicates the 95% confidence interval of the mean. All pmcmc tested the hypothesis that the mean equals zero. In bold, those values that are significant (pmcmc <0.05)"
 source(here("R", "func.R"))
+#
+# Modyfying a parameter for later (see p_format function in func.R)
+equal <- FALSE
 #
 ############################## CREATING BIG DF FOR TABLE ##############################
 # Building the vectors for titles of rows and columns
@@ -398,31 +457,7 @@ Table 2. Probability of choosing the correct ramp in the first trial when the co
 #| label: tbl-bias
 #| tbl-cap: "Probability of choosing the correct ramp in the first trial when the correct ramp was blue (Prob Blue) or red (Prob Red) for each species and each treatment. p~mcmc~ tested the hypothesis that the probability is >0.33. In bold, those values that are significant (p~mcmc~ <0.05)"
 source(here("R", "func.R"))
-# First we estimate the probability of choosing right in the first trial using the intercepts from the posteriors
-## 1) L. delicata
-### Group = red
-probright_drCORTCold <- exp(deli_red$b_Intercept)/(1+exp(deli_red$b_Intercept))
-probright_drControlCold <- exp(deli_red$b_cortControl + deli_red$b_Intercept)/(1+exp(deli_red$b_cortControl + deli_red$b_Intercept))
-probright_drCORTHot <- exp(deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$b_tempHot + deli_red$b_Intercept))
-probright_drControlHot <- exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept)/(1+exp(deli_red$'b_cortControl:tempHot' + deli_red$b_cortControl + deli_red$b_tempHot + deli_red$b_Intercept))
-### Group = blue
-probright_dbCORTCold <- exp(deli_blue$b_Intercept)/(1+exp(deli_blue$b_Intercept))
-probright_dbControlCold <- exp(deli_blue$b_cortControl + deli_blue$b_Intercept)/(1+exp(deli_blue$b_cortControl + deli_blue$b_Intercept))
-probright_dbCORTHot <- exp(deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$b_tempHot + deli_blue$b_Intercept))
-probright_dbControlHot <- exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept)/(1+exp(deli_blue$'b_cortControl:tempHot' + deli_blue$b_cortControl + deli_blue$b_tempHot + deli_blue$b_Intercept))
-## 2) L. guichenoti
-### Group = red
-probright_grCORTCold <- exp(guich_red$b_Intercept)/(1+exp(guich_red$b_Intercept))
-probright_grControlCold <- exp(guich_red$b_cortControl + guich_red$b_Intercept)/(1+exp(guich_red$b_cortControl + guich_red$b_Intercept))
-probright_grCORTHot <- exp(guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$b_tempHot + guich_red$b_Intercept))
-probright_grControlHot <- exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept)/(1+exp(guich_red$'b_cortControl:tempHot' + guich_red$b_cortControl + guich_red$b_tempHot + guich_red$b_Intercept))
-### Group = blue
-probright_gbCORTCold <- exp(guich_blue$b_Intercept)/(1+exp(guich_blue$b_Intercept))
-probright_gbControlCold <- exp(guich_blue$b_cortControl + guich_blue$b_Intercept)/(1+exp(guich_blue$b_cortControl + guich_blue$b_Intercept))
-probright_gbCORTHot <- exp(guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$b_tempHot + guich_blue$b_Intercept))
-probright_gbControlHot <- exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept)/(1+exp(guich_blue$'b_cortControl:tempHot' + guich_blue$b_cortControl + guich_blue$b_tempHot + guich_blue$b_Intercept))
-#
-# Second we build a df with all the mean probabilities of choosing right in the first trial for each treatment and species
+# First we build a df with all the mean probabilities of choosing right in the first trial for each treatment and species (see results chunk)
 prob_df <- data.frame(
   probright_drCORTCold_t = format_dec(mean(probright_drCORTCold), 3),
   probright_drControlCold_t = format_dec(mean(probright_drControlCold), 3),
@@ -491,9 +526,9 @@ colour_table <- flextable(table_df) %>%
   set_table_properties(width = 1) %>%
   align(align="center", part="all") %>% 
   set_header_labels(prob_choice_Blue = "Prob Blue", 
-                    p_value_Blue = "p-value Blue", 
+                    p_value_Blue = "pmcmc Blue", 
                     prob_choice_Red = "Prob Red", 
-                    p_value_Red = "p-value Red") %>%
+                    p_value_Red = "pmcmc Red") %>%
   italic(j = 1, italic = TRUE, part = "body") %>% # To have names of species in italics
   flextable::compose(i = c(2:4,6:8), j = 1, value = as_paragraph(""), part = "body") %>% # To remove some of the values in the first column
   hline(i = c(4), j = c(1:6), part = "body") %>% # To make some horizontal lines
@@ -659,8 +694,8 @@ cat("\\newpage")
 ```
 
 #### Preliminary analyses
-```{r, modelsage}
-#| label: modelsage
+```{r, modelsprel}
+#| label: modelprel
 # Fitting the models for L. delicata and L. guichenoti including age as a covariate
 #
 data_prel <- data_clean %>%
@@ -670,6 +705,7 @@ refit2 = FALSE
 formula <- FC_associative ~ age.start + group*trial_associative + trial_associative*cort*temp + 
                             (1 + trial_associative|lizard_id) + (1|clutch)
 species <- c("delicata", "guichenoti")
+# + (-1+group|obs)
 #
 models <- list() # Create an empty list to store the models
 for(s in species){
@@ -696,9 +732,6 @@ for(s in species){
 #
 model_prel_deli <- models[["delicata"]]
 model_prel_guich <- models[["guichenoti"]]
-#
-summary(model_prel_deli)
-summary(model_prel_guich)
 ```
 
 #### Models with age included

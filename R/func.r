@@ -162,10 +162,10 @@ format_p <- function(x, n) {
 }
 ####################
 ####################
-# Function to create each df for the probability figure (plots A, C fig-deli and fig-guich)
-#' @title df_plotAC
+# Function to create each df for the probability figure (plots C, F fig-deli and fig-guich)
+#' @title df_plotprob
 #' @param data to select the df, levels are: "deli_red", "deli_blue", "guich_red", "guich_blue" 
-df_plotAC <- function(data){
+df_plotprob <- function(data){
   if (data == "deli_red"){
     df <- as.data.frame(deli_red)
   } else if (data == "deli_blue"){
@@ -222,24 +222,69 @@ df_plotAC <- function(data){
     SE_Predicted_prob = sd(Value)
     ) %>%
   ungroup() %>%
-  mutate(
-    Treatment = factor(Treatment,
-                        levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot")),
-    ) %>%
 data.frame()
-  return(fig_df)
+  if(data == "deli_red"){
+    final_fig_df <- fig_df %>%
+      mutate(Treatment = factor(Treatment, 
+        levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot"),
+        labels = c("CORT-Cold" = paste0("CORT-Cold (n = ", n_list$delicata_Red_CORT_Cold, ")"),
+                  "Control-Cold" = paste0("Control-Cold (n = ", n_list$delicata_Red_Control_Cold, ")"),
+                  "CORT-Hot" = paste0("CORT-Hot (n = ", n_list$delicata_Red_CORT_Hot, ")"),
+                  "Control-Hot" = paste0("Control-Hot (n = ", n_list$delicata_Red_Control_Hot, ")"))
+      )) %>%
+    data.frame()
+  } else if(data == "deli_blue"){
+    final_fig_df <- fig_df %>%
+      mutate(Treatment = factor(Treatment, 
+        levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot"),
+        labels = c("CORT-Cold" = paste0("CORT-Cold (n = ", n_list$delicata_Blue_CORT_Cold, ")"),
+                  "Control-Cold" = paste0("Control-Cold (n = ", n_list$delicata_Blue_Control_Cold, ")"),
+                  "CORT-Hot" = paste0("CORT-Hot (n = ", n_list$delicata_Blue_CORT_Hot, ")"),
+                  "Control-Hot" = paste0("Control-Hot (n = ", n_list$delicata_Blue_Control_Hot, ")"))
+      )) %>%
+    data.frame()
+  } else if(data == "guich_red"){
+    final_fig_df <- fig_df %>%
+      mutate(Treatment = factor(Treatment, 
+        levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot"),
+        labels = c("CORT-Cold" = paste0("CORT-Cold (n = ", n_list$guichenoti_Red_CORT_Cold, ")"),
+                  "Control-Cold" = paste0("Control-Cold (n = ", n_list$guichenoti_Red_Control_Cold, ")"),
+                  "CORT-Hot" = paste0("CORT-Hot (n = ", n_list$guichenoti_Red_CORT_Hot, ")"),
+                  "Control-Hot" = paste0("Control-Hot (n = ", n_list$guichenoti_Red_Control_Hot, ")"))
+      )) %>%
+    data.frame()
+  } else if(data == "guich_blue"){
+    final_fig_df <- fig_df %>%
+      mutate(Treatment = factor(Treatment, 
+        levels = c("CORT-Cold", "Control-Cold", "CORT-Hot", "Control-Hot"),
+        labels = c("CORT-Cold" = paste0("CORT-Cold (n = ", n_list$guichenoti_Blue_CORT_Cold, ")"),
+                  "Control-Cold" = paste0("Control-Cold (n = ", n_list$guichenoti_Blue_Control_Cold, ")"),
+                  "CORT-Hot" = paste0("CORT-Hot (n = ", n_list$guichenoti_Blue_CORT_Hot, ")"),
+                  "Control-Hot" = paste0("Control-Hot (n = ", n_list$guichenoti_Blue_Control_Hot, ")"))
+      )) %>%
+    data.frame()
+  }
+  return(final_fig_df)
 }
 ####################
 ####################
-# Function to create each df for the slopes figure (part of plots B, D fig-deli or fig-guich)
-#' @title df_plotBD1
+# Function to create each df for the slopes and intercept figures (part of plots A, B, D, E fig-deli or fig-guich)
+#' @title df_plotviol
 #' @param data to select the df, levels are: "deli_red", "deli_blue", "guich_red", "guich_blue"
-df_plotBD1 <- function(data){
+#' @param var to select whether we use the intercept or the slope (choice/slope)
+df_plotviol <- function(data, var){
   if (data == "deli_red"){
-      lst <- list('CORT-Cold' = dar_CORTCold,
+      if(var == "choice"){
+        lst <- list('CORT-Cold' = probright_drCORTCold,
+                  'Control-Cold' = probright_drControlCold,
+                  'CORT-Hot' = probright_drCORTHot,
+                  'Control-Hot' = probright_drControlHot)
+      } else if(var == "slope"){
+        lst <- list('CORT-Cold' = dar_CORTCold,
                   'Control-Cold' = dar_ControlCold,
                   'CORT-Hot' = dar_CORTHot,
                   'Control-Hot' = dar_ControlHot)
+      }
       df_plotBD <- data.frame(Value = unlist(lst),
         Treatment = factor(rep(names(lst), each = length(dar_CORTCold)))) %>%
         mutate(Treatment = factor(Treatment, 
@@ -252,10 +297,17 @@ df_plotBD1 <- function(data){
         ) %>%
       data.frame()
   } else if (data == "deli_blue"){
-      lst <- list('CORT-Cold' = dab_CORTCold,
+      if(var == "choice"){
+        lst <- list('CORT-Cold' = probright_dbCORTCold,
+                  'Control-Cold' = probright_dbControlCold,
+                  'CORT-Hot' = probright_dbCORTHot,
+                  'Control-Hot' = probright_dbControlHot)
+      } else if(var == "slope"){
+        lst <- list('CORT-Cold' = dab_CORTCold,
                   'Control-Cold' = dab_ControlCold,
                   'CORT-Hot' = dab_CORTHot,
                   'Control-Hot' = dab_ControlHot)
+      }
       df_plotBD <- data.frame(Value = unlist(lst),
         Treatment = factor(rep(names(lst), each = length(dab_CORTCold)))) %>%
         mutate(Treatment = factor(Treatment, 
@@ -268,10 +320,17 @@ df_plotBD1 <- function(data){
         ) %>%
       data.frame()    
   } else if(data == "guich_red"){
-        lst <- list('CORT-Cold' = gar_CORTCold,
+        if(var == "choice"){
+          lst <- list('CORT-Cold' = probright_grCORTCold,
+                  'Control-Cold' = probright_grControlCold,
+                  'CORT-Hot' = probright_grCORTHot,
+                  'Control-Hot' = probright_grControlHot)
+        } else if(var == "slope"){
+          lst <- list('CORT-Cold' = gar_CORTCold,
                     'Control-Cold' = gar_ControlCold,
                     'CORT-Hot' = gar_CORTHot,
                     'Control-Hot' = gar_ControlHot)
+        }
         df_plotBD <- data.frame(Value = unlist(lst),
           Treatment = factor(rep(names(lst), each = length(gar_CORTCold)))) %>%
           mutate(Treatment = factor(Treatment, 
@@ -284,10 +343,17 @@ df_plotBD1 <- function(data){
           ) %>%
       data.frame()
   } else if(data == "guich_blue"){
-        lst <- list('CORT-Cold' = gab_CORTCold,
+        if(var == "choice"){
+          lst <- list('CORT-Cold' = probright_gbCORTCold,
+                  'Control-Cold' = probright_gbControlCold,
+                  'CORT-Hot' = probright_gbCORTHot,
+                  'Control-Hot' = probright_gbControlHot)
+        } else if(var == "slope"){
+          lst <- list('CORT-Cold' = gab_CORTCold,
                     'Control-Cold' = gab_ControlCold,
                     'CORT-Hot' = gab_CORTHot,
                     'Control-Hot' = gab_ControlHot)
+        }
         df_plotBD <- data.frame(Value = unlist(lst),
           Treatment = factor(rep(names(lst), each = length(gab_CORTCold)))) %>%
           mutate(Treatment = factor(Treatment, 
@@ -307,17 +373,34 @@ df_plotBD1 <- function(data){
 ####################
 ####################
 # Function to create each df for the slopes figure (part of plots B, D fig-deli and fig-guich)
-#' @title df_plotBD2
+#' @title df_plotpoints
 #' @param data to select the df, levels are: "deli_red", "deli_blue", "guich_red", "guich_blue"
-df_plotBD2 <- function(data){
+#' @param var to select whether we use the intercept or the slope (choice/slope)
+df_plotpoints <- function(data, var){
   if (data == "deli_red"){
-      prev_BD2 <- fig_dar_BD1_df
+    if(var == "choice"){
+      prev_BD2 <- fig_dar_choiceviol_df
+    } else if(var == "slope"){
+      prev_BD2 <- fig_dar_sloviol_df
+    }
   } else if (data == "deli_blue"){
-      prev_BD2 <- fig_dab_BD1_df
+    if(var == "choice"){
+      prev_BD2 <- fig_dab_choiceviol_df
+    } else if(var == "slope"){
+      prev_BD2 <- fig_dab_sloviol_df
+    }
   } else if (data == "guich_red"){
-      prev_BD2 <- fig_gar_BD1_df
+    if(var == "choice"){
+      prev_BD2 <- fig_gar_choiceviol_df
+    } else if(var == "slope"){
+      prev_BD2 <- fig_gar_sloviol_df
+    }
   }else if (data == "guich_blue"){
-      prev_BD2 <- fig_gab_BD1_df
+    if(var == "choice"){
+      prev_BD2 <- fig_gab_choiceviol_df
+    } else if(var == "slope"){
+      prev_BD2 <- fig_gab_sloviol_df
+    }
   } else {
         stop("Data not valid")
   }
@@ -338,14 +421,16 @@ df_BD2 <- prev_BD2 %>%
 #' @title plotting
 #' @param sp to select the species for the labels ("deli"/"guich")
 #' @param col o select the colour ("red"/"blue")
-#' @param df_prob to select the df for probability (plot A, C)
-#' @param df_violin to select the df for the violin plot (plot B, D)
-#' @param df_points to select the df for the points and geom_bars (plot B, D)
-plotting <- function(sp, col, df_prob, df_violin, df_points){
+#' @param df_violin_1 to select the df for the violin plot for choice (plot A, D)
+#' @param df_points_1 to select the df for the points and geom_bars for choice (plot A, D)
+#' @param df_violin_2 to select the df for the violin plot for slopes (plot B, E)
+#' @param df_points_2 to select the df for the points and geom_bars for slopes (plot B, E)
+#' @param df_prob to select the df for probability (plot C, F)
+plotting <- function(sp, col, df_violin_1, df_points_1, df_violin_2, df_points_2, df_prob){
   # Specify labels depending on species and relevel the factor treatment for the legend
   if(sp == "deli"){
     if (col == "red"){
-      lab <- c("A", "B")
+      lab <- c("A", "B", "C")
       custom_values <- c("CORT-Cold (n = 5)" = "#00008B",
                         "Control-Cold (n = 6)" = "#68bde1", 
                         "CORT-Hot (n = 5)" = "#b50101", 
@@ -358,7 +443,7 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
       img <- readPNG("./Others/Red.png")
       
     } else if (col == "blue"){
-      lab <- c("C", "D")
+      lab <- c("D", "E", "F")
             custom_values <- c("CORT-Cold (n = 6)" = "#00008B",
                         "Control-Cold (n = 6)" = "#68bde1", 
                         "CORT-Hot (n = 6)" = "#b50101", 
@@ -374,7 +459,7 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
     }
   } else if (sp == "guich"){
       if (col == "red"){
-      lab <- c("A", "B")
+      lab <- c("A", "B", "C")
       custom_values <- c("CORT-Cold (n = 5)" = "#00008B",
                         "Control-Cold (n = 4)" = "#68bde1", 
                         "CORT-Hot (n = 5)" = "#b50101", 
@@ -386,7 +471,7 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
       )
       img <- readPNG("./Others/Red.png")
     } else if (col == "blue"){
-      lab <- c("C", "D")
+      lab <- c("D", "E", "F")
       custom_values <- c("CORT-Cold (n = 5)" = "#00008B",
                         "Control-Cold (n = 3)" = "#68bde1", 
                         "CORT-Hot (n = 5)" = "#b50101", 
@@ -403,46 +488,66 @@ plotting <- function(sp, col, df_prob, df_violin, df_points){
   } else {
     stop("Species not valid")
   }
-  # First part of the plot (A, C), the probabilities of choosing right over trial
-  plot1 <- ggplot(df_prob, aes(x = Trial, y = Mean_Predicted_prob, color = Treatment)) +
+  # First part of the plot (A, C), the probabilities of choosing right the first trial
+  plot1 <- ggplot(df_violin_1, aes(x = Treatment, y = Value, fill = Treatment)) +
+  geom_flat_violin(alpha = 0.5) +
+  scale_fill_manual(values = custom_values,
+                    breaks = custom_breaks) +
+  geom_point(data = df_points_1, aes(y = Mean, x = Treatment), position = position_dodge(width = 0.75), color = "black", fill = "black", size = 3) +
+  geom_segment(data = df_points_1, aes(y = Mean - SD, yend = Mean + SD, x = Treatment, xend = Treatment), size = 1.5, color = "black") +
+  geom_hline(yintercept = 0.33, linetype = "dashed", color = "black") +
+  ylim(min(df_violin_1$Value), max(df_violin_1$Value)) +
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Decision first trial", x = "Density") +
+  theme(
+    plot.margin = margin(7, 5.5, 5.5, 7, unit = "mm"),
+    axis.title = element_text(size = 11, family = "Times"),
+    axis.text.x = element_text(size = 9, family = "Times"),
+    axis.text.y = element_blank(),
+    legend.position = "none"
+  ) 
+  # Second part of the plot (B, E), the estimated slopes per treatment
+  plot2 <- ggplot(df_violin_2, aes(x = Treatment, y = Value, fill = Treatment)) +
+  geom_flat_violin(alpha = 0.5) +
+  scale_fill_manual(values = custom_values,
+                    breaks = custom_breaks) +
+  geom_point(data = df_points_2, aes(y = Mean, x = Treatment), position = position_dodge(width = 0.75), color = "black", fill = "black", size = 3) +
+  geom_segment(data = df_points_2, aes(y = Mean - SD, yend = Mean + SD, x = Treatment, xend = Treatment), size = 1.5, color = "black") +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  ylim(-0.1, max(df_violin_2$Value)) +
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Slope estimates", x = "Density") +
+  theme(
+    plot.margin = margin(7, 5.5, 5.5, 7, unit = "mm"),
+    axis.title = element_text(size = 11, family = "Times"),
+    axis.text.x = element_text(size = 9, family = "Times"),
+    axis.text.y = element_blank(),
+    legend.position = "none"
+  ) 
+  # Third part of the plot (C, F), the estimated probability per treatments over trial
+  plot3 <- ggplot(df_prob, aes(x = Trial, y = Mean_Predicted_prob, color = Treatment)) +
   geom_line(linewidth = 1) +
-  scale_color_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="#68bde1", "CORT-Hot"="#b50101", "Control-Hot"="#fa927d")) +
+  scale_color_manual(values = custom_values,
+                    breaks = custom_breaks) +
   geom_ribbon(aes(ymin = Mean_Predicted_prob - SE_Predicted_prob, ymax = Mean_Predicted_prob + SE_Predicted_prob, fill = Treatment), color = NA, alpha = 0.075) + 
-  scale_fill_manual(values = c("CORT-Cold"="darkblue", "Control-Cold"="#68bde1", "CORT-Hot"="#b50101", "Control-Hot"="#fa927d")) +
+  scale_fill_manual(values = custom_values,
+                    breaks = custom_breaks) +
   theme_classic() +
   labs(y = "Probability of correct choice", x = "Trial") +
   theme(
     plot.margin = margin(7, 5.5, 5.5, 7, unit = "mm"),
     axis.title = element_text(size = 11, family = "Times"),
     axis.text = element_text(size = 9, family = "Times"),
-    legend.position = "none"
-  ) 
-  #
-  # Second part of the plot (B, D), the slope estimates of each treatment
-  plot2 <- ggplot(df_violin, aes(x = Treatment, y = Value, fill = Treatment)) +
-  geom_flat_violin(alpha = 0.5) +
-  scale_fill_manual(values = custom_values,
-                    breaks = custom_breaks) +
-  geom_point(data = df_points, aes(y = Mean, x = Treatment), position = position_dodge(width = 0.75), color = "black", fill = "black", size = 3) +
-  geom_segment(data = df_points, aes(y = Mean - SD, yend = Mean + SD, x = Treatment, xend = Treatment), size = 1.5, color = "black") +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
-  ylim(-0.1, max(df_violin$Value)) +
-  coord_flip() +
-  theme_classic() +
-  labs(y = "Slope estimates", x = "Treatments") +
-  theme(
-    plot.margin = margin(7, 5.5, 5.5, 7, unit = "mm"),
-    axis.text.y = element_blank(),   # Remove y-axis labels
-    axis.title = element_text(size = 11, family = "Times"),
-    axis.text = element_text(size = 9, family = "Times"),
     legend.position = "right",
     legend.title = element_text(size = 10, family = "Times"),
     legend.text = element_text(size = 9, family = "Times")
-    ) +
-  guides(fill = guide_legend(order = 1))
+    )
+  #
   #
   # Combine them
-  plot <- plot_grid(plot1, plot2, labels = lab, nrow = 1, rel_widths = c(0.45, 0.45), label_x = 0, label_y = 0.95) +
-    annotation_custom(rasterGrob(img), xmin = 0.88, xmax = 0.98, ymin = 0.75, ymax = 0.9)
+  plot <- plot_grid(plot1, plot2, plot3, labels = lab, nrow = 1, rel_widths = c(0.23, 0.23, 0.54), label_x = 0, label_y = 0.95) +
+    annotation_custom(rasterGrob(img), xmin = 0.8, xmax = 0.98, ymin = 0.75, ymax = 0.98)
   return(plot)
 }
