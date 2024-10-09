@@ -150,7 +150,7 @@ format_dec <- function(x, n) {
 #' @param n The number of decimals
 format_p <- function(x, n) {
   if(equal == TRUE){
-    e <- "="
+    e <- "= "
   } else if(equal == FALSE){
     e <- ""  
   }
@@ -441,7 +441,7 @@ plotting <- function(sp, col, df_violin_1, df_points_1, df_violin_2, df_points_2
                         "CORT-Cold (n = 5)"
       )
       img <- readPNG("./Others/Red.png")
-      
+
     } else if (col == "blue"){
       lab <- c("D", "E", "F")
             custom_values <- c("CORT-Cold (n = 6)" = "#00008B",
@@ -525,7 +525,7 @@ plotting <- function(sp, col, df_violin_1, df_points_1, df_violin_2, df_points_2
     axis.text.x = element_text(size = 9, family = "Times"),
     axis.text.y = element_blank(),
     legend.position = "none"
-  ) 
+  )
   # Third part of the plot (C, F), the estimated probability per treatments over trial
   plot3 <- ggplot(df_prob, aes(x = Trial, y = Mean_Predicted_prob, color = Treatment)) +
   geom_line(linewidth = 1) +
@@ -548,6 +548,6 @@ plotting <- function(sp, col, df_violin_1, df_points_1, df_violin_2, df_points_2
   #
   # Combine them
   plot <- plot_grid(plot1, plot2, plot3, labels = lab, nrow = 1, rel_widths = c(0.23, 0.23, 0.54), label_x = 0, label_y = 0.95) +
-    annotation_custom(rasterGrob(img), xmin = 0.8, xmax = 0.98, ymin = 0.75, ymax = 0.98)
+    annotation_custom(rasterGrob(img), xmin = 0.8, xmax = 0.98, ymin = 0.8, ymax = 0.98)
   return(plot)
 }
