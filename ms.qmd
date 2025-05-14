@@ -124,7 +124,7 @@ We calculated the p~mcmc~ to test the hypothesis that learning rates and contras
 ## Results
 ```{r, cleaning}
 #| label: cleaning
-source(here("R", "1_data_process.R"))
+source(here::here("R", "1_data_process.R"))
 # Once we run this code, the result will be the main data base used (data_clean).
 write.csv(data_clean, file= "./output/databases_clean/data_clean.csv")
 ```
@@ -620,7 +620,8 @@ dScomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison,
     legend.text = element_text(size = 10, family = "Times New Roman"),
     strip.text = element_text(size = 13, family = "Times New Roman")
   ) 
-print(dScomparisons)
+ggsave("./output/figures/dScomparisons.tif", plot= dScomparisons, width = 25, height = 18, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/dScomparisons.tif")
 ```
 
 ```{r, fig-perceived2}
@@ -641,7 +642,8 @@ dLcomparisons <- ggplot(annotated_coldistance_feeders, aes(x = color_comparison,
     legend.text = element_text(size = 10, family = "Times New Roman"),
     strip.text = element_text(size = 13, family = "Times New Roman")
   )
-print(dLcomparisons)
+ggsave("./output/figures/dLcomparisons.tif", plot= dLcomparisons, width = 25, height = 18, units = "cm", dpi = 600)
+knitr::include_graphics("./output/figures/dLcomparisons.tif")
 ```
 
 ```{r, results='asis', echo=FALSE}
@@ -892,6 +894,6 @@ plot_age_guich <- data_age %>%
   annotation_custom(rasterGrob(img_guich), xmin = 0.73, xmax = 0.98, ymin = 0.73, ymax = 0.98)
 #
 plot_age <- plot_grid(plot_age_deli, plot_age_guich, ncol = 1)
-ggsave("./output/figures/plot_age.png", plot=plot_age, width = 25, height = 18, units = "cm", dpi = 600)
+ggsave("./output/figures/plot_age.tif", plot=plot_age, width = 25, height = 18, units = "cm", dpi = 600)
 knitr::include_graphics("./output/figures/plot_age.png")
 ```
