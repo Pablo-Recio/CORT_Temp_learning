@@ -3,8 +3,5 @@
 .RData
 .Ruserdata
 
-# R files
-*.r
-
 # VSCode files
-*.vcod
+.vdoc.*.r
